@@ -1,18 +1,21 @@
 import Foundation
+import UIKit
 
-class List {
+class Task {
     var name: String = ""
     var completed: Bool = false
     var completionDate: NSDate
     var priority: Int = 1
-    var openedEditCell: Bool = false
+    var tag: Tag
     
-    
-    init(name: String, completed: Bool, completionDate: NSDate, priority: Int) {
+    init(name: String, completed: Bool, completionDate: NSDate, priority: Int, tag: Tag) {
         self.name = name
         self.completed = completed
         self.completionDate = completionDate
         self.priority = priority
+        
+        tag.tasks++
+        self.tag = tag
     }
     
     func encodeWithCoder(encoder: NSCoder) {

@@ -2,7 +2,7 @@ import UIKit
 
 let messageFontSize: CGFloat = 17
 
-class EditItemViewController: UIViewController, UITableViewDelegate, UITextViewDelegate {
+class EditTaskViewController: UIViewController, UITableViewDelegate, UITextViewDelegate {
     let path: NSIndexPath
     //var textView: UITextView = "Hello"
     

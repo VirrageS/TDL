@@ -1,38 +1,46 @@
 import UIKit
 
 let cellTextFontSize: CGFloat = 12
+let cellTagTextFontSize: CGFloat = 9
 
+var tags = [Tag]()
 var listSections: [String] = []
-var sectionItems = [[List]]()
+var sectionItems = [[Task]]()
 var hiddenEditCell = [[Bool]]()
 
 class ListViewController: UITableViewController {
     convenience override init() {
-        self.init(style: .Grouped)
-        title = "To Do List"
+        self.init(style: .Plain)
+        title = "Next 7 Days"
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         listSections = ["Today", "Tommorow", "WTF"]
+        tags = [
+            Tag(name: "Home", color: UIColor.greenColor()),
+            Tag(name: "School", color: UIColor.grayColor()),
+            Tag(name: "Work", color: UIColor.redColor())
+        ]
         sectionItems = [
             [
-                List(name: "Buy milk11", completed: false, completionDate: NSDate.date(), priority: 1),
-                List(name: "Buy milk12", completed: false, completionDate: NSDate.date(), priority: 1)
+                Task(name: "Buy milk11", completed: false, completionDate: NSDate.date(), priority: 1, tag: tags[2]),
+                Task(name: "Buy milk12", completed: false, completionDate: NSDate.date(), priority: 1, tag: tags[0])
             ],
             [
-                List(name: "Buy milk21", completed: false, completionDate: NSDate.date(), priority: 1),
-                List(name: "Buy milk22", completed: false, completionDate: NSDate.date(), priority: 1)
+                Task(name: "Buy milk21", completed: false, completionDate: NSDate.date(), priority: 1, tag: tags[0]),
+                Task(name: "Buy milk22", completed: false, completionDate: NSDate.date(), priority: 1, tag: tags[1])
             ],
             [
-                List(name: "Buy milk31", completed: false, completionDate: NSDate.date(), priority: 1),
-                List(name: "Buy milk32", completed: false, completionDate: NSDate.date(), priority: 1),
-                List(name: "Buy milk33", completed: false, completionDate: NSDate.date(), priority: 1),
-                List(name: "Buy milk34", completed: false, completionDate: NSDate.date(), priority: 1)
+                Task(name: "Buy milk31", completed: false, completionDate: NSDate.date(), priority: 1, tag: tags[0]),
+                Task(name: "Buy milk32", completed: false, completionDate: NSDate.date(), priority: 1, tag: tags[1]),
+                Task(name: "Buy milk33", completed: false, completionDate: NSDate.date(), priority: 1, tag: tags[2]),
+                Task(name: "Buy milk34", completed: false, completionDate: NSDate.date(), priority: 1, tag: tags[1])
             ]
         ]
-        
+
+
         for section in 0...sectionItems.count-1 {
             hiddenEditCell.insert([Bool](), atIndex: section)
             for row in 0...sectionItems[section].count-1 {
@@ -40,8 +48,15 @@ class ListViewController: UITableViewController {
             }
         }
 
-        let addButtonItem = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "addNewCell:")
+        let addButtonItem = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "openAddTaskController:")
         navigationItem.rightBarButtonItem = addButtonItem
+        
+        let image: UIImage = UIImage(named: "menu-button") as UIImage
+        let menuButtonItem = UIBarButtonItem(image: image, style: UIBarButtonItemStyle.Plain, target: self, action: "openMenuController:")
+        //barButtonSystemItem: UIBarButtonSystemItem.Bookmarks, target: self, action: "openMenuController:")
+        navigationItem.leftBarButtonItem = menuButtonItem
+        
+        
         tableView.backgroundColor = UIColor.whiteColor()
         tableView.rowHeight = listCellHeight
         tableView.separatorColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0)
@@ -130,15 +145,21 @@ class ListViewController: UITableViewController {
         return listEditCellHeight
     }
     
-    func addNewCell(sender: AnyObject) {
-        let addItemViewController = AddItemViewController()
-        navigationController.pushViewController(addItemViewController, animated: true)
+    func openAddTaskController(sender: AnyObject) {
+        let addTaskViewController = AddTaskViewController()
+        navigationController.pushViewController(addTaskViewController, animated: true)
     }
     
-    func openEditController(indexPath: NSIndexPath) {
-        let editItemViewController: EditItemViewController = EditItemViewController(indexPath: indexPath)
-        self.navigationController.pushViewController(editItemViewController, animated: true)
+    func openMenuController(sender: AnyObject) {
+        let menuViewController = MenuViewController()
+        navigationController.pushViewController(menuViewController, animated: true)
     }
+    
+    func openEditTaskController(indexPath: NSIndexPath) {
+        let editTaskViewController: EditTaskViewController = EditTaskViewController(indexPath: indexPath)
+        self.navigationController.pushViewController(editTaskViewController, animated: true)
+    }
+    
     /*
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {

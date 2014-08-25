@@ -87,7 +87,7 @@ class ListEditCell: UITableViewCell {
         
         window = window.rootViewController as UINavigationController
         let controller: ListViewController = window.topViewController as ListViewController
-        controller.openEditController(indexPath)
+        controller.openEditTaskController(indexPath)
     }
 }
 
