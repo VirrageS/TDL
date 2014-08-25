@@ -3,7 +3,6 @@ import UIKit
 let cellTextFontSize: CGFloat = 12
 let cellTagTextFontSize: CGFloat = 9
 
-var tags = [Tag]()
 var listSections: [String] = []
 var sectionItems = [[Task]]()
 var open = [[Bool]]()
@@ -18,11 +17,6 @@ class ListViewController: UITableViewController {
         super.viewDidLoad()
         
         listSections = ["Today", "Tommorow", "WTF"]
-        tags = [
-            Tag(name: "Home", color: UIColor.greenColor()),
-            Tag(name: "School", color: UIColor.grayColor()),
-            Tag(name: "Work", color: UIColor.redColor())
-        ]
         sectionItems = [
             [
                 Task(name: "Buy milk11", completed: false, completionDate: NSDate.date(), priority: 1, tag: tags[2]),

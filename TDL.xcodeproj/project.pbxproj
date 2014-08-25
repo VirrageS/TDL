@@ -8,6 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		4517D17819AB468B008EED28 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4517D17719AB468B008EED28 /* Main.storyboard */; };
+		451CD1AA19ABC09F005DB8DF /* SlideNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451CD1A919ABC09F005DB8DF /* SlideNavigationController.swift */; };
+		451CD1AD19ABC124005DB8DF /* SlideAnimationSlide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451CD1AC19ABC124005DB8DF /* SlideAnimationSlide.swift */; };
+		451CD1AF19ABC2CE005DB8DF /* MenuCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451CD1AE19ABC2CE005DB8DF /* MenuCell.swift */; };
+		451CD1B219ABC71B005DB8DF /* TagViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451CD1B119ABC71B005DB8DF /* TagViewController.swift */; };
+		451CD1B419ABC77A005DB8DF /* TagCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451CD1B319ABC77A005DB8DF /* TagCell.swift */; };
+		451CD1B619ABDC8B005DB8DF /* AddTagViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451CD1B519ABDC8B005DB8DF /* AddTagViewController.swift */; };
+		451CD1B819ABDC9E005DB8DF /* EditTagViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451CD1B719ABDC9E005DB8DF /* EditTagViewController.swift */; };
 		4524937F19AB5767006D479B /* menu-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 4524937D19AB5767006D479B /* menu-button.png */; };
 		4524938019AB5767006D479B /* menu-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4524937E19AB5767006D479B /* menu-button@2x.png */; };
 		45272DE219A8F421000EE553 /* AddITaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45272DE119A8F421000EE553 /* AddITaskViewController.swift */; };
@@ -34,6 +41,13 @@
 
 /* Begin PBXFileReference section */
 		4517D17719AB468B008EED28 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		451CD1A919ABC09F005DB8DF /* SlideNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlideNavigationController.swift; sourceTree = "<group>"; };
+		451CD1AC19ABC124005DB8DF /* SlideAnimationSlide.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SlideAnimationSlide.swift; sourceTree = "<group>"; };
+		451CD1AE19ABC2CE005DB8DF /* MenuCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuCell.swift; sourceTree = "<group>"; };
+		451CD1B119ABC71B005DB8DF /* TagViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagViewController.swift; sourceTree = "<group>"; };
+		451CD1B319ABC77A005DB8DF /* TagCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagCell.swift; sourceTree = "<group>"; };
+		451CD1B519ABDC8B005DB8DF /* AddTagViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddTagViewController.swift; sourceTree = "<group>"; };
+		451CD1B719ABDC9E005DB8DF /* EditTagViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditTagViewController.swift; sourceTree = "<group>"; };
 		4524937D19AB5767006D479B /* menu-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "menu-button.png"; path = "Images.xcassets/menu-button.png"; sourceTree = "<group>"; };
 		4524937E19AB5767006D479B /* menu-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "menu-button@2x.png"; path = "Images.xcassets/menu-button@2x.png"; sourceTree = "<group>"; };
 		45272DE119A8F421000EE553 /* AddITaskViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddITaskViewController.swift; sourceTree = "<group>"; };
@@ -70,6 +84,34 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		451CD1A819ABC081005DB8DF /* Slide */ = {
+			isa = PBXGroup;
+			children = (
+				451CD1AB19ABC111005DB8DF /* Animations */,
+				451CD1A919ABC09F005DB8DF /* SlideNavigationController.swift */,
+			);
+			name = Slide;
+			sourceTree = "<group>";
+		};
+		451CD1AB19ABC111005DB8DF /* Animations */ = {
+			isa = PBXGroup;
+			children = (
+				451CD1AC19ABC124005DB8DF /* SlideAnimationSlide.swift */,
+			);
+			name = Animations;
+			sourceTree = "<group>";
+		};
+		451CD1B019ABC6D3005DB8DF /* Tags */ = {
+			isa = PBXGroup;
+			children = (
+				451CD1B119ABC71B005DB8DF /* TagViewController.swift */,
+				451CD1B319ABC77A005DB8DF /* TagCell.swift */,
+				451CD1B719ABDC9E005DB8DF /* EditTagViewController.swift */,
+				451CD1B519ABDC8B005DB8DF /* AddTagViewController.swift */,
+			);
+			name = Tags;
+			sourceTree = "<group>";
+		};
 		4524938219AB579C006D479B /* Images */ = {
 			isa = PBXGroup;
 			children = (
@@ -83,26 +125,20 @@
 			isa = PBXGroup;
 			children = (
 				454CD71319AB4B2C0052FD17 /* MenuViewController.swift */,
+				451CD1AE19ABC2CE005DB8DF /* MenuCell.swift */,
 			);
 			name = Menu;
 			sourceTree = "<group>";
 		};
-		45993D9B19AA29D800B371CE /* Item */ = {
-			isa = PBXGroup;
-			children = (
-				45993D9919AA29CA00B371CE /* EditITaskViewController.swift */,
-				45272DE119A8F421000EE553 /* AddITaskViewController.swift */,
-			);
-			name = Item;
-			sourceTree = "<group>";
-		};
-		45A2FC6519A8BE9000ADEABA /* List */ = {
+		45A2FC6519A8BE9000ADEABA /* Tasks */ = {
 			isa = PBXGroup;
 			children = (
 				45DE9C9419A8BB82004AB634 /* ListViewController.swift */,
 				45A2FC6119A8BDC700ADEABA /* ListCell.swift */,
+				45993D9919AA29CA00B371CE /* EditITaskViewController.swift */,
+				45272DE119A8F421000EE553 /* AddITaskViewController.swift */,
 			);
-			name = List;
+			name = Tasks;
 			sourceTree = "<group>";
 		};
 		45A2FC6719A8BEA900ADEABA /* Modules */ = {
@@ -138,8 +174,9 @@
 				4517D17719AB468B008EED28 /* Main.storyboard */,
 				45DE9C9219A8BB82004AB634 /* AppDelegate.swift */,
 				454CD71519AB4B470052FD17 /* Menu */,
-				45A2FC6519A8BE9000ADEABA /* List */,
-				45993D9B19AA29D800B371CE /* Item */,
+				45A2FC6519A8BE9000ADEABA /* Tasks */,
+				451CD1B019ABC6D3005DB8DF /* Tags */,
+				451CD1A819ABC081005DB8DF /* Slide */,
 				45A2FC6719A8BEA900ADEABA /* Modules */,
 				45DE9C9019A8BB82004AB634 /* Supporting Files */,
 				45DE9C9919A8BB82004AB634 /* Images.xcassets */,
@@ -277,11 +314,18 @@
 				45993D9A19AA29CA00B371CE /* EditITaskViewController.swift in Sources */,
 				45A2FC6219A8BDC700ADEABA /* ListCell.swift in Sources */,
 				45A2FC6419A8BE0000ADEABA /* Task.swift in Sources */,
+				451CD1B819ABDC9E005DB8DF /* EditTagViewController.swift in Sources */,
 				45272DE219A8F421000EE553 /* AddITaskViewController.swift in Sources */,
 				45DE9C9519A8BB82004AB634 /* ListViewController.swift in Sources */,
+				451CD1AF19ABC2CE005DB8DF /* MenuCell.swift in Sources */,
 				45DE9C9319A8BB82004AB634 /* AppDelegate.swift in Sources */,
+				451CD1B619ABDC8B005DB8DF /* AddTagViewController.swift in Sources */,
+				451CD1AA19ABC09F005DB8DF /* SlideNavigationController.swift in Sources */,
+				451CD1B419ABC77A005DB8DF /* TagCell.swift in Sources */,
 				454CD71419AB4B2C0052FD17 /* MenuViewController.swift in Sources */,
+				451CD1B219ABC71B005DB8DF /* TagViewController.swift in Sources */,
 				454CD71719AB4C230052FD17 /* Tag.swift in Sources */,
+				451CD1AD19ABC124005DB8DF /* SlideAnimationSlide.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
