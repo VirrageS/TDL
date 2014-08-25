@@ -1,12 +1,15 @@
 import UIKit
 
-let listCellHeight: CGFloat = 35
+let taskCellHeight: CGFloat = 35
+let taskCellButtonCornerRadius: CGFloat = 5.0
+let taskCellEditSectionHeight: CGFloat = 40
 
 class ListCell: UITableViewCell {
     let nameTextLabel: UILabel
     let tagTextLabel: UILabel
     let circleViewLabel: UILabel
-    var hasOpenedEditCell: Bool = true
+    let deleteButton: UIButton
+    let editButton: UIButton
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String) {
         nameTextLabel = UILabel(frame: CGRectZero)
@@ -26,10 +29,30 @@ class ListCell: UITableViewCell {
         circleViewLabel = UILabel(frame: CGRectMake(235, 12, 10, 10))
         circleViewLabel.layer.cornerRadius = 5
         
+        deleteButton = UIButton.buttonWithType(UIButtonType.System) as UIButton
+        deleteButton.layer.cornerRadius = taskCellButtonCornerRadius
+        deleteButton.setTitle("Delete", forState: UIControlState.Normal)
+        deleteButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
+        deleteButton.frame = CGRectMake(20, 40, 60, 25)
+        deleteButton.backgroundColor = UIColor.redColor()
+        
+        editButton = UIButton.buttonWithType(UIButtonType.System) as UIButton
+        editButton.layer.cornerRadius = taskCellButtonCornerRadius
+        editButton.setTitle("Edit", forState: UIControlState.Normal)
+        editButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
+        editButton.backgroundColor = editButton.tintColor
+        editButton.frame = CGRectMake(250, 40, 60, 25)
+        
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        deleteButton.addTarget(self, action: "deleteButtonAction:", forControlEvents: UIControlEvents.TouchUpInside)
+        editButton.addTarget(self, action: "editButtonAction:", forControlEvents: UIControlEvents.TouchUpInside)
+        
         contentView.addSubview(nameTextLabel)
         contentView.addSubview(tagTextLabel)
         contentView.addSubview(circleViewLabel)
+        contentView.addSubview(deleteButton)
+        contentView.addSubview(editButton)
         
         nameTextLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
         contentView.addConstraint(NSLayoutConstraint(item: nameTextLabel, attribute: .Left, relatedBy: .Equal, toItem: contentView, attribute: .Left, multiplier: 1, constant: 30))
@@ -48,9 +71,49 @@ class ListCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func setButtonsHidden(indexPath: NSIndexPath) {
+        deleteButton.hidden = !open[indexPath.section][indexPath.row]
+        editButton.hidden = !open[indexPath.section][indexPath.row]
+    }
+    
     func configureWithList(task: Task) {
         nameTextLabel.text = task.name
         tagTextLabel.text = task.tag.name
         circleViewLabel.layer.backgroundColor = task.tag.color.CGColor
+    }
+    
+    func deleteButtonAction(sender: UIButton!) {
+        let buttonCell = sender.superview?.superview as UITableViewCell
+        let tableView = buttonCell.superview?.superview as UITableView
+        let indexPath = tableView.indexPathForCell(buttonCell) as NSIndexPath
+
+        sectionItems[indexPath.section].removeAtIndex(indexPath.row)
+        if sectionItems[indexPath.section].count > 0 {
+            for i in 0...sectionItems[indexPath.section].count-1 {
+                if indexPath.row <= i {
+                    open[indexPath.section][i] = open[indexPath.section][i+1]
+                }
+            }
+        }
+
+        open[indexPath.section][sectionItems[indexPath.section].count] = false
+        tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
+    }
+    
+    func editButtonAction(sender: UIButton!) {
+        // for index path
+        let buttonCell = sender.superview?.superview as UITableViewCell
+        let tableView = buttonCell.superview?.superview as UITableView
+        let indexPath = tableView.indexPathForCell(buttonCell) as NSIndexPath
+        
+        // search window
+        var window: AnyObject = sender.superview!
+        while !(window is UIWindow) {
+            window = window.superview!!
+        }
+        
+        window = window.rootViewController as UINavigationController
+        let controller: ListViewController = window.topViewController as ListViewController
+        controller.openEditTaskController(indexPath)
     }
 }

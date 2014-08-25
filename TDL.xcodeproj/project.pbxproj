@@ -11,7 +11,6 @@
 		4524937F19AB5767006D479B /* menu-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 4524937D19AB5767006D479B /* menu-button.png */; };
 		4524938019AB5767006D479B /* menu-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4524937E19AB5767006D479B /* menu-button@2x.png */; };
 		45272DE219A8F421000EE553 /* AddITaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45272DE119A8F421000EE553 /* AddITaskViewController.swift */; };
-		45272DE519A8F6CC000EE553 /* ListEditCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45272DE419A8F6CC000EE553 /* ListEditCell.swift */; };
 		454CD71419AB4B2C0052FD17 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454CD71319AB4B2C0052FD17 /* MenuViewController.swift */; };
 		454CD71719AB4C230052FD17 /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454CD71619AB4C230052FD17 /* Tag.swift */; };
 		45993D9A19AA29CA00B371CE /* EditITaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45993D9919AA29CA00B371CE /* EditITaskViewController.swift */; };
@@ -38,7 +37,6 @@
 		4524937D19AB5767006D479B /* menu-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "menu-button.png"; path = "Images.xcassets/menu-button.png"; sourceTree = "<group>"; };
 		4524937E19AB5767006D479B /* menu-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "menu-button@2x.png"; path = "Images.xcassets/menu-button@2x.png"; sourceTree = "<group>"; };
 		45272DE119A8F421000EE553 /* AddITaskViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddITaskViewController.swift; sourceTree = "<group>"; };
-		45272DE419A8F6CC000EE553 /* ListEditCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListEditCell.swift; sourceTree = "<group>"; };
 		454CD71319AB4B2C0052FD17 /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		454CD71619AB4C230052FD17 /* Tag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
 		45993D9919AA29CA00B371CE /* EditITaskViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditITaskViewController.swift; sourceTree = "<group>"; };
@@ -102,7 +100,6 @@
 			isa = PBXGroup;
 			children = (
 				45DE9C9419A8BB82004AB634 /* ListViewController.swift */,
-				45272DE419A8F6CC000EE553 /* ListEditCell.swift */,
 				45A2FC6119A8BDC700ADEABA /* ListCell.swift */,
 			);
 			name = List;
@@ -283,7 +280,6 @@
 				45272DE219A8F421000EE553 /* AddITaskViewController.swift in Sources */,
 				45DE9C9519A8BB82004AB634 /* ListViewController.swift in Sources */,
 				45DE9C9319A8BB82004AB634 /* AppDelegate.swift in Sources */,
-				45272DE519A8F6CC000EE553 /* ListEditCell.swift in Sources */,
 				454CD71419AB4B2C0052FD17 /* MenuViewController.swift in Sources */,
 				454CD71719AB4C230052FD17 /* Tag.swift in Sources */,
 			);

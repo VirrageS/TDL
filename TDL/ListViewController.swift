@@ -6,7 +6,7 @@ let cellTagTextFontSize: CGFloat = 9
 var tags = [Tag]()
 var listSections: [String] = []
 var sectionItems = [[Task]]()
-var hiddenEditCell = [[Bool]]()
+var open = [[Bool]]()
 
 class ListViewController: UITableViewController {
     convenience override init() {
@@ -42,9 +42,9 @@ class ListViewController: UITableViewController {
 
 
         for section in 0...sectionItems.count-1 {
-            hiddenEditCell.insert([Bool](), atIndex: section)
+            open.insert([Bool](), atIndex: section)
             for row in 0...sectionItems[section].count-1 {
-                hiddenEditCell[section].insert(true, atIndex: row)
+                open[section].insert(false, atIndex: row)
             }
         }
 
@@ -58,11 +58,9 @@ class ListViewController: UITableViewController {
         
         
         tableView.backgroundColor = UIColor.whiteColor()
-        tableView.rowHeight = listCellHeight
         tableView.separatorColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0)
         
         tableView.registerClass(ListCell.self, forCellReuseIdentifier: NSStringFromClass(ListCell))
-        tableView.registerClass(ListEditCell.self, forCellReuseIdentifier: NSStringFromClass(ListEditCell))
         //ad items from file
         //loadInitialData()
         
@@ -77,72 +75,35 @@ class ListViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView!, numberOfRowsInSection section: Int) -> Int {
-        return sectionItems[section].count*2 as Int
+        return sectionItems[section].count as Int
     }
     
     override func tableView(tableView: UITableView!, cellForRowAtIndexPath indexPath: NSIndexPath!) -> UITableViewCell! {
-        if indexPath.row%2 == 0 {
-            let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(ListCell), forIndexPath: indexPath) as ListCell
-            cell.configureWithList(sectionItems[indexPath.section][indexPath.row/2])
-            return cell as ListCell
-        } else {
-            let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(ListEditCell), forIndexPath: indexPath) as ListEditCell
-            cell.setButtonsHidden(indexPath)
-            return cell as ListEditCell
-        }
+        let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(ListCell), forIndexPath: indexPath) as ListCell
+        cell.configureWithList(sectionItems[indexPath.section][indexPath.row])
+        cell.setButtonsHidden(indexPath)
+        return cell as ListCell
     }
 
     override func tableView(tableView: UITableView!, didSelectRowAtIndexPath indexPath: NSIndexPath!) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        
-        var tappedCell = tableView.cellForRowAtIndexPath(indexPath)
-        if tappedCell is ListEditCell {
-            return
-        }
 
-        if hiddenEditCell[indexPath.section][(indexPath.row/2)] {
-            hiddenEditCell[indexPath.section][(indexPath.row/2)] = false
-
-            var newIndexPath = NSIndexPath(forRow: indexPath.row+1, inSection: indexPath.section)
-            tableView.reloadRowsAtIndexPaths([newIndexPath], withRowAnimation: UITableViewRowAnimation.Bottom)
-        } else {
-            hiddenEditCell[indexPath.section][(indexPath.row/2)] = true
-            
-            var newIndexPath = NSIndexPath(forRow: indexPath.row+1, inSection: indexPath.section)
-            tableView.reloadRowsAtIndexPaths([newIndexPath], withRowAnimation: UITableViewRowAnimation.Top)
-        }
-    }
-    
-    override func tableView(tableView: UITableView!, willSelectRowAtIndexPath indexPath: NSIndexPath!) -> NSIndexPath! {
-        // cannot select row if is edit cell
-        if indexPath.row%2 != 0 {
-            return nil
-        }
+        open[indexPath.section][indexPath.row] = open[indexPath.section][indexPath.row] ? false : true
+        //println("\(indexPath.section) \(indexPath.row) \(open[indexPath.section][indexPath.row])")
         
-        return indexPath
-    }
-    
-    override func tableView(tableView: UITableView!, willDeselectRowAtIndexPath indexPath: NSIndexPath!) -> NSIndexPath! {
-        // cannot deselect row if is edit cell
-        if indexPath.row%2 != 0 {
-            return nil
-        }
-        
-        return indexPath
+        let cell: ListCell = tableView.cellForRowAtIndexPath(indexPath) as ListCell!
+        cell.setButtonsHidden(indexPath)
+        tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
     }
     
     override func tableView(tableView: UITableView!, heightForRowAtIndexPath indexPath: NSIndexPath!) -> CGFloat {
-        // row height for normal cell
-        if indexPath.row%2 == 0 {
-            return listCellHeight
+        // row height for open cell
+        //println("\(indexPath.section) \(indexPath.row) \(open[indexPath.section][indexPath.row])")
+        if open[indexPath.section][indexPath.row] {
+            return taskCellHeight + taskCellEditSectionHeight
         }
-        
-        // check if edit cell is hiddens
-        if hiddenEditCell[indexPath.section][(indexPath.row/2)] {
-            return 0
-        }
-        
-        return listEditCellHeight
+            
+        return taskCellHeight
     }
     
     func openAddTaskController(sender: AnyObject) {

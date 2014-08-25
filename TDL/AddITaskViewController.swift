@@ -29,7 +29,7 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextViewDe
         
         
         deleteButtonLabel = UIButton.buttonWithType(UIButtonType.System) as UIButton
-        deleteButtonLabel.layer.cornerRadius = listEditCellButtonCornerRadius
+        deleteButtonLabel.layer.cornerRadius = 5.0
         deleteButtonLabel.setTitle("Delete", forState: UIControlState.Normal)
         deleteButtonLabel.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         deleteButtonLabel.frame = CGRectMake(240, 103, 60, 25)
