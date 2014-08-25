@@ -21,12 +21,10 @@ class TagViewController: UITableViewController {
         navigationItem.rightBarButtonItem = addButtonItem
         
         
-        print(navigationController)
+        //print(navigationController.viewControllers)
         let image: UIImage = UIImage(named: "menu-button") as UIImage
-        let menuButtonItem = UIBarButtonItem(image: image, style: UIBarButtonItemStyle.Bordered, target: self, action: "popBack:")
-        //barButtonSystemItem: UIBarButtonSystemItem.Bookmarks, target: self, action: "openMenuController:")
-//        navigationItem.leftBarButtonItem = menuButtonItem
-        
+        let menuButtonItem = UIBarButtonItem(image: image, style: UIBarButtonItemStyle.Plain, target: self, action: "backToMenuController:")
+        navigationItem.leftBarButtonItem = menuButtonItem
         
         tableView.backgroundColor = UIColor.whiteColor()
         tableView.separatorColor = UIColor.whiteColor()
@@ -38,11 +36,8 @@ class TagViewController: UITableViewController {
 //        tableView.delegate = nil
 //    }
 
-    func popBack() {
-        println("Hello")
-//        print(navigationController)
-        //view.endEditing(true)
-        //navigationController.popToRootViewControllerAnimated(true);
+    func backToMenuController(sender: AnyObject) {
+        navigationController.popViewControllerAnimated(true)
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView!) -> Int {

@@ -46,7 +46,7 @@ class ListViewController: UITableViewController {
         navigationItem.rightBarButtonItem = addButtonItem
         
         let image: UIImage = UIImage(named: "menu-button") as UIImage
-        let menuButtonItem = UIBarButtonItem(image: image, style: UIBarButtonItemStyle.Plain, target: self, action: "openMenuController:")
+        let menuButtonItem = UIBarButtonItem(image: image, style: UIBarButtonItemStyle.Plain, target: self, action: "backToMenuController:")
         //barButtonSystemItem: UIBarButtonSystemItem.Bookmarks, target: self, action: "openMenuController:")
         navigationItem.leftBarButtonItem = menuButtonItem
         
@@ -58,6 +58,10 @@ class ListViewController: UITableViewController {
         //ad items from file
         //loadInitialData()
         
+    }
+    
+    func backToMenuController(sender: AnyObject) {
+        navigationController.popViewControllerAnimated(true)
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView!) -> Int {
