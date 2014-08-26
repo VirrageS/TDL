@@ -4,12 +4,13 @@ let taskCellHeight: CGFloat = 35
 let taskCellButtonCornerRadius: CGFloat = 5.0
 let taskCellEditSectionHeight: CGFloat = 40
 
-class ListCell: UITableViewCell {
+class TaskCell: UITableViewCell {
     let nameTextLabel: UILabel
     let tagTextLabel: UILabel
     let circleViewLabel: UILabel
     let deleteButton: UIButton
     let editButton: UIButton
+    let completeImageView: UIImageView
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String) {
         nameTextLabel = UILabel(frame: CGRectZero)
@@ -36,6 +37,11 @@ class ListCell: UITableViewCell {
         deleteButton.frame = CGRectMake(20, 40, 60, 25)
         deleteButton.backgroundColor = UIColor.redColor()
         
+        let completeImage: UIImage = UIImage(named: "complete") as UIImage
+        completeImage.drawAtPoint(CGPoint(x: 40, y: 30))
+        completeImageView = UIImageView(image: completeImage) as UIImageView
+        
+        
         editButton = UIButton.buttonWithType(UIButtonType.System) as UIButton
         editButton.layer.cornerRadius = taskCellButtonCornerRadius
         editButton.setTitle("Edit", forState: UIControlState.Normal)
@@ -53,6 +59,7 @@ class ListCell: UITableViewCell {
         contentView.addSubview(circleViewLabel)
         contentView.addSubview(deleteButton)
         contentView.addSubview(editButton)
+        contentView.addSubview(completeImageView)
         
         nameTextLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
         contentView.addConstraint(NSLayoutConstraint(item: nameTextLabel, attribute: .Left, relatedBy: .Equal, toItem: contentView, attribute: .Left, multiplier: 1, constant: 30))
@@ -71,9 +78,9 @@ class ListCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setButtonsHidden(indexPath: NSIndexPath) {
-        deleteButton.hidden = !open[indexPath.section][indexPath.row]
-        editButton.hidden = !open[indexPath.section][indexPath.row]
+    func setButtonsHidden(indexPath: NSIndexPath, check: Int) {
+        deleteButton.hidden = check == 1 ? !open[indexPath.section][indexPath.row] : !isOpenTodayTaskCell[indexPath.section][indexPath.row]
+        editButton.hidden = check == 1 ? !open[indexPath.section][indexPath.row] : !isOpenTodayTaskCell[indexPath.section][indexPath.row]
     }
     
     func configureWithList(task: Task) {
@@ -113,7 +120,7 @@ class ListCell: UITableViewCell {
         }
         
         window = window.rootViewController as UINavigationController
-        let controller: ListViewController = window.topViewController as ListViewController
+        let controller: TaskViewController = window.topViewController as TaskViewController
         controller.openEditTaskController(indexPath)
     }
 }

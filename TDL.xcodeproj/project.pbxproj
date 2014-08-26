@@ -15,18 +15,17 @@
 		451CD1B419ABC77A005DB8DF /* TagCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451CD1B319ABC77A005DB8DF /* TagCell.swift */; };
 		451CD1B619ABDC8B005DB8DF /* AddTagViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451CD1B519ABDC8B005DB8DF /* AddTagViewController.swift */; };
 		451CD1B819ABDC9E005DB8DF /* EditTagViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451CD1B719ABDC9E005DB8DF /* EditTagViewController.swift */; };
-		4524937F19AB5767006D479B /* menu-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 4524937D19AB5767006D479B /* menu-button.png */; };
-		4524938019AB5767006D479B /* menu-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4524937E19AB5767006D479B /* menu-button@2x.png */; };
 		45272DE219A8F421000EE553 /* AddITaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45272DE119A8F421000EE553 /* AddITaskViewController.swift */; };
 		454CD71419AB4B2C0052FD17 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454CD71319AB4B2C0052FD17 /* MenuViewController.swift */; };
 		454CD71719AB4C230052FD17 /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454CD71619AB4C230052FD17 /* Tag.swift */; };
 		45993D9A19AA29CA00B371CE /* EditITaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45993D9919AA29CA00B371CE /* EditITaskViewController.swift */; };
-		45A2FC6219A8BDC700ADEABA /* ListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A2FC6119A8BDC700ADEABA /* ListCell.swift */; };
+		45A2FC6219A8BDC700ADEABA /* TaskCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A2FC6119A8BDC700ADEABA /* TaskCell.swift */; };
 		45A2FC6419A8BE0000ADEABA /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A2FC6319A8BE0000ADEABA /* Task.swift */; };
 		45DE9C9319A8BB82004AB634 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45DE9C9219A8BB82004AB634 /* AppDelegate.swift */; };
-		45DE9C9519A8BB82004AB634 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45DE9C9419A8BB82004AB634 /* ListViewController.swift */; };
+		45DE9C9519A8BB82004AB634 /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45DE9C9419A8BB82004AB634 /* TaskViewController.swift */; };
 		45DE9C9A19A8BB82004AB634 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45DE9C9919A8BB82004AB634 /* Images.xcassets */; };
 		45DE9CA619A8BB82004AB634 /* TDLTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45DE9CA519A8BB82004AB634 /* TDLTests.swift */; };
+		45F367A719AC70A300F6B36B /* TodayTaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F367A619AC70A300F6B36B /* TodayTaskViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,22 +47,21 @@
 		451CD1B319ABC77A005DB8DF /* TagCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagCell.swift; sourceTree = "<group>"; };
 		451CD1B519ABDC8B005DB8DF /* AddTagViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddTagViewController.swift; sourceTree = "<group>"; };
 		451CD1B719ABDC9E005DB8DF /* EditTagViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditTagViewController.swift; sourceTree = "<group>"; };
-		4524937D19AB5767006D479B /* menu-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "menu-button.png"; path = "Images.xcassets/menu-button.png"; sourceTree = "<group>"; };
-		4524937E19AB5767006D479B /* menu-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "menu-button@2x.png"; path = "Images.xcassets/menu-button@2x.png"; sourceTree = "<group>"; };
 		45272DE119A8F421000EE553 /* AddITaskViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddITaskViewController.swift; sourceTree = "<group>"; };
 		454CD71319AB4B2C0052FD17 /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		454CD71619AB4C230052FD17 /* Tag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
 		45993D9919AA29CA00B371CE /* EditITaskViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditITaskViewController.swift; sourceTree = "<group>"; };
-		45A2FC6119A8BDC700ADEABA /* ListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListCell.swift; sourceTree = "<group>"; };
+		45A2FC6119A8BDC700ADEABA /* TaskCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskCell.swift; sourceTree = "<group>"; };
 		45A2FC6319A8BE0000ADEABA /* Task.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		45DE9C8D19A8BB82004AB634 /* TDL.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TDL.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		45DE9C9119A8BB82004AB634 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		45DE9C9219A8BB82004AB634 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		45DE9C9419A8BB82004AB634 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
+		45DE9C9419A8BB82004AB634 /* TaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewController.swift; sourceTree = "<group>"; };
 		45DE9C9919A8BB82004AB634 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		45DE9C9F19A8BB82004AB634 /* TDLTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TDLTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		45DE9CA419A8BB82004AB634 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		45DE9CA519A8BB82004AB634 /* TDLTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TDLTests.swift; sourceTree = "<group>"; };
+		45F367A619AC70A300F6B36B /* TodayTaskViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodayTaskViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,19 +104,8 @@
 			children = (
 				451CD1B119ABC71B005DB8DF /* TagViewController.swift */,
 				451CD1B319ABC77A005DB8DF /* TagCell.swift */,
-				451CD1B719ABDC9E005DB8DF /* EditTagViewController.swift */,
-				451CD1B519ABDC8B005DB8DF /* AddTagViewController.swift */,
 			);
 			name = Tags;
-			sourceTree = "<group>";
-		};
-		4524938219AB579C006D479B /* Images */ = {
-			isa = PBXGroup;
-			children = (
-				4524937E19AB5767006D479B /* menu-button@2x.png */,
-				4524937D19AB5767006D479B /* menu-button.png */,
-			);
-			name = Images;
 			sourceTree = "<group>";
 		};
 		454CD71519AB4B470052FD17 /* Menu */ = {
@@ -133,10 +120,9 @@
 		45A2FC6519A8BE9000ADEABA /* Tasks */ = {
 			isa = PBXGroup;
 			children = (
-				45DE9C9419A8BB82004AB634 /* ListViewController.swift */,
-				45A2FC6119A8BDC700ADEABA /* ListCell.swift */,
-				45993D9919AA29CA00B371CE /* EditITaskViewController.swift */,
-				45272DE119A8F421000EE553 /* AddITaskViewController.swift */,
+				45F367A619AC70A300F6B36B /* TodayTaskViewController.swift */,
+				45DE9C9419A8BB82004AB634 /* TaskViewController.swift */,
+				45A2FC6119A8BDC700ADEABA /* TaskCell.swift */,
 			);
 			name = Tasks;
 			sourceTree = "<group>";
@@ -176,11 +162,11 @@
 				454CD71519AB4B470052FD17 /* Menu */,
 				45A2FC6519A8BE9000ADEABA /* Tasks */,
 				451CD1B019ABC6D3005DB8DF /* Tags */,
+				45F367A519AC706C00F6B36B /* Add/Edit */,
 				451CD1A819ABC081005DB8DF /* Slide */,
 				45A2FC6719A8BEA900ADEABA /* Modules */,
 				45DE9C9019A8BB82004AB634 /* Supporting Files */,
 				45DE9C9919A8BB82004AB634 /* Images.xcassets */,
-				4524938219AB579C006D479B /* Images */,
 			);
 			path = TDL;
 			sourceTree = "<group>";
@@ -208,6 +194,17 @@
 				45DE9CA419A8BB82004AB634 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		45F367A519AC706C00F6B36B /* Add/Edit */ = {
+			isa = PBXGroup;
+			children = (
+				45993D9919AA29CA00B371CE /* EditITaskViewController.swift */,
+				45272DE119A8F421000EE553 /* AddITaskViewController.swift */,
+				451CD1B719ABDC9E005DB8DF /* EditTagViewController.swift */,
+				451CD1B519ABDC8B005DB8DF /* AddTagViewController.swift */,
+			);
+			name = Add/Edit;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -291,9 +288,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				45DE9C9A19A8BB82004AB634 /* Images.xcassets in Resources */,
-				4524938019AB5767006D479B /* menu-button@2x.png in Resources */,
 				4517D17819AB468B008EED28 /* Main.storyboard in Resources */,
-				4524937F19AB5767006D479B /* menu-button.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -312,16 +307,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				45993D9A19AA29CA00B371CE /* EditITaskViewController.swift in Sources */,
-				45A2FC6219A8BDC700ADEABA /* ListCell.swift in Sources */,
+				45A2FC6219A8BDC700ADEABA /* TaskCell.swift in Sources */,
 				45A2FC6419A8BE0000ADEABA /* Task.swift in Sources */,
 				451CD1B819ABDC9E005DB8DF /* EditTagViewController.swift in Sources */,
 				45272DE219A8F421000EE553 /* AddITaskViewController.swift in Sources */,
-				45DE9C9519A8BB82004AB634 /* ListViewController.swift in Sources */,
+				45DE9C9519A8BB82004AB634 /* TaskViewController.swift in Sources */,
 				451CD1AF19ABC2CE005DB8DF /* MenuCell.swift in Sources */,
 				45DE9C9319A8BB82004AB634 /* AppDelegate.swift in Sources */,
 				451CD1B619ABDC8B005DB8DF /* AddTagViewController.swift in Sources */,
 				451CD1AA19ABC09F005DB8DF /* SlideNavigationController.swift in Sources */,
 				451CD1B419ABC77A005DB8DF /* TagCell.swift in Sources */,
+				45F367A719AC70A300F6B36B /* TodayTaskViewController.swift in Sources */,
 				454CD71419AB4B2C0052FD17 /* MenuViewController.swift in Sources */,
 				451CD1B219ABC71B005DB8DF /* TagViewController.swift in Sources */,
 				454CD71719AB4C230052FD17 /* Tag.swift in Sources */,

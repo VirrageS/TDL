@@ -1,7 +1,7 @@
 import UIKit
 
-let menuCellHeight: CGFloat = 50
-let menuCellTextFontSize: CGFloat = 20
+let menuCellHeight: CGFloat = 55
+let menuCellTextFontSize: CGFloat = 22
 
 class MenuCell: UITableViewCell {
     let nameTextLabel: UILabel
@@ -12,7 +12,7 @@ class MenuCell: UITableViewCell {
         nameTextLabel.font = UIFont.systemFontOfSize(menuCellTextFontSize)
         nameTextLabel.numberOfLines = 1
         nameTextLabel.textAlignment = NSTextAlignment.Left;
-        nameTextLabel.textColor = UIColor(red: 142/255, green: 142/255, blue: 147/255, alpha: 1)
+        nameTextLabel.textColor = UIColor.blackColor()
         
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 

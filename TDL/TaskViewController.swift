@@ -3,11 +3,9 @@ import UIKit
 let cellTextFontSize: CGFloat = 12
 let cellTagTextFontSize: CGFloat = 9
 
-var listSections: [String] = []
-var sectionItems = [[Task]]()
-var open = [[Bool]]()
 
-class ListViewController: UITableViewController {
+
+class TaskViewController: UITableViewController {
     convenience override init() {
         self.init(style: .Plain)
         title = "Next 7 Days"
@@ -15,32 +13,8 @@ class ListViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        listSections = ["Today", "Tommorow", "WTF"]
-        sectionItems = [
-            [
-                Task(name: "Buy milk11", completed: false, completionDate: NSDate.date(), priority: 1, tag: tags[2]),
-                Task(name: "Buy milk12", completed: false, completionDate: NSDate.date(), priority: 1, tag: tags[0])
-            ],
-            [
-                Task(name: "Buy milk21", completed: false, completionDate: NSDate.date(), priority: 1, tag: tags[0]),
-                Task(name: "Buy milk22", completed: false, completionDate: NSDate.date(), priority: 1, tag: tags[1])
-            ],
-            [
-                Task(name: "Buy milk31", completed: false, completionDate: NSDate.date(), priority: 1, tag: tags[0]),
-                Task(name: "Buy milk32", completed: false, completionDate: NSDate.date(), priority: 1, tag: tags[1]),
-                Task(name: "Buy milk33", completed: false, completionDate: NSDate.date(), priority: 1, tag: tags[2]),
-                Task(name: "Buy milk34", completed: false, completionDate: NSDate.date(), priority: 1, tag: tags[1])
-            ]
-        ]
 
 
-        for section in 0...sectionItems.count-1 {
-            open.insert([Bool](), atIndex: section)
-            for row in 0...sectionItems[section].count-1 {
-                open[section].insert(false, atIndex: row)
-            }
-        }
 
         let addButtonItem = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "openAddTaskController:")
         navigationItem.rightBarButtonItem = addButtonItem
@@ -54,7 +28,7 @@ class ListViewController: UITableViewController {
         tableView.backgroundColor = UIColor.whiteColor()
         tableView.separatorColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0)
         
-        tableView.registerClass(ListCell.self, forCellReuseIdentifier: NSStringFromClass(ListCell))
+        tableView.registerClass(TaskCell.self, forCellReuseIdentifier: NSStringFromClass(TaskCell))
         //ad items from file
         //loadInitialData()
         
@@ -77,10 +51,10 @@ class ListViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView!, cellForRowAtIndexPath indexPath: NSIndexPath!) -> UITableViewCell! {
-        let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(ListCell), forIndexPath: indexPath) as ListCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(TaskCell), forIndexPath: indexPath) as TaskCell
         cell.configureWithList(sectionItems[indexPath.section][indexPath.row])
-        cell.setButtonsHidden(indexPath)
-        return cell as ListCell
+        cell.setButtonsHidden(indexPath, check: 1)
+        return cell as TaskCell
     }
 
     override func tableView(tableView: UITableView!, didSelectRowAtIndexPath indexPath: NSIndexPath!) {
@@ -89,9 +63,9 @@ class ListViewController: UITableViewController {
         open[indexPath.section][indexPath.row] = open[indexPath.section][indexPath.row] ? false : true
         //println("\(indexPath.section) \(indexPath.row) \(open[indexPath.section][indexPath.row])")
         
-        let cell: ListCell = tableView.cellForRowAtIndexPath(indexPath) as ListCell!
-        cell.setButtonsHidden(indexPath)
-        tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
+        let cell: TaskCell = tableView.cellForRowAtIndexPath(indexPath) as TaskCell!
+        cell.setButtonsHidden(indexPath, check: 1)
+        tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Fade)
     }
     
     override func tableView(tableView: UITableView!, heightForRowAtIndexPath indexPath: NSIndexPath!) -> CGFloat {
