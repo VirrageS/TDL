@@ -26,6 +26,7 @@
 		45DE9C9A19A8BB82004AB634 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45DE9C9919A8BB82004AB634 /* Images.xcassets */; };
 		45DE9CA619A8BB82004AB634 /* TDLTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45DE9CA519A8BB82004AB634 /* TDLTests.swift */; };
 		45F367A719AC70A300F6B36B /* TodayTaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F367A619AC70A300F6B36B /* TodayTaskViewController.swift */; };
+		45F367BF19ACCCCB00F6B36B /* NoTaskCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F367BE19ACCCCB00F6B36B /* NoTaskCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +63,7 @@
 		45DE9CA419A8BB82004AB634 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		45DE9CA519A8BB82004AB634 /* TDLTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TDLTests.swift; sourceTree = "<group>"; };
 		45F367A619AC70A300F6B36B /* TodayTaskViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodayTaskViewController.swift; sourceTree = "<group>"; };
+		45F367BE19ACCCCB00F6B36B /* NoTaskCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoTaskCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,6 +125,7 @@
 				45F367A619AC70A300F6B36B /* TodayTaskViewController.swift */,
 				45DE9C9419A8BB82004AB634 /* TaskViewController.swift */,
 				45A2FC6119A8BDC700ADEABA /* TaskCell.swift */,
+				45F367BE19ACCCCB00F6B36B /* NoTaskCell.swift */,
 			);
 			name = Tasks;
 			sourceTree = "<group>";
@@ -308,6 +311,7 @@
 			files = (
 				45993D9A19AA29CA00B371CE /* EditITaskViewController.swift in Sources */,
 				45A2FC6219A8BDC700ADEABA /* TaskCell.swift in Sources */,
+				45F367BF19ACCCCB00F6B36B /* NoTaskCell.swift in Sources */,
 				45A2FC6419A8BE0000ADEABA /* Task.swift in Sources */,
 				451CD1B819ABDC9E005DB8DF /* EditTagViewController.swift in Sources */,
 				45272DE219A8F421000EE553 /* AddITaskViewController.swift in Sources */,

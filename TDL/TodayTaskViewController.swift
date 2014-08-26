@@ -23,6 +23,7 @@ class TodayTaskViewController: UITableViewController {
         tableView.separatorColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0)
         
         tableView.registerClass(TaskCell.self, forCellReuseIdentifier: NSStringFromClass(TaskCell))
+        tableView.registerClass(NoTaskCell.self, forCellReuseIdentifier: NSStringFromClass(NoTaskCell))
         //load items from file
         //loadInitialData()
         
@@ -37,33 +38,52 @@ class TodayTaskViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView!, numberOfRowsInSection section: Int) -> Int {
-        return sectionItems[section].count as Int
+        return sectionItems[section].count == 0 ? 1 : sectionItems[section].count as Int
     }
     
     override func tableView(tableView: UITableView!, cellForRowAtIndexPath indexPath: NSIndexPath!) -> UITableViewCell! {
-        let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(TaskCell), forIndexPath: indexPath) as TaskCell
-        cell.configureWithList(sectionItems[indexPath.section][indexPath.row])
-        cell.setButtonsHidden(indexPath, check: 0)
-        return cell as TaskCell
+        if sectionItems[indexPath.section].count > 0 {
+            let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(TaskCell), forIndexPath: indexPath) as     TaskCell
+            cell.configureWithList(sectionItems[indexPath.section][indexPath.row])
+            cell.setButtonsHidden(indexPath, check: 0)
+            return cell as TaskCell
+        } else {
+            let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(NoTaskCell), forIndexPath: indexPath) as     NoTaskCell
+            return cell as NoTaskCell
+        }
     }
     
     override func tableView(tableView: UITableView!, didSelectRowAtIndexPath indexPath: NSIndexPath!) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        if sectionItems[indexPath.section].count > 0 {
+            tableView.deselectRowAtIndexPath(indexPath, animated: true)
         
-        isOpenTodayTaskCell[indexPath.section][indexPath.row] = isOpenTodayTaskCell[indexPath.section][indexPath.row] ? false : true
+            isOpenTodayTaskCell[indexPath.section][indexPath.row] = isOpenTodayTaskCell[indexPath.section][indexPath.row] ? false : true
 
-        let cell: TaskCell = tableView.cellForRowAtIndexPath(indexPath) as TaskCell!
-        cell.setButtonsHidden(indexPath, check: 0)
-        tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Fade)
+            let cell: TaskCell = tableView.cellForRowAtIndexPath(indexPath) as TaskCell!
+            cell.setButtonsHidden(indexPath, check: 0)
+            tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Fade)
+        }
+    }
+    
+    override func tableView(tableView: UITableView!, willSelectRowAtIndexPath indexPath: NSIndexPath!) -> NSIndexPath! {
+        if sectionItems[indexPath.section].count > 0 {
+            return indexPath
+        }
+        
+        return nil
     }
     
     override func tableView(tableView: UITableView!, heightForRowAtIndexPath indexPath: NSIndexPath!) -> CGFloat {
-        // row height for open cell
-        if isOpenTodayTaskCell[indexPath.section][indexPath.row] {
-            return taskCellHeight + taskCellEditSectionHeight
+        if sectionItems[indexPath.section].count > 0 {
+            // row height for open cell
+            if isOpenTodayTaskCell[indexPath.section][indexPath.row] {
+                return taskCellHeight + taskCellEditSectionHeight
+            }
+        
+            return taskCellHeight
         }
         
-        return taskCellHeight
+        return noTaskCellHeight
     }
     
     func openAddTaskController(sender: AnyObject) {

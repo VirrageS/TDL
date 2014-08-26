@@ -2,15 +2,16 @@ import UIKit
 
 let taskCellHeight: CGFloat = 35
 let taskCellButtonCornerRadius: CGFloat = 5.0
-let taskCellEditSectionHeight: CGFloat = 40
+let taskCellEditSectionHeight: CGFloat = 50
 
 class TaskCell: UITableViewCell {
     let nameTextLabel: UILabel
     let tagTextLabel: UILabel
     let circleViewLabel: UILabel
-    let deleteButton: UIButton
+    let completeButton: UIButton
+    let postponeButton: UIButton
     let editButton: UIButton
-    let completeImageView: UIImageView
+    
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String) {
         nameTextLabel = UILabel(frame: CGRectZero)
@@ -30,36 +31,35 @@ class TaskCell: UITableViewCell {
         circleViewLabel = UILabel(frame: CGRectMake(235, 12, 10, 10))
         circleViewLabel.layer.cornerRadius = 5
         
-        deleteButton = UIButton.buttonWithType(UIButtonType.System) as UIButton
-        deleteButton.layer.cornerRadius = taskCellButtonCornerRadius
-        deleteButton.setTitle("Delete", forState: UIControlState.Normal)
-        deleteButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
-        deleteButton.frame = CGRectMake(20, 40, 60, 25)
-        deleteButton.backgroundColor = UIColor.redColor()
+        let completeImage: UIImage = UIImage(named: "complete-image") as UIImage
+        completeButton = UIButton.buttonWithType(UIButtonType.Custom) as UIButton
+        completeButton.setImage(completeImage, forState: UIControlState.Normal)
+        completeButton.frame = CGRectMake(20, taskCellHeight, 50, 50)
+
+        let postponeImage: UIImage = UIImage(named: "postpone-image") as UIImage
+        postponeButton = UIButton.buttonWithType(UIButtonType.Custom) as UIButton
+        postponeButton.setImage(postponeImage, forState: UIControlState.Normal)
+        postponeButton.frame = CGRectMake(135, taskCellHeight, 50, 50)
         
-        let completeImage: UIImage = UIImage(named: "complete") as UIImage
-        completeImage.drawAtPoint(CGPoint(x: 40, y: 30))
-        completeImageView = UIImageView(image: completeImage) as UIImageView
-        
-        
-        editButton = UIButton.buttonWithType(UIButtonType.System) as UIButton
-        editButton.layer.cornerRadius = taskCellButtonCornerRadius
-        editButton.setTitle("Edit", forState: UIControlState.Normal)
-        editButton.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
-        editButton.backgroundColor = editButton.tintColor
-        editButton.frame = CGRectMake(250, 40, 60, 25)
+        let editImage: UIImage = UIImage(named: "edit-image") as UIImage
+        editButton = UIButton.buttonWithType(UIButtonType.Custom) as UIButton
+        editButton.setImage(editImage, forState: UIControlState.Normal)
+        editButton.frame = CGRectMake(250, taskCellHeight, 50, 50)
         
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        deleteButton.addTarget(self, action: "deleteButtonAction:", forControlEvents: UIControlEvents.TouchUpInside)
+        completeButton.addTarget(self, action: "complete:", forControlEvents: UIControlEvents.TouchUpInside)
+        postponeButton.addTarget(self, action: "postpone:", forControlEvents: UIControlEvents.TouchUpInside)
         editButton.addTarget(self, action: "editButtonAction:", forControlEvents: UIControlEvents.TouchUpInside)
         
         contentView.addSubview(nameTextLabel)
         contentView.addSubview(tagTextLabel)
         contentView.addSubview(circleViewLabel)
-        contentView.addSubview(deleteButton)
+//        contentView.addSubview(deleteButton)
+        contentView.addSubview(completeButton)
+        contentView.addSubview(postponeButton)
         contentView.addSubview(editButton)
-        contentView.addSubview(completeImageView)
+        
         
         nameTextLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
         contentView.addConstraint(NSLayoutConstraint(item: nameTextLabel, attribute: .Left, relatedBy: .Equal, toItem: contentView, attribute: .Left, multiplier: 1, constant: 30))
@@ -79,7 +79,8 @@ class TaskCell: UITableViewCell {
     }
     
     func setButtonsHidden(indexPath: NSIndexPath, check: Int) {
-        deleteButton.hidden = check == 1 ? !open[indexPath.section][indexPath.row] : !isOpenTodayTaskCell[indexPath.section][indexPath.row]
+        completeButton.hidden = check == 1 ? !open[indexPath.section][indexPath.row] : !isOpenTodayTaskCell[indexPath.section][indexPath.row]
+        postponeButton.hidden = check == 1 ? !open[indexPath.section][indexPath.row] : !isOpenTodayTaskCell[indexPath.section][indexPath.row]
         editButton.hidden = check == 1 ? !open[indexPath.section][indexPath.row] : !isOpenTodayTaskCell[indexPath.section][indexPath.row]
     }
     
@@ -89,22 +90,42 @@ class TaskCell: UITableViewCell {
         circleViewLabel.layer.backgroundColor = task.tag.color.CGColor
     }
     
-    func deleteButtonAction(sender: UIButton!) {
+
+    func complete(sender: UIButton!) {
         let buttonCell = sender.superview?.superview as UITableViewCell
         let tableView = buttonCell.superview?.superview as UITableView
         let indexPath = tableView.indexPathForCell(buttonCell) as NSIndexPath
+        
+        var window: AnyObject = sender.superview!
+        while !(window is UIWindow) {
+            window = window.superview!!
+        }
+        
+        window = window.rootViewController as UINavigationController
 
         sectionItems[indexPath.section].removeAtIndex(indexPath.row)
         if sectionItems[indexPath.section].count > 0 {
             for i in 0...sectionItems[indexPath.section].count-1 {
                 if indexPath.row <= i {
+                    isOpenTodayTaskCell[indexPath.section][i] = isOpenTodayTaskCell[indexPath.section][i+1]
                     open[indexPath.section][i] = open[indexPath.section][i+1]
                 }
             }
         }
 
         open[indexPath.section][sectionItems[indexPath.section].count] = false
+        isOpenTodayTaskCell[indexPath.section][sectionItems[indexPath.section].count] = false
+        
+        tableView.beginUpdates()
         tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
+        if sectionItems[indexPath.section].count == 0 && window.topViewController is TodayTaskViewController {
+            tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
+        }
+        tableView.endUpdates()
+    }
+    
+    func postpone(sender: UIButton!) {
+        println("postpone button tapped")
     }
     
     func editButtonAction(sender: UIButton!) {
@@ -120,7 +141,12 @@ class TaskCell: UITableViewCell {
         }
         
         window = window.rootViewController as UINavigationController
-        let controller: TaskViewController = window.topViewController as TaskViewController
-        controller.openEditTaskController(indexPath)
+        if window.topViewController is TaskViewController {
+            let controller: TaskViewController = window.topViewController as TaskViewController
+            controller.openEditTaskController(indexPath)
+        } else {
+            let controller: TodayTaskViewController = window.topViewController as TodayTaskViewController
+            controller.openEditTaskController(indexPath)
+        }
     }
 }
