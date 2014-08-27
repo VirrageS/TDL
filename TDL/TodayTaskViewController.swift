@@ -8,6 +8,10 @@ class TodayTaskViewController: UITableViewController {
         title = "Today"
     }
     
+    func slideNavigationControllerShouldDisplayLeftMenu() -> Bool {
+        return true;
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

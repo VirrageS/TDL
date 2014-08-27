@@ -2,7 +2,7 @@ import UIKit
 
 let taskCellHeight: CGFloat = 35
 let taskCellButtonCornerRadius: CGFloat = 5.0
-let taskCellEditSectionHeight: CGFloat = 50
+let taskCellEditSectionHeight: CGFloat = 60
 
 class TaskCell: UITableViewCell {
     let nameTextLabel: UILabel
