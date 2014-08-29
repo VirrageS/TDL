@@ -1,8 +1,13 @@
 import UIKit
 
-class AddTaskViewController: UIViewController, UITableViewDelegate, UITextViewDelegate {
+class AddTaskViewController: UIViewController, UITableViewDelegate, UITextViewDelegate, SlideNavigationControllerDelegate {
     var textView: UITextView!
     var deleteButtonLabel: UIButton!
+    
+    
+    func shouldDisplayMenu() -> Bool {
+        return false
+    }
     
     override init() {
         super.init(nibName: nil, bundle: nil)

@@ -1,18 +1,16 @@
 import UIKit
 
 class SlideNavigationControllerAnimatorSlide {
-    let slideMovement: CGFloat = 0.0
+    let slideMovement: CGFloat = 100.0
+    var _instance: SlideNavigationController?
     
     init() {
-        //super.init()
-        slideMovement = 100.0
+        
     }
     
     func prepareMenuForAnimation() {
-        let menuViewController: UIViewController = SlideNavigationController.sharedInstance(SlideNavigationController())().menu!
-
-    
-        let orientation: UIInterfaceOrientation = SlideNavigationController.sharedInstance(SlideNavigationController())().interfaceOrientation
+        let menuViewController: UIViewController = _instance!.menu!
+        let orientation: UIInterfaceOrientation = _instance!.interfaceOrientation
         var rect: CGRect = menuViewController.view.frame
     
         if UIInterfaceOrientationIsLandscape(orientation) {
@@ -33,9 +31,8 @@ class SlideNavigationControllerAnimatorSlide {
     }
 
     func animateMenu(progress: CGFloat) {
-        let menuViewController: UIViewController = SlideNavigationController.sharedInstance(SlideNavigationController())().menu!
-    
-        let orientation: UIInterfaceOrientation = SlideNavigationController.sharedInstance(SlideNavigationController())().interfaceOrientation
+        let menuViewController: UIViewController = _instance!.menu!
+        let orientation: UIInterfaceOrientation = _instance!.interfaceOrientation
     
         var location: CGFloat  = CGFloat(self.slideMovement*(-1)) + CGFloat(self.slideMovement*progress)
         location = (location > 0) ? 0 : location;
@@ -56,9 +53,8 @@ class SlideNavigationControllerAnimatorSlide {
     }
 
     func clearMenu() {
-        let menuViewController: UIViewController = SlideNavigationController.sharedInstance(SlideNavigationController())().menu!
-        
-        let orientation: UIInterfaceOrientation = SlideNavigationController.sharedInstance(SlideNavigationController())().interfaceOrientation
+        let menuViewController: UIViewController = _instance!.menu!
+        let orientation: UIInterfaceOrientation = _instance!.interfaceOrientation
         
         var rect: CGRect = menuViewController.view.frame;
     
@@ -69,5 +65,9 @@ class SlideNavigationControllerAnimatorSlide {
         }
         
         menuViewController.view.frame = rect;
+    }
+    
+    func setInstance(instance: SlideNavigationController?) {
+        _instance = instance?.sharedInstance()
     }
 }

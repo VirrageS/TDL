@@ -1,7 +1,5 @@
 import UIKit
 
-
-
 class MenuViewController: UITableViewController {
     let slideOutAnimationEnabled: Bool = true
     
@@ -23,7 +21,7 @@ class MenuViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView!, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return menuItems.count
     }
 
     override func tableView(tableView: UITableView!, cellForRowAtIndexPath indexPath: NSIndexPath!) -> UITableViewCell! {
@@ -35,22 +33,27 @@ class MenuViewController: UITableViewController {
     override func tableView(tableView: UITableView!, didSelectRowAtIndexPath indexPath: NSIndexPath!) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         
-        var controller: UIViewController
+        var controller: UIViewController?
         switch(indexPath.row) {
         case 0:
             controller = TodayTaskViewController()
-            navigationController.pushViewController(controller, animated: true)
             break
         case 1:
             controller = TaskViewController()
-            navigationController.pushViewController(controller, animated: true)
             break
         case 2:
             controller = TagViewController()
-            navigationController.pushViewController(controller, animated: true)
             break
         default:
             break
+        }
+        
+        if controller != nil {
+            var slideNavigation = SlideNavigationController().sharedInstance()
+            slideNavigation._delegate = controller as? SlideNavigationControllerDelegate
+            slideNavigation.popToRootAndSwitchToViewController(controller!, slideOutAnimation: true, completion: { (Bool) -> Void in })
+        } else {
+            println("Something went wrong and controller has not been initiated")
         }
     }
     

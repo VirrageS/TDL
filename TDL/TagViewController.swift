@@ -8,7 +8,11 @@
 
 import UIKit
 
-class TagViewController: UITableViewController {
+class TagViewController: UITableViewController, SlideNavigationControllerDelegate {
+    func shouldDisplayMenu() -> Bool {
+        return true
+    }
+    
     override init() {
         super.init(nibName: nil, bundle: nil)
         title = "Tags"
@@ -20,24 +24,9 @@ class TagViewController: UITableViewController {
         let addButtonItem = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "openAddTagController:")
         navigationItem.rightBarButtonItem = addButtonItem
         
-        
-        //print(navigationController.viewControllers)
-        let image: UIImage = UIImage(named: "menu-button") as UIImage
-        let menuButtonItem = UIBarButtonItem(image: image, style: UIBarButtonItemStyle.Plain, target: self, action: "backToMenuController:")
-        navigationItem.leftBarButtonItem = menuButtonItem
-        
         tableView.backgroundColor = UIColor.whiteColor()
         tableView.separatorColor = UIColor.whiteColor()
         tableView.registerClass(TagCell.self, forCellReuseIdentifier: NSStringFromClass(TagCell))
-    }
-    
-//    override func dealloc() {
-//        tableView.dataSource = nil
-//        tableView.delegate = nil
-//    }
-
-    func backToMenuController(sender: AnyObject) {
-        navigationController.popViewControllerAnimated(true)
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView!) -> Int {
@@ -64,12 +53,11 @@ class TagViewController: UITableViewController {
     
     func openAddTagController(sender: AnyObject) {
         let addTagViewController = AddTagViewController()
-        navigationController.pushViewController(addTagViewController, animated: true)
-    }
     
-    func openMenuController(sender: AnyObject) {
-        let menuViewController = MenuViewController()
-        navigationController.pushViewController(menuViewController, animated: true)
+        let slideNavigation = SlideNavigationController().sharedInstance()
+        slideNavigation._delegate = addTagViewController
+        
+        navigationController.pushViewController(addTagViewController, animated: true)
     }
     
     required init(coder aDecoder: NSCoder) {

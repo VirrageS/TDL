@@ -1,11 +1,20 @@
 import UIKit
 
-var menuItems = [String]()
-var tags = [Tag]()
+
 var listSections: [String] = []
 var sectionItems = [[Task]]()
-var isOpenTodayTaskCell = [[Bool]]()
+var tags = [Tag]()
 var open = [[Bool]]()
+
+var isOpenTodayTaskCell = [[Bool]]()
+var isOpenNext7DaysTaskCell = [[Bool]]() // for "open"
+
+var namesForNext7DaysSections = [String]() // for "listSection"
+
+var allTags = [Tag]() // for "tags"
+var allTasks = [[Task]]() // for "sectionItems"
+
+var menuItems = [String]() // for now it is good
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -52,14 +61,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
 
-        let leftMenu: UIViewController? = MenuViewController()
-        let slideNavigation: SlideNavigationController = SlideNavigationController()
-        slideNavigation.sharedInstance().menu = leftMenu!
+        let slideNavigation = SlideNavigationController()
+        slideNavigation.sharedInstance().menu = MenuViewController()
+        
+        let mainController = TodayTaskViewController()
+        slideNavigation.sharedInstance()._delegate = mainController
+        slideNavigation.pushViewController(mainController, animated: true)
+        slideNavigation.setMenuRevealAnimator(SlideNavigationControllerAnimatorSlide())
         
         window = UIWindow(frame: UIScreen.mainScreen().bounds)
         window.backgroundColor = UIColor.whiteColor()
-        window.rootViewController = UINavigationController(rootViewController: MenuViewController())
+        window.rootViewController = slideNavigation
         window.makeKeyAndVisible()
         return true
     }
+    
+    /*
+    
+    
+    func updateData() {
+    let documentsDirectory = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
+    let finalPath = documentsDirectory.stringByAppendingPathComponent("tdl.plist") as String
+    NSKeyedArchiver.archiveRootObject(self.listItems, toFile: finalPath)
+    }
+    
+    func loadInitialData() {
+    let finalPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0].stringByAppendingPathComponent("tdl.plist") as String
+    if NSFileManager.defaultManager().fileExistsAtPath(finalPath) {
+    listItems = NSKeyedUnarchiver.unarchiveObjectWithFile(finalPath) as NSMutableArray
+    }
+    }
+    */
 }

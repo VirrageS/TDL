@@ -1,8 +1,11 @@
 import UIKit
 
-class EditTagViewController: UIViewController {
+class EditTagViewController: UIViewController, SlideNavigationControllerDelegate {
     let path: NSIndexPath
-    //var textView: UITextView = "Hello"
+
+    func shouldDisplayMenu() -> Bool {
+        return false
+    }
     
     init(indexPath: NSIndexPath) {
         self.path = indexPath

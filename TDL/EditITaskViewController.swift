@@ -2,14 +2,21 @@ import UIKit
 
 let messageFontSize: CGFloat = 17
 
-class EditTaskViewController: UIViewController {
+class EditTaskViewController: UIViewController, UITableViewDelegate, UITextViewDelegate, SlideNavigationControllerDelegate {
     let path: NSIndexPath
-    //var textView: UITextView = "Hello"
+    
+    func shouldDisplayMenu() -> Bool {
+        return false
+    }
     
     init(indexPath: NSIndexPath) {
         self.path = indexPath
         super.init(nibName: nil, bundle: nil)
         title = "Edit Item"
+    }
+    
+    func slideNavigationControllerShouldDisplayLeftMenu() -> Bool {
+        return false
     }
 
     override func viewDidLoad() {

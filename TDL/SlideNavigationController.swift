@@ -1,39 +1,46 @@
 import UIKit
 import QuartzCore
 
-var MENU_SLIDE_ANIMATION_DURATION: NSTimeInterval = 0.3
-var MENU_QUICK_SLIDE_ANIMATION_DURATION: NSTimeInterval = 0.18
-var MENU_IMAGE = "menu-button"
-var MENU_SHADOW_RADIUS: CGFloat = 10
-var MENU_SHADOW_OPACITY: Float = 1
-var MENU_DEFAULT_SLIDE_OFFSET: CGFloat = 60.0
-var MENU_FAST_VELOCITY_FOR_SWIPE_FOLLOW_DIRECTION = 1200
-var STATUS_BAR_HEIGHT = 20
+let DEBUG: Bool = false
 
-class SlideNavigationController: UINavigationController, UIGestureRecognizerDelegate, UINavigationControllerDelegate  {
+let MENU_SLIDE_ANIMATION_DURATION: NSTimeInterval = 0.3
+let MENU_QUICK_SLIDE_ANIMATION_DURATION: NSTimeInterval = 0.18
+let MENU_SHADOW_RADIUS: CGFloat = 10
+let MENU_SHADOW_OPACITY: Float = 1
+let MENU_DEFAULT_SLIDE_OFFSET: CGFloat = 60.0
+let MENU_FAST_VELOCITY_FOR_SWIPE_FOLLOW_DIRECTION = 1200
+
+var singletonInstance: SlideNavigationController?
+
+@objc protocol SlideNavigationControllerDelegate {
+    optional func shouldDisplayMenu() -> Bool
+}
+
+class SlideNavigationController: UINavigationController, UINavigationControllerDelegate, UIGestureRecognizerDelegate {
     enum PopType {
         case PopTypeAll
         case PopTypeRoot
     }
+
+    var avoidSwitchingToSameClassViewController: Bool = false
+    var _enableSwipeGesture: Bool?
+    var enableShadow: Bool?
     
-    let slideNavigationControllerShouldDisplayLeftMenu: Bool = true
-    let avoidSwitchingToSameClassViewController: Bool = true
-    var _enableSwipeGesture: Bool = true
-    var enableShadow: Bool? = true
+    let portraitSlideOffset: CGFloat = MENU_DEFAULT_SLIDE_OFFSET
+    let landscapeSlideOffset: CGFloat = MENU_DEFAULT_SLIDE_OFFSET
+    let panGestureSideOffset: CGFloat = MENU_DEFAULT_SLIDE_OFFSET
+    
+    var _delegate: SlideNavigationControllerDelegate?
+    
     var menu: UIViewController?
-    var leftBarButtonItem: UIBarButtonItem?
-//    let rightBarButtonItem: UIBarButtonItem
-    let portraitSlideOffset: CGFloat = 60.0
-    let landscapeSlideOffset: CGFloat = 0.0
-    let panGestureSideOffset: CGFloat = 50.0
-//    let sharedInstance: SlideNavigationController?
+    var lastRevealedMenu: UIViewController?
+
     var _tapRecognizer: UITapGestureRecognizer?
     var _panRecognizer: UIPanGestureRecognizer?
-    var draggingPoint: CGPoint!
-    var singletonInstance: SlideNavigationController?
-    let lastRevealedMenu: AnyObject?
+    
+    var draggingPoint: CGPoint! = CGPoint(x: 0, y: 0)
+    var leftBarButtonItem: UIBarButtonItem?
     var _menuRevealAnimator: SlideNavigationControllerAnimatorSlide?
-//    @property (nonatomic, strong) id <SlideNavigationContorllerAnimator> menuRevealAnimator;
     
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -42,15 +49,19 @@ class SlideNavigationController: UINavigationController, UIGestureRecognizerDele
     override init() {
         super.init(nibName: nil, bundle: nil)
         
-        singletonInstance = self
-        landscapeSlideOffset = MENU_DEFAULT_SLIDE_OFFSET
-        portraitSlideOffset = MENU_DEFAULT_SLIDE_OFFSET
-        panGestureSideOffset = 0
+        if DEBUG {
+            println("init called")
+        }
+        
+        if singletonInstance == nil {
+            singletonInstance = self
+        }
+        
         avoidSwitchingToSameClassViewController = true
-        _enableSwipeGesture = true
+        setEnableSwipeGesture(true)
+        setEnableShadow(true)
         delegate = self
     }
-
     
     func sharedInstance() -> SlideNavigationController {
         if singletonInstance == nil {
@@ -62,19 +73,17 @@ class SlideNavigationController: UINavigationController, UIGestureRecognizerDele
 
 
     func initWithRootViewController(rootViewController: UIViewController) -> AnyObject! {
-//        setup()
-    
         return self;
     }
-    
 
-    
     override func viewWillLayoutSubviews()  {
         super.viewWillLayoutSubviews()
     
-    // Update shadow size of enabled
+        // Update shadow size of enabled
         if (enableShadow != nil) {
-            view.layer.shadowPath = UIBezierPath(rect: view.bounds).CGPath
+            if enableShadow! {
+                view.layer.shadowPath = UIBezierPath(rect: view.bounds).CGPath
+            }
         }
     }
     
@@ -94,22 +103,31 @@ class SlideNavigationController: UINavigationController, UIGestureRecognizerDele
     }
 
     func switchToViewController(viewController: UIViewController, slideOutAnimation: Bool, poptype: PopType, completion: (Bool) -> Void) {
-        if avoidSwitchingToSameClassViewController { // missing && [self.topViewController isKindOfClass:viewController.class])
+        if DEBUG {
+            println("switchToViewController step #1 called")
+        }
+        
+        if avoidSwitchingToSameClassViewController && topViewController == viewController {
             closeMenuWithCompletion(completion)
-            return;
+            return
         }
     
         let switchAndCallCompletion = { (closeMenuBeforeCallingCompletion: Bool) -> () in
             if poptype == PopType.PopTypeAll {
                 self.setViewControllers([viewController], animated: false)
             } else {
-                self.popToRootViewControllerAnimated(false)
+                // #TODO
+//                self.popToRootViewControllerAnimated(false)
                 self.pushViewController(viewController, animated: false)
             }
         
             if closeMenuBeforeCallingCompletion {
                 self.closeMenuWithCompletion(completion)
             }
+        }
+        
+        if DEBUG {
+            println("switchToViewController step #2 called")
         }
         
         if isMenuOpen() {
@@ -126,6 +144,10 @@ class SlideNavigationController: UINavigationController, UIGestureRecognizerDele
             }
         } else {
             switchAndCallCompletion(false)
+        }
+        
+        if DEBUG {
+            println("switchToViewController step #3 called")
         }
     }
 
@@ -156,11 +178,7 @@ class SlideNavigationController: UINavigationController, UIGestureRecognizerDele
     func openMenu(completion: (Bool) -> Void) {
         openMenu(MENU_SLIDE_ANIMATION_DURATION, completion)
     }
-    
-    func toggleLeftMenu() {
-        toggleMenu({ (Bool) -> Void in })
-    }
-    
+
     func isMenuOpen() -> Bool {
         return horizontalLocation() == 0 ? false : true;
     }
@@ -188,7 +206,7 @@ class SlideNavigationController: UINavigationController, UIGestureRecognizerDele
                 return
             })
         } else {
-            return popToRootViewControllerAnimated(animated)
+            return super.popToRootViewControllerAnimated(animated)
         }
         
         return nil;
@@ -200,7 +218,7 @@ class SlideNavigationController: UINavigationController, UIGestureRecognizerDele
                 self.pushViewController(viewController, animated: animated)
             })
         } else {
-            pushViewController(viewController, animated: animated)
+            super.pushViewController(viewController, animated: animated)
         }
     }
 
@@ -238,6 +256,10 @@ class SlideNavigationController: UINavigationController, UIGestureRecognizerDele
 
     
     func toggleMenu(completion: (Bool) -> Void) {
+        if DEBUG {
+            println("toggleMenu called")
+        }
+        
         if isMenuOpen() {
             closeMenuWithCompletion(completion)
         } else {
@@ -260,13 +282,25 @@ class SlideNavigationController: UINavigationController, UIGestureRecognizerDele
     }
 
     func shouldDisplayMenu(vc: UIViewController) -> Bool {
-        // missing if vc.respondsToSelector(Selector( slideNavigationControllerShouldDisplayLeftMenu)  && [(UIViewController<SlideNavigationControllerDelegate> *)vc slideNavigationControllerShouldDisplayRightMenu])
-            return true
+        if DEBUG {
+            println("shouldDisplayMenu called")
+        }
         
-//        return false
+        if let check = _delegate?.shouldDisplayMenu!() {
+            if DEBUG {
+                print(check)
+            }
+            return check
+        }
+        
+        return true
     }
     
     func openMenu(duration: NSTimeInterval, completion: (Bool) -> Void) {
+        if DEBUG {
+            println("openMenu called")
+        }
+        
         enableTapGestureToCloseMenu(true)
         prepareMenuForReveal()
         
@@ -321,27 +355,17 @@ class SlideNavigationController: UINavigationController, UIGestureRecognizerDele
 
     // is it needed?
     func prepareMenuForReveal() {
-//        if lastRevealedMenu is leftMenu {
-//            return
-//        }
-//        
-//        let menuViewController = leftMenu
-//        let removingMenu
-//        
-//        if (self.lastRevealedMenu && menu == self.lastRevealedMenu)
-//        return;
-//        
-//        UIViewController *menuViewController = (menu == MenuLeft) ? self.leftMenu : self.rightMenu;
-//        UIViewController *removingMenuViewController = (menu == MenuLeft) ? self.rightMenu : self.leftMenu;
-//        
-//        self.lastRevealedMenu = menu;
-//        
-//        [removingMenuViewController.view removeFromSuperview];
-//        [self.view.window insertSubview:menuViewController.view atIndex:0];
-//        
-//        [self updateMenuFrameAndTransformAccordingToOrientation];
-//        
-//        [self.menuRevealAnimator prepareMenuForAnimation:menu];
+        if lastRevealedMenu != nil {
+            if lastRevealedMenu == menu {
+                return
+            }
+        }
+        
+        var menuViewController: UIViewController = menu!
+        lastRevealedMenu = menu
+        self.view.window?.insertSubview(menuViewController.view, atIndex: 0)
+        updateMenuFrameAndTransformAccordingToOrientation()
+        _menuRevealAnimator?.prepareMenuForAnimation()
     }
     
     func horizontalLocation() -> CGFloat {
@@ -367,8 +391,16 @@ class SlideNavigationController: UINavigationController, UIGestureRecognizerDele
     }
     
     func navigationController(navigationController: UINavigationController!, willShowViewController viewController: UIViewController!, animated: Bool) {
+        if DEBUG {
+            println("navigationController called")
+        }
+        
         if shouldDisplayMenu(viewController) {
             viewController.navigationItem.leftBarButtonItem = barButtonItemForMenu()
+            
+            if DEBUG {
+                println("leftButtonSet called")
+            }
         }
     }
     
@@ -378,9 +410,20 @@ class SlideNavigationController: UINavigationController, UIGestureRecognizerDele
 
     
     func leftMenuSelected(sender: AnyObject) {
+        if DEBUG {
+            println("leftMenuSelected called")
+        }
         if isMenuOpen() {
+            if DEBUG {
+                println("leftMenuSelected -> isMenuOpen -> true -> called")
+            }
+            
             closeMenuWithCompletion({ (Bool) -> Void in })
         } else {
+            if DEBUG {
+                println("leftMenuSelected -> isMenuOpen -> false -> called")
+            }
+            
             openMenu({ (Bool) -> Void in })
         }
     }
@@ -458,6 +501,9 @@ class SlideNavigationController: UINavigationController, UIGestureRecognizerDele
     }
     
     func panRecognizer() -> UIPanGestureRecognizer {
+        if DEBUG {
+            println("panRecognizer called")
+        }
         if !(_panRecognizer != nil) {
             _panRecognizer = UIPanGestureRecognizer(target: self, action: "panDetected:")
             _panRecognizer!.delegate = self;
@@ -469,7 +515,7 @@ class SlideNavigationController: UINavigationController, UIGestureRecognizerDele
     func setEnableSwipeGesture(markEnableSwipeGesture: Bool) {
         _enableSwipeGesture = markEnableSwipeGesture;
     
-        if _enableSwipeGesture {
+        if (_enableSwipeGesture != nil) {
             self.view.addGestureRecognizer(panRecognizer())
         } else {
             self.view.removeGestureRecognizer(panRecognizer())
@@ -477,6 +523,7 @@ class SlideNavigationController: UINavigationController, UIGestureRecognizerDele
     }
     
     func setMenuRevealAnimator(menuRevealAnimator: SlideNavigationControllerAnimatorSlide) {
+        menuRevealAnimator.setInstance(singletonInstance!)
         menuRevealAnimator.clear()
         _menuRevealAnimator = menuRevealAnimator
     }

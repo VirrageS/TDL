@@ -4,6 +4,9 @@ let taskCellHeight: CGFloat = 35
 let taskCellButtonCornerRadius: CGFloat = 5.0
 let taskCellEditSectionHeight: CGFloat = 60
 
+let taskCellTextFontSize: CGFloat = 12
+let taskCellTagFontSize: CGFloat = 9
+
 class TaskCell: UITableViewCell {
     let nameTextLabel: UILabel
     let tagTextLabel: UILabel
@@ -16,14 +19,14 @@ class TaskCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String) {
         nameTextLabel = UILabel(frame: CGRectZero)
         nameTextLabel.backgroundColor = UIColor.whiteColor()
-        nameTextLabel.font = UIFont.systemFontOfSize(cellTextFontSize)
+        nameTextLabel.font = UIFont.systemFontOfSize(taskCellTextFontSize)
         nameTextLabel.numberOfLines = 1
         nameTextLabel.textAlignment = NSTextAlignment.Left;
         nameTextLabel.textColor = UIColor(red: 142/255, green: 142/255, blue: 147/255, alpha: 1)
         
         tagTextLabel = UILabel(frame: CGRectZero)
         tagTextLabel.backgroundColor = UIColor.whiteColor()
-        tagTextLabel.font = UIFont.systemFontOfSize(cellTagTextFontSize)
+        tagTextLabel.font = UIFont.systemFontOfSize(taskCellTagFontSize)
         tagTextLabel.numberOfLines = 1
         tagTextLabel.textAlignment = NSTextAlignment.Left;
         tagTextLabel.textColor = UIColor(red: 142/255, green: 142/255, blue: 147/255, alpha: 1)
@@ -55,7 +58,6 @@ class TaskCell: UITableViewCell {
         contentView.addSubview(nameTextLabel)
         contentView.addSubview(tagTextLabel)
         contentView.addSubview(circleViewLabel)
-//        contentView.addSubview(deleteButton)
         contentView.addSubview(completeButton)
         contentView.addSubview(postponeButton)
         contentView.addSubview(editButton)
