@@ -53,7 +53,7 @@ class TaskCell: UITableViewCell {
         
         completeButton.addTarget(self, action: "complete:", forControlEvents: UIControlEvents.TouchUpInside)
         postponeButton.addTarget(self, action: "postpone:", forControlEvents: UIControlEvents.TouchUpInside)
-        editButton.addTarget(self, action: "editButtonAction:", forControlEvents: UIControlEvents.TouchUpInside)
+        editButton.addTarget(self, action: "edit:", forControlEvents: UIControlEvents.TouchUpInside)
         
         contentView.addSubview(nameTextLabel)
         contentView.addSubview(tagTextLabel)
@@ -102,36 +102,77 @@ class TaskCell: UITableViewCell {
         while !(window is UIWindow) {
             window = window.superview!!
         }
-        
         window = window.rootViewController as UINavigationController
 
         sectionItems[indexPath.section].removeAtIndex(indexPath.row)
-        if sectionItems[indexPath.section].count > 0 {
-            for i in 0...sectionItems[indexPath.section].count-1 {
-                if indexPath.row <= i {
-                    isOpenTodayTaskCell[indexPath.section][i] = isOpenTodayTaskCell[indexPath.section][i+1]
-                    open[indexPath.section][i] = open[indexPath.section][i+1]
-                }
-            }
-        }
+        updateOpenCells(indexPath)
 
-        open[indexPath.section][sectionItems[indexPath.section].count] = false
-        isOpenTodayTaskCell[indexPath.section][sectionItems[indexPath.section].count] = false
-        
         tableView.beginUpdates()
         tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
+        
+        // for no task cell
         if sectionItems[indexPath.section].count == 0 && window.topViewController is TodayTaskViewController {
             tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
         }
         tableView.endUpdates()
     }
     
-    func postpone(sender: UIButton!) {
-        println("postpone button tapped")
+    func postpone(sender: UIButton!) { // TODO: clean up and new function "updateOpenCells"
+        let buttonCell = sender.superview?.superview as UITableViewCell
+        let tableView = buttonCell.superview?.superview as UITableView
+        let indexPath = tableView.indexPathForCell(buttonCell) as NSIndexPath
+        
+        var window: AnyObject = sender.superview!
+        while !(window is UIWindow) {
+            window = window.superview!!
+        }
+        window = window.rootViewController as UINavigationController
+
+        // change completion date, insert task to tasks list and delete from current section
+        var task: Task = sectionItems[indexPath.section][indexPath.row]
+        task.completionDate = NSDate(timeInterval: NSTimeInterval(60*60*24), sinceDate: task.completionDate)
+        sectionItems[indexPath.section+1].insert(task, atIndex: sectionItems[indexPath.section+1].count)
+        sectionItems[indexPath.section].removeAtIndex(indexPath.row)
+        
+        updateOpenCells(indexPath)
+        open[indexPath.section+1].insert(false, atIndex: sectionItems[indexPath.section+1].count-1)
+        
+        // table view update: delete and insert
+        tableView.beginUpdates()
+        tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
+
+        // we cannot insert new row in section+1 if it is today task view controller
+        if window.topViewController is TaskViewController {
+            tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: sectionItems[indexPath.section+1].count-1, inSection: indexPath.section+1)], withRowAnimation: UITableViewRowAnimation.Left)
+        }
+        
+        // for no task cell
+        if sectionItems[indexPath.section].count == 0 && window.topViewController is TodayTaskViewController {
+            tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
+        }
+        tableView.endUpdates()
     }
     
-    func editButtonAction(sender: UIButton!) {
-        // for index path
+    func updateOpenCells(indexPath: NSIndexPath) {
+        if sectionItems[indexPath.section].count > 0 {
+            for i in 0...sectionItems[indexPath.section].count-1 {
+                if indexPath.row <= i {
+                    if indexPath.section == 0 {
+                        isOpenTodayTaskCell[indexPath.section][i] = isOpenTodayTaskCell[indexPath.section][i+1]
+                    }
+                    
+                    open[indexPath.section][i] = open[indexPath.section][i+1]
+                }
+            }
+        }
+        
+        open[indexPath.section][sectionItems[indexPath.section].count] = false
+        if indexPath.section == 0 {
+            isOpenTodayTaskCell[indexPath.section][sectionItems[indexPath.section].count] = false
+        }
+    }
+    
+    func edit(sender: UIButton!) {
         let buttonCell = sender.superview?.superview as UITableViewCell
         let tableView = buttonCell.superview?.superview as UITableView
         let indexPath = tableView.indexPathForCell(buttonCell) as NSIndexPath
@@ -141,14 +182,16 @@ class TaskCell: UITableViewCell {
         while !(window is UIWindow) {
             window = window.superview!!
         }
-        
         window = window.rootViewController as UINavigationController
+
         if window.topViewController is TaskViewController {
-            let controller: TaskViewController = window.topViewController as TaskViewController
+            let controller = window.topViewController as TaskViewController
             controller.openEditTaskController(indexPath)
         } else {
-            let controller: TodayTaskViewController = window.topViewController as TodayTaskViewController
+            let controller = window.topViewController as TodayTaskViewController
             controller.openEditTaskController(indexPath)
         }
+        
+        
     }
 }

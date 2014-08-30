@@ -15,7 +15,7 @@ class TodayTaskViewController: UITableViewController, SlideNavigationControllerD
         
         let addButtonItem = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "openAddTaskController:")
         navigationItem.rightBarButtonItem = addButtonItem
-
+        
         tableView.backgroundColor = UIColor.whiteColor()
         tableView.separatorColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0)
         tableView.registerClass(TaskCell.self, forCellReuseIdentifier: NSStringFromClass(TaskCell))
@@ -75,6 +75,10 @@ class TodayTaskViewController: UITableViewController, SlideNavigationControllerD
         
         // row height for no cell
         return noTaskCellHeight
+    }
+    
+    override func tableView(tableView: UITableView!, editingStyleForRowAtIndexPath indexPath: NSIndexPath!) -> UITableViewCellEditingStyle {
+        return UITableViewCellEditingStyle.None
     }
     
     func openAddTaskController(sender: AnyObject) {

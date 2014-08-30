@@ -42,13 +42,11 @@ class SlideNavigationController: UINavigationController, UINavigationControllerD
     var leftBarButtonItem: UIBarButtonItem?
     var _menuRevealAnimator: SlideNavigationControllerAnimatorSlide?
     
-    required init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     override init() {
         super.init(nibName: nil, bundle: nil)
         
+        super.navigationItem.title = "WTF"
+
         if DEBUG {
             println("init called")
         }
@@ -71,10 +69,9 @@ class SlideNavigationController: UINavigationController, UINavigationControllerD
         return singletonInstance!
     }
 
-
-    func initWithRootViewController(rootViewController: UIViewController) -> AnyObject! {
-        return self;
-    }
+//    func initWithRootViewController(rootViewController: UIViewController) -> AnyObject! {
+//        return self;
+//    }
 
     override func viewWillLayoutSubviews()  {
         super.viewWillLayoutSubviews()
@@ -526,5 +523,9 @@ class SlideNavigationController: UINavigationController, UINavigationControllerD
         menuRevealAnimator.setInstance(singletonInstance!)
         menuRevealAnimator.clear()
         _menuRevealAnimator = menuRevealAnimator
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }

@@ -15,7 +15,7 @@ class TaskViewController: UITableViewController, SlideNavigationControllerDelega
 
         // right item to open add task controller
         let addButtonItem = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "openAddTaskController:")
-        navigationItem.rightBarButtonItem = addButtonItem
+        navigationItem.leftBarButtonItem = addButtonItem
         
         tableView.backgroundColor = UIColor.whiteColor()
         tableView.separatorColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0)
@@ -23,7 +23,7 @@ class TaskViewController: UITableViewController, SlideNavigationControllerDelega
     }
 
     override func numberOfSectionsInTableView(tableView: UITableView!) -> Int {
-        return sectionItems.count as Int
+        return listSections.count as Int
     }
     
     override func tableView(tableView: UITableView!, titleForHeaderInSection section: Int) -> String! {

@@ -21,6 +21,7 @@
 		45993D9A19AA29CA00B371CE /* EditITaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45993D9919AA29CA00B371CE /* EditITaskViewController.swift */; };
 		45A2FC6219A8BDC700ADEABA /* TaskCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A2FC6119A8BDC700ADEABA /* TaskCell.swift */; };
 		45A2FC6419A8BE0000ADEABA /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A2FC6319A8BE0000ADEABA /* Task.swift */; };
+		45B62AF519B1E05300912F76 /* MenuLogoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B62AF419B1E05300912F76 /* MenuLogoCell.swift */; };
 		45DE9C9319A8BB82004AB634 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45DE9C9219A8BB82004AB634 /* AppDelegate.swift */; };
 		45DE9C9519A8BB82004AB634 /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45DE9C9419A8BB82004AB634 /* TaskViewController.swift */; };
 		45DE9C9A19A8BB82004AB634 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 45DE9C9919A8BB82004AB634 /* Images.xcassets */; };
@@ -54,6 +55,7 @@
 		45993D9919AA29CA00B371CE /* EditITaskViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditITaskViewController.swift; sourceTree = "<group>"; };
 		45A2FC6119A8BDC700ADEABA /* TaskCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskCell.swift; sourceTree = "<group>"; };
 		45A2FC6319A8BE0000ADEABA /* Task.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
+		45B62AF419B1E05300912F76 /* MenuLogoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuLogoCell.swift; sourceTree = "<group>"; };
 		45DE9C8D19A8BB82004AB634 /* TDL.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TDL.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		45DE9C9119A8BB82004AB634 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		45DE9C9219A8BB82004AB634 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -115,6 +117,7 @@
 			children = (
 				454CD71319AB4B2C0052FD17 /* MenuViewController.swift */,
 				451CD1AE19ABC2CE005DB8DF /* MenuCell.swift */,
+				45B62AF419B1E05300912F76 /* MenuLogoCell.swift */,
 			);
 			name = Menu;
 			sourceTree = "<group>";
@@ -326,6 +329,7 @@
 				451CD1B219ABC71B005DB8DF /* TagViewController.swift in Sources */,
 				454CD71719AB4C230052FD17 /* Tag.swift in Sources */,
 				451CD1AD19ABC124005DB8DF /* SlideAnimationSlide.swift in Sources */,
+				45B62AF519B1E05300912F76 /* MenuLogoCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
