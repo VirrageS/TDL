@@ -13,13 +13,18 @@ class TaskViewController: UITableViewController, SlideNavigationControllerDelega
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // right item to open add task controller
+        // Right item to open add task controller
         let addButtonItem = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "openAddTaskController:")
-        navigationItem.leftBarButtonItem = addButtonItem
+        navigationItem.rightBarButtonItem = addButtonItem
         
         tableView.backgroundColor = UIColor.whiteColor()
-        tableView.separatorColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0)
+        tableView.separatorStyle = UITableViewCellSeparatorStyle.None
         tableView.registerClass(TaskCell.self, forCellReuseIdentifier: NSStringFromClass(TaskCell))
+    }
+
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        tableView.reloadData()
     }
 
     override func numberOfSectionsInTableView(tableView: UITableView!) -> Int {
@@ -36,7 +41,7 @@ class TaskViewController: UITableViewController, SlideNavigationControllerDelega
     
     override func tableView(tableView: UITableView!, cellForRowAtIndexPath indexPath: NSIndexPath!) -> UITableViewCell! {
         let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(TaskCell), forIndexPath: indexPath) as TaskCell
-        cell.configureWithList(sectionItems[indexPath.section][indexPath.row])
+        cell.configureCell(sectionItems[indexPath.section][indexPath.row])
         cell.setButtonsHidden(indexPath, check: 1)
         return cell as TaskCell
     }
@@ -52,13 +57,25 @@ class TaskViewController: UITableViewController, SlideNavigationControllerDelega
     }
     
     override func tableView(tableView: UITableView!, heightForRowAtIndexPath indexPath: NSIndexPath!) -> CGFloat {
-        // row height for open cell
-        if open[indexPath.section][indexPath.row] {
-            return taskCellHeight + taskCellEditSectionHeight
+        var extraHeight: CGFloat?
+        // Extra height when task name is too long
+        if interfaceOrientation.isPortrait {
+            extraHeight = CGFloat(ceil(Double(sectionItems[indexPath.section][indexPath.row].name.utf16Count)/35)*14.5)
+        } else {
+            extraHeight = CGFloat(ceil(Double(sectionItems[indexPath.section][indexPath.row].name.utf16Count)/71)*14.5)
         }
         
-        // row height for closed cell
-        return taskCellHeight
+        // Row height for open cell
+        if open[indexPath.section][indexPath.row] {
+            return taskCellHeight + taskCellEditSectionHeight + extraHeight!
+        }
+        
+        // Row height for closed cell
+        return taskCellHeight + extraHeight!
+    }
+    
+    override func tableView(tableView: UITableView!, willDisplayHeaderView view: UIView!, forSection section: Int) {
+        view.tintColor = UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1)
     }
     
     func openAddTaskController(sender: AnyObject) {

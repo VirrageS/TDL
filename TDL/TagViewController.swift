@@ -1,11 +1,3 @@
-//
-//  TagViewController.swift
-//  TDL
-//
-//  Created by Janusz Marcinkiewicz on 25.08.2014.
-//  Copyright (c) 2014 VirrageS. All rights reserved.
-//
-
 import UIKit
 
 class TagViewController: UITableViewController, SlideNavigationControllerDelegate {
@@ -20,12 +12,12 @@ class TagViewController: UITableViewController, SlideNavigationControllerDelegat
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         let addButtonItem = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "openAddTagController:")
         navigationItem.rightBarButtonItem = addButtonItem
         
         tableView.backgroundColor = UIColor.whiteColor()
-        tableView.separatorColor = UIColor.whiteColor()
+        tableView.separatorColor = UIColor.clearColor() // transparent separator
         tableView.registerClass(TagCell.self, forCellReuseIdentifier: NSStringFromClass(TagCell))
     }
     
@@ -49,8 +41,15 @@ class TagViewController: UITableViewController, SlideNavigationControllerDelegat
     
     override func tableView(tableView: UITableView!, didSelectRowAtIndexPath indexPath: NSIndexPath!) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        
+        let detailTagViewController = DetailTagViewController(tag: tags[indexPath.row])
+        
+        let slideNavigation = SlideNavigationController().sharedInstance()
+        slideNavigation._delegate = detailTagViewController
+        
+        navigationController.pushViewController(detailTagViewController, animated: true)
     }
-    
+
     func openAddTagController(sender: AnyObject) {
         let addTagViewController = AddTagViewController()
     

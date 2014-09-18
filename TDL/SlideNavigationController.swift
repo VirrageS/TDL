@@ -5,12 +5,13 @@ let DEBUG: Bool = false
 
 let MENU_SLIDE_ANIMATION_DURATION: NSTimeInterval = 0.3
 let MENU_QUICK_SLIDE_ANIMATION_DURATION: NSTimeInterval = 0.18
-let MENU_SHADOW_RADIUS: CGFloat = 10
+let MENU_SHADOW_RADIUS: CGFloat = 5
 let MENU_SHADOW_OPACITY: Float = 1
 let MENU_DEFAULT_SLIDE_OFFSET: CGFloat = 60.0
 let MENU_FAST_VELOCITY_FOR_SWIPE_FOLLOW_DIRECTION = 1200
 
 var singletonInstance: SlideNavigationController?
+var bar: UINavigationBar?
 
 @objc protocol SlideNavigationControllerDelegate {
     optional func shouldDisplayMenu() -> Bool
@@ -32,6 +33,7 @@ class SlideNavigationController: UINavigationController, UINavigationControllerD
     
     var _delegate: SlideNavigationControllerDelegate?
     
+    
     var menu: UIViewController?
     var lastRevealedMenu: UIViewController?
 
@@ -41,11 +43,9 @@ class SlideNavigationController: UINavigationController, UINavigationControllerD
     var draggingPoint: CGPoint! = CGPoint(x: 0, y: 0)
     var leftBarButtonItem: UIBarButtonItem?
     var _menuRevealAnimator: SlideNavigationControllerAnimatorSlide?
-    
-    override init() {
-        super.init(nibName: nil, bundle: nil)
-        
-        super.navigationItem.title = "WTF"
+   
+    convenience override init() {
+        self.init(nibName: nil, bundle: nil)
 
         if DEBUG {
             println("init called")
@@ -54,6 +54,11 @@ class SlideNavigationController: UINavigationController, UINavigationControllerD
         if singletonInstance == nil {
             singletonInstance = self
         }
+//        
+//        if bar == nil {
+//            bar = self.navigationBar
+//        }
+//        self.navigationBar.bounds.origin = CGPoint(x: -10, y: 0)
         
         avoidSwitchingToSameClassViewController = true
         setEnableSwipeGesture(true)
@@ -350,17 +355,20 @@ class SlideNavigationController: UINavigationController, UINavigationControllerD
         return rect;
     }
 
-    // is it needed?
     func prepareMenuForReveal() {
         if lastRevealedMenu != nil {
             if lastRevealedMenu == menu {
                 return
             }
         }
-        
-        var menuViewController: UIViewController = menu!
+
         lastRevealedMenu = menu
-        self.view.window?.insertSubview(menuViewController.view, atIndex: 0)
+        
+        view.window?.insertSubview(menu!.view, atIndex: 0)
+//        view.window?.insertSubview(bar!, atIndex: 1)
+//        .navigationBar.topItem.title = "Hello"
+//        navigationItem.title = "lol"
+        
         updateMenuFrameAndTransformAccordingToOrientation()
         _menuRevealAnimator?.prepareMenuForAnimation()
     }
@@ -482,7 +490,7 @@ class SlideNavigationController: UINavigationController, UINavigationControllerD
     }
 
     func minXForDragging() -> Int {
-        return 0;
+        return 0
     }
     
     func maxXForDragging() -> Int {
@@ -503,14 +511,14 @@ class SlideNavigationController: UINavigationController, UINavigationControllerD
         }
         if !(_panRecognizer != nil) {
             _panRecognizer = UIPanGestureRecognizer(target: self, action: "panDetected:")
-            _panRecognizer!.delegate = self;
+            _panRecognizer!.delegate = self
         }
     
-        return _panRecognizer!;
+        return _panRecognizer!
     }
     
     func setEnableSwipeGesture(markEnableSwipeGesture: Bool) {
-        _enableSwipeGesture = markEnableSwipeGesture;
+        _enableSwipeGesture = markEnableSwipeGesture
     
         if (_enableSwipeGesture != nil) {
             self.view.addGestureRecognizer(panRecognizer())
@@ -523,9 +531,5 @@ class SlideNavigationController: UINavigationController, UINavigationControllerD
         menuRevealAnimator.setInstance(singletonInstance!)
         menuRevealAnimator.clear()
         _menuRevealAnimator = menuRevealAnimator
-    }
-
-    required init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }

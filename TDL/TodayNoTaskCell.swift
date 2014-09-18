@@ -1,7 +1,7 @@
 import UIKit
 
 let noTaskCellHeight: CGFloat = 300
-let noTaskCellTextFontSize: CGFloat = 15
+let noTaskCellTextFontSize: CGFloat = 18
 
 class NoTaskCell: UITableViewCell {
     let nameTextLabel: UILabel
@@ -12,11 +12,11 @@ class NoTaskCell: UITableViewCell {
         nameTextLabel.font = UIFont.systemFontOfSize(noTaskCellTextFontSize)
         nameTextLabel.numberOfLines = 2
         nameTextLabel.text = "No tasks for today.\nHave a nice day :)"
-        nameTextLabel.textAlignment = NSTextAlignment.Center;
+        nameTextLabel.textAlignment = NSTextAlignment.Center
         nameTextLabel.textColor = UIColor.blackColor()
         
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
+
         contentView.addSubview(nameTextLabel)
         
         nameTextLabel.setTranslatesAutoresizingMaskIntoConstraints(false)

@@ -1,24 +1,20 @@
 import UIKit
 
-class MenuViewController: UITableViewController {
+class MenuViewController: UITableViewController, SlideNavigationControllerDelegate {
     let slideOutAnimationEnabled: Bool = true
     
     convenience override init() {
         self.init(style: .Plain)
-        title = "Dlaczego"
+        title = "Hello"
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationItem.title = "WTF"
+        tableView.scrollEnabled = false
 
-        let addButtonItem = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "openAddTaskController:")
-        navigationItem.rightBarButtonItem = addButtonItem
-        
-        tableView.backgroundColor = UIColor.whiteColor()
-        tableView.separatorColor = UIColor.whiteColor()
-//        tableView.separatorInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+        tableView.separatorStyle = UITableViewCellSeparatorStyle.None
+        tableView.backgroundColor = UIColor(red: 248/255, green: 248/255, blue: 248/255, alpha: 1.0)
         tableView.registerClass(MenuCell.self, forCellReuseIdentifier: NSStringFromClass(MenuCell))
         tableView.registerClass(MenuLogoCell.self, forCellReuseIdentifier: NSStringFromClass(MenuLogoCell))
     }
@@ -47,13 +43,31 @@ class MenuViewController: UITableViewController {
         }
         
         let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(MenuCell), forIndexPath: indexPath) as MenuCell
-        cell.configure(menuItems[indexPath.row-1], count: (indexPath.row == 1 ? sectionItems[0].count : (indexPath.row == 2 ? all : nil)))
+        cell.configure(menuItems[indexPath.row-1])
+        cell.selected = true
+        
+        // #Description
+        let view = UIView(frame: cell.bounds)
+        view.layer.borderColor = UIColor.whiteColor().CGColor
+        
+        let separatorLine = UIView(frame: CGRect(x: 0, y: menuCellHeight, width: 320, height: 0.5)) // #Change
+        separatorLine.backgroundColor = UIColor(red: 200/255, green: 200/255, blue: 200/255, alpha: 1.0)
+        view.addSubview(separatorLine)
+        
+        cell.selectedBackgroundView = view
         return cell as MenuCell
     }
     
-    override func tableView(tableView: UITableView!, didSelectRowAtIndexPath indexPath: NSIndexPath!) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    override func tableView(tableView: UITableView!, shouldHighlightRowAtIndexPath indexPath: NSIndexPath!) -> Bool {
+        if indexPath.row == 0 {
+            return false
+        }
         
+        return true
+    }
+    
+    override func tableView(tableView: UITableView!, didSelectRowAtIndexPath indexPath: NSIndexPath!) {
+
         var controller: UIViewController?
         switch(indexPath.row) {
         case 1:
@@ -88,9 +102,42 @@ class MenuViewController: UITableViewController {
     
     override func tableView(tableView: UITableView!, heightForRowAtIndexPath indexPath: NSIndexPath!) -> CGFloat {
         if indexPath.row == 0 {
-            return menuLogoCellHeight
+            if interfaceOrientation.isLandscape {
+                return menuLogoCellHeightLandscape
+            }
+
+            return menuLogoCellHeightPortrait
         }
         
         return menuCellHeight
+    }
+    
+    override func viewDidLayoutSubviews() {
+        self.updateCount()
+    }
+    
+    func updateCount() {
+        // Update count in menu cell
+        var indexPath: NSIndexPath = NSIndexPath(forRow: 1, inSection: 0)
+        var cell: MenuCell? = tableView.cellForRowAtIndexPath(indexPath) as MenuCell?
+        if cell == nil {
+            println("Menu cell is nil?")
+            return
+        }
+        
+        cell!.countTextLabel.text = String(sectionItems[0].count)
+        
+        var all: Int = 0
+        for i in 0...sectionItems.count-1 {
+            if sectionItems[i].count > 0 {
+                for j in 0...sectionItems[i].count-1 {
+                    all++
+                }
+            }
+        }
+        
+        indexPath = NSIndexPath(forRow: 2, inSection: 0)
+        cell = tableView.cellForRowAtIndexPath(indexPath) as MenuCell?
+        cell!.countTextLabel.text = String(all)
     }
 }

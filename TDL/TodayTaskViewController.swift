@@ -12,16 +12,21 @@ class TodayTaskViewController: UITableViewController, SlideNavigationControllerD
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         let addButtonItem = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "openAddTaskController:")
         navigationItem.rightBarButtonItem = addButtonItem
-        
+
         tableView.backgroundColor = UIColor.whiteColor()
-        tableView.separatorColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0)
+        tableView.separatorStyle = UITableViewCellSeparatorStyle.None
         tableView.registerClass(TaskCell.self, forCellReuseIdentifier: NSStringFromClass(TaskCell))
         tableView.registerClass(NoTaskCell.self, forCellReuseIdentifier: NSStringFromClass(NoTaskCell))
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        tableView.reloadData()
+    }
+
     override func numberOfSectionsInTableView(tableView: UITableView!) -> Int {
         return 1
     }
@@ -33,11 +38,14 @@ class TodayTaskViewController: UITableViewController, SlideNavigationControllerD
     override func tableView(tableView: UITableView!, cellForRowAtIndexPath indexPath: NSIndexPath!) -> UITableViewCell! {
         if sectionItems[indexPath.section].count > 0 {
             let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(TaskCell), forIndexPath: indexPath) as     TaskCell
-            cell.configureWithList(sectionItems[indexPath.section][indexPath.row])
+
+            cell.configureCell(sectionItems[indexPath.section][indexPath.row])
             cell.setButtonsHidden(indexPath, check: 0)
+            tableView.scrollEnabled = true
             return cell as TaskCell
         } else {
             let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(NoTaskCell), forIndexPath: indexPath) as     NoTaskCell
+            tableView.scrollEnabled = false
             return cell as NoTaskCell
         }
     }
@@ -64,21 +72,38 @@ class TodayTaskViewController: UITableViewController, SlideNavigationControllerD
     
     override func tableView(tableView: UITableView!, heightForRowAtIndexPath indexPath: NSIndexPath!) -> CGFloat {
         if sectionItems[indexPath.section].count > 0 {
-            // row height for open cell
+            var extraHeight: CGFloat?
+            // Extra height when task name is too long
+            if interfaceOrientation.isPortrait {
+                extraHeight = CGFloat(ceil(Double(sectionItems[indexPath.section][indexPath.row].name.utf16Count)/35)*14.5)
+            } else {
+                extraHeight = CGFloat(ceil(Double(sectionItems[indexPath.section][indexPath.row].name.utf16Count)/71)*14.5)
+            }
+
+            // Row height for open cell
             if isOpenTodayTaskCell[indexPath.section][indexPath.row] {
-                return taskCellHeight + taskCellEditSectionHeight
+                return taskCellHeight + taskCellEditSectionHeight + extraHeight!
             }
         
-            // row height for closed cell
-            return taskCellHeight
+            // Row height for closed cell
+            return taskCellHeight + extraHeight!
         }
         
-        // row height for no cell
+        // Row height for no cell
         return noTaskCellHeight
     }
+
+    override func tableView(tableView: UITableView!, shouldHighlightRowAtIndexPath indexPath: NSIndexPath!) -> Bool {
+        let cell: AnyObject? = tableView.cellForRowAtIndexPath(indexPath)
+        if cell is NoTaskCell {
+            return false
+        }
+        
+        return true
+    }
     
-    override func tableView(tableView: UITableView!, editingStyleForRowAtIndexPath indexPath: NSIndexPath!) -> UITableViewCellEditingStyle {
-        return UITableViewCellEditingStyle.None
+    override func tableView(tableView: UITableView!, willDisplayCell cell: UITableViewCell!, forRowAtIndexPath indexPath: NSIndexPath!) {
+        //println(sectionItems[indexPath.section][indexPath.row].name)
     }
     
     func openAddTaskController(sender: AnyObject) {
