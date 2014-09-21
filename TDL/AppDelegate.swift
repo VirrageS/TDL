@@ -1,24 +1,19 @@
 import UIKit
 
-var listSections = [String]()
-var sectionItems = [[Task]]()
-var tags = [Tag]()
-var open = [[Bool]]()
-
 var isOpenTodayTaskCell = [[Bool]]()
-var isOpenNext7DaysTaskCell = [[Bool]]() // for "open"
+var isOpenNext7DaysTaskCell = [[Bool]]()
 
-var namesForNext7DaysSections = [String]() // for "listSection"
+var namesForSections: [(day: String, desc: String)] = []
 
-var allTags = [Tag]() // for "tags"
-var allTasks = [Task]() // for "sectionItems" but also must be created new list
+var allTags = [Tag]()
+var allTasks = [[Task]]() // #Change - task must be inserted and got by NSDate not by section
+var allFilters = [String]()
 var tasksForNext7Days = [[Task]]()
 
-var menuItems = [String]() // for now it is good
-
+var menuItems = [String]()
 var priorityColors = [UIColor]()
 
-enum UpdateType {
+enum UpdateType { // #Delete - not sure if has purpose
     case Today
     case All
     case None
@@ -32,10 +27,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         menuItems = [
             "Today",
             "Next 7 Days",
-            "Tags"
+            "Tags",
+            "Filters"
         ]
         
-        tags = [
+        allTags = [
             Tag(name: "Home", color: UIColor.greenColor()),
             Tag(name: "School", color: UIColor.grayColor()),
             Tag(name: "Work", color: UIColor.redColor())
@@ -48,42 +44,54 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1.0)
         ]
 
-        // Names for sections (Today, Tommorow...)
+        // Names for sections (Today, Tommorow, ...)
         let day: NSTimeInterval = 60*60*24
         for i in 0...6 {
             var newDay: NSTimeInterval = day * NSTimeInterval(i)
-            listSections.append(formatDate(NSDate(timeIntervalSinceNow: newDay)))
+            namesForSections.append(formatDate(NSDate(timeIntervalSinceNow: newDay)))
         }
         
-        sectionItems = [
+        allTasks = [
             [
-                Task(name: "Mow the lawn", completed: false, completionDate: NSDate.date(), priority: 1, tag: tags[2]),
-                Task(name: "Check mail", completed: false, completionDate: NSDate.date(), priority: 0, tag: tags[0])
+                Task(name: "Mow the lawn", completed: false, dueDate: NSDate.date(), priority: 1, tag: allTags[2]),
+                Task(name: "Check mail", completed: false, dueDate: NSDate.date(), priority: 0, tag: allTags[0])
             ],
             [
-                Task(name: "Write an email to Jennifer", completed: false, completionDate: NSDate.date(), priority: 2, tag: tags[0]),
-                Task(name: "Buy milk22", completed: false, completionDate: NSDate.date(), priority: 1, tag: tags[1])
+                Task(name: "Write an email to Jennifer", completed: false, dueDate: NSDate(timeIntervalSinceNow: 1*24*60*60), priority: 2, tag: allTags[0]),
+                Task(name: "Buy milk22", completed: false, dueDate: NSDate(timeIntervalSinceNow: 1*24*60*60), priority: 1, tag: allTags[1])
             ],
             [
-                Task(name: "Buy milk31", completed: false, completionDate: NSDate.date(), priority: 1, tag: tags[0]),
-                Task(name: "Buy milk32", completed: false, completionDate: NSDate.date(), priority: 3, tag: tags[1]),
-                Task(name: "Buy milk33", completed: false, completionDate: NSDate.date(), priority: 1, tag: tags[2]),
-                Task(name: "Buy milk34", completed: false, completionDate: NSDate.date(), priority: 1, tag: tags[1])
+                Task(name: "Buy milk31", completed: false, dueDate: NSDate(timeIntervalSinceNow: 2*24*60*60), priority: 1, tag: allTags[0]),
+                Task(name: "Buy milk32", completed: false, dueDate: NSDate(timeIntervalSinceNow: 2*24*60*60), priority: 3, tag: allTags[1]),
+                Task(name: "Buy milk33", completed: false, dueDate: NSDate(timeIntervalSinceNow: 2*24*60*60), priority: 1, tag: allTags[2])
             ],
-            [],[],[],[],[],[]
+            [
+                Task(name: "Buy milk34", completed: false, dueDate: NSDate(timeIntervalSinceNow: 3*24*60*60), priority: 1, tag: allTags[1])
+            ],[],[
+                Task(name: "Buy milk34", completed: false, dueDate: NSDate(timeIntervalSinceNow: 5*24*60*60), priority: 1, tag: allTags[1])
+            ],[],[],[]
+        ]
+        
+        allFilters = [
+            "Priority 1",
+            "Priority 2",
+            "Priority 3",
+            "Priority 4",
+            "View all",
+            "No due date"
         ]
 
-        for section in 0...sectionItems.count-1 {
-            open.insert([Bool](), atIndex: section)
+        for section in 0...allTasks.count-1 {
+            isOpenNext7DaysTaskCell.insert([Bool](), atIndex: section)
             isOpenTodayTaskCell.insert([Bool](), atIndex: section)
             
-            if sectionItems[section].count > 0 {
-                for row in 0...sectionItems[section].count-1 {
-                    open[section].insert(false, atIndex: row)
+            if allTasks[section].count > 0 {
+                for row in 0...allTasks[section].count-1 {
+                    isOpenNext7DaysTaskCell[section].insert(false, atIndex: row)
                     isOpenTodayTaskCell[section].insert(false, atIndex: row)
                 }
             } else {
-                open[section].insert(false, atIndex: 0)
+                isOpenNext7DaysTaskCell[section].insert(false, atIndex: 0)
             }
         }
 
@@ -103,19 +111,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
-    func formatDate(date: NSDate) -> String {
+    func formatDate(date: NSDate) -> (day: String, desc: String) {
         let calendar = NSCalendar.currentCalendar()
         var dateFormatter = NSDateFormatter()
         
         if calendar.isDateInToday(date) { // Today
-            return "Today"
+            dateFormatter.dateFormat = "ccc LLL dd"
+            return (day: "Today ", desc: dateFormatter.stringFromDate(date))
         } else if calendar.isDateInTomorrow(date) { // Tommorow
-            return "Tommorow"
+            dateFormatter.dateFormat = "ccc LLL dd"
+            return (day: "Tommorow ", desc: dateFormatter.stringFromDate(date))
         }
-        
+    
         // Full name of day
         dateFormatter.dateFormat = "cccc"
-        return dateFormatter.stringFromDate(date)
+        var _day: String = dateFormatter.stringFromDate(date)
+        dateFormatter.dateFormat = "LLL dd"
+        var _desc: String = dateFormatter.stringFromDate(date)
+        return (day: _day, desc: _desc)
     }
     
     /*

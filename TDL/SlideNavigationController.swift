@@ -201,7 +201,7 @@ class SlideNavigationController: UINavigationController, UINavigationControllerD
         }
     }
 
-    override func popToRootViewControllerAnimated(animated: Bool) -> [AnyObject]! {
+    override func popToRootViewControllerAnimated(animated: Bool) -> [AnyObject]? {
         if isMenuOpen() {
             closeMenuWithCompletion({ (Bool) -> Void in
                 self.popToRootViewControllerAnimated(animated)
@@ -214,7 +214,7 @@ class SlideNavigationController: UINavigationController, UINavigationControllerD
         return nil;
     }
     
-    override func pushViewController(viewController: UIViewController!, animated: Bool) {
+    override func pushViewController(viewController: UIViewController, animated: Bool) {
         if isMenuOpen() {
             closeMenuWithCompletion({ (Bool) -> Void in
                 self.pushViewController(viewController, animated: animated)
@@ -224,7 +224,7 @@ class SlideNavigationController: UINavigationController, UINavigationControllerD
         }
     }
 
-    override func popToViewController(viewController: UIViewController!, animated: Bool) -> [AnyObject]! {
+    override func popToViewController(viewController: UIViewController, animated: Bool) -> [AnyObject]? {
         if isMenuOpen() {
             closeMenuWithCompletion({ (Bool) -> Void in
                 self.popToViewController(viewController, animated: animated)
@@ -448,7 +448,7 @@ class SlideNavigationController: UINavigationController, UINavigationControllerD
     }
     
     func panDetected(aPanRecognizer: UIPanGestureRecognizer) {
-        var translation: CGPoint = aPanRecognizer.translationInView(aPanRecognizer.view)
+        var translation: CGPoint = aPanRecognizer.translationInView(aPanRecognizer.view!)
         var velocity: CGPoint = aPanRecognizer.velocityInView(aPanRecognizer.view)
         var movement: CGFloat = translation.x - draggingPoint.x
         
@@ -509,6 +509,7 @@ class SlideNavigationController: UINavigationController, UINavigationControllerD
         if DEBUG {
             println("panRecognizer called")
         }
+        
         if !(_panRecognizer != nil) {
             _panRecognizer = UIPanGestureRecognizer(target: self, action: "panDetected:")
             _panRecognizer!.delegate = self

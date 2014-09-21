@@ -2,12 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "scale" : "1x"
+      "scale" : "1x",
+      "filename" : "tag@x1.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "extend-image@15px.png"
+      "filename" : "tag_good.png"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x"
     }
   ],
   "info" : {

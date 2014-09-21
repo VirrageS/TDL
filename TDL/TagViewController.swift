@@ -21,33 +21,39 @@ class TagViewController: UITableViewController, SlideNavigationControllerDelegat
         tableView.registerClass(TagCell.self, forCellReuseIdentifier: NSStringFromClass(TagCell))
     }
     
-    override func numberOfSectionsInTableView(tableView: UITableView!) -> Int {
+    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(tableView: UITableView!, numberOfRowsInSection section: Int) -> Int {
-        return tags.count
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return allTags.count
     }
     
-    override func tableView(tableView: UITableView!, cellForRowAtIndexPath indexPath: NSIndexPath!) -> UITableViewCell! {
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(TagCell), forIndexPath: indexPath) as TagCell
         cell.configure(indexPath.row)
         return cell as TagCell
     }
     
-    override func tableView(tableView: UITableView!, heightForRowAtIndexPath indexPath: NSIndexPath!) -> CGFloat {
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return tagCellHeight
     }
     
-    override func tableView(tableView: UITableView!, didSelectRowAtIndexPath indexPath: NSIndexPath!) {
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         
-        let detailTagViewController = DetailTagViewController(tag: tags[indexPath.row])
+        let detailTagViewController = DetailTagViewController(tag: allTags[indexPath.row])
         
         let slideNavigation = SlideNavigationController().sharedInstance()
         slideNavigation._delegate = detailTagViewController
         
-        navigationController.pushViewController(detailTagViewController, animated: true)
+        // Check if navigationController is nil
+        if navigationController == nil {
+            println("openDetailTagViewController - navigationController is nil")
+            return
+        }
+        
+        navigationController!.pushViewController(detailTagViewController, animated: true)
     }
 
     func openAddTagController(sender: AnyObject) {
@@ -56,7 +62,13 @@ class TagViewController: UITableViewController, SlideNavigationControllerDelegat
         let slideNavigation = SlideNavigationController().sharedInstance()
         slideNavigation._delegate = addTagViewController
         
-        navigationController.pushViewController(addTagViewController, animated: true)
+        // Check if navigationController is nil
+        if navigationController == nil {
+            println("openAddTagController - navigationController is nil")
+            return
+        }
+        
+        navigationController!.pushViewController(addTagViewController, animated: true)
     }
     
     required init(coder aDecoder: NSCoder) {

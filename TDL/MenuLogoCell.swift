@@ -9,7 +9,7 @@ class MenuLogoCell: UITableViewCell {
     let nameTextLabel: UILabel
     let separatorLineLabel: UILabel
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String) {
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         nameTextLabel = UILabel(frame: CGRectZero)
         nameTextLabel.backgroundColor = menuLogoCellColor
         nameTextLabel.font = UIFont.systemFontOfSize(menuLogoCellTextFontSize)

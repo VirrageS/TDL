@@ -9,10 +9,10 @@ class MenuCell: UITableViewCell {
     let nameTextLabel: UILabel
     let countTextLabel: UILabel
     let iconImageView: UIImageView
-    var separatorLineLabel: UILabel
+    var separatorLineLabel: UIView
     
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String) {
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         nameTextLabel = UILabel(frame: CGRectZero)
         nameTextLabel.backgroundColor = menuCellColor
         nameTextLabel.font = UIFont.systemFontOfSize(menuCellTextFontSize)
@@ -27,7 +27,7 @@ class MenuCell: UITableViewCell {
         countTextLabel.textAlignment = NSTextAlignment.Left;
         countTextLabel.textColor = UIColor.blackColor()
         
-        separatorLineLabel = UILabel(frame: CGRectZero)
+        separatorLineLabel = UIView(frame: CGRectZero)
         separatorLineLabel.backgroundColor = UIColor(red: 178/255, green: 178/255, blue: 178/255, alpha: 1.0)
 
         iconImageView = UIImageView()
@@ -63,7 +63,7 @@ class MenuCell: UITableViewCell {
         nameTextLabel.text = text
 
         var image: UIImage
-        switch(nameTextLabel.text) {
+        switch(nameTextLabel.text!) {
         case "Today":
             image = UIImage(named: "today-icon")
             break

@@ -10,7 +10,7 @@ class DetailTagCell: UITableViewCell {
     let tagTextLabel: UILabel
     let circleViewLabel: UILabel
 
-    override init(style: UITableViewCellStyle, reuseIdentifier: String) {
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         nameTextLabel = UILabel(frame: CGRectZero)
         nameTextLabel.backgroundColor = UIColor.whiteColor()
         nameTextLabel.font = UIFont.systemFontOfSize(detailTagCellTextFontSize)

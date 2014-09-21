@@ -19,24 +19,24 @@ class MenuViewController: UITableViewController, SlideNavigationControllerDelega
         tableView.registerClass(MenuLogoCell.self, forCellReuseIdentifier: NSStringFromClass(MenuLogoCell))
     }
     
-    override func numberOfSectionsInTableView(tableView: UITableView!) -> Int {
+    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(tableView: UITableView!, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return menuItems.count + 1
     }
 
-    override func tableView(tableView: UITableView!, cellForRowAtIndexPath indexPath: NSIndexPath!) -> UITableViewCell! {
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if indexPath.row == 0 {
             let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(MenuLogoCell), forIndexPath: indexPath) as MenuLogoCell
             return cell as MenuLogoCell
         }
         
         var all: Int = 0
-        for i in 0...sectionItems.count-1 {
-            if sectionItems[i].count > 0 {
-                for j in 0...sectionItems[i].count-1 {
+        for i in 0...allTasks.count-1 {
+            if allTasks[i].count > 0 {
+                for j in 0...allTasks[i].count-1 {
                     all++
                 }
             }
@@ -45,20 +45,41 @@ class MenuViewController: UITableViewController, SlideNavigationControllerDelega
         let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(MenuCell), forIndexPath: indexPath) as MenuCell
         cell.configure(menuItems[indexPath.row-1])
         cell.selected = true
+
+        // View for separator line
+        var view: UIView
+        var separatorLineBottom: UIView
+        var separatorLineTop: UIView
+       
+        view = UIView(frame: cell.bounds)
+        view.backgroundColor = UIColor.clearColor()
         
-        // #Description
-        let view = UIView(frame: cell.bounds)
-        view.layer.borderColor = UIColor.whiteColor().CGColor
+        separatorLineBottom = UIView(frame: CGRectZero)
+        separatorLineBottom.backgroundColor = UIColor(red: 178/255, green: 178/255, blue: 178/255, alpha: 1.0)
         
-        let separatorLine = UIView(frame: CGRect(x: 0, y: menuCellHeight, width: 320, height: 0.5)) // #Change
-        separatorLine.backgroundColor = UIColor(red: 200/255, green: 200/255, blue: 200/255, alpha: 1.0)
-        view.addSubview(separatorLine)
+        separatorLineTop = UIView(frame: CGRectZero)
+        separatorLineTop.backgroundColor = UIColor(red: 178/255, green: 178/255, blue: 178/255, alpha: 1.0)
+        
+        view.addSubview(separatorLineBottom)
+        view.addSubview(separatorLineTop)
+        
+        separatorLineBottom.setTranslatesAutoresizingMaskIntoConstraints(false)
+        view.addConstraint(NSLayoutConstraint(item: separatorLineBottom, attribute: .Left, relatedBy: .Equal, toItem: view, attribute: .Left, multiplier: 1, constant: 0))
+        view.addConstraint(NSLayoutConstraint(item: separatorLineBottom, attribute: .Top, relatedBy: .Equal, toItem: view, attribute: .Bottom, multiplier: 1, constant: -0.5))
+        view.addConstraint(NSLayoutConstraint(item: separatorLineBottom, attribute: .Right, relatedBy: .Equal, toItem: view, attribute: .Right, multiplier: 1, constant: 0))
+        view.addConstraint(NSLayoutConstraint(item: separatorLineBottom, attribute: .Bottom, relatedBy: .Equal, toItem: view, attribute: .Bottom, multiplier: 1, constant: 0))
+        
+        separatorLineTop.setTranslatesAutoresizingMaskIntoConstraints(false)
+        view.addConstraint(NSLayoutConstraint(item: separatorLineTop, attribute: .Left, relatedBy: .Equal, toItem: view, attribute: .Left, multiplier: 1, constant: 0))
+        view.addConstraint(NSLayoutConstraint(item: separatorLineTop, attribute: .Top, relatedBy: .Equal, toItem: view, attribute: .Top, multiplier: 1, constant: 0))
+        view.addConstraint(NSLayoutConstraint(item: separatorLineTop, attribute: .Right, relatedBy: .Equal, toItem: view, attribute: .Right, multiplier: 1, constant: 0))
+        view.addConstraint(NSLayoutConstraint(item: separatorLineTop, attribute: .Bottom, relatedBy: .Equal, toItem: view, attribute: .Top, multiplier: 1, constant: 0.5))
         
         cell.selectedBackgroundView = view
         return cell as MenuCell
     }
     
-    override func tableView(tableView: UITableView!, shouldHighlightRowAtIndexPath indexPath: NSIndexPath!) -> Bool {
+    override func tableView(tableView: UITableView, shouldHighlightRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         if indexPath.row == 0 {
             return false
         }
@@ -66,8 +87,7 @@ class MenuViewController: UITableViewController, SlideNavigationControllerDelega
         return true
     }
     
-    override func tableView(tableView: UITableView!, didSelectRowAtIndexPath indexPath: NSIndexPath!) {
-
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         var controller: UIViewController?
         switch(indexPath.row) {
         case 1:
@@ -78,6 +98,9 @@ class MenuViewController: UITableViewController, SlideNavigationControllerDelega
             break
         case 3:
             controller = TagViewController()
+            break
+        case 4:
+            controller = FilterViewController()
             break
         default:
             break
@@ -92,15 +115,8 @@ class MenuViewController: UITableViewController, SlideNavigationControllerDelega
         }
     }
     
-    override func tableView(tableView: UITableView!, willSelectRowAtIndexPath indexPath: NSIndexPath!) -> NSIndexPath! {
-        if indexPath.row == 0 {
-            return nil
-        }
-        
-        return indexPath
-    }
-    
-    override func tableView(tableView: UITableView!, heightForRowAtIndexPath indexPath: NSIndexPath!) -> CGFloat {
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        // Menu cell height for portrait and landscape
         if indexPath.row == 0 {
             if interfaceOrientation.isLandscape {
                 return menuLogoCellHeightLandscape
@@ -113,10 +129,6 @@ class MenuViewController: UITableViewController, SlideNavigationControllerDelega
     }
     
     override func viewDidLayoutSubviews() {
-        self.updateCount()
-    }
-    
-    func updateCount() {
         // Update count in menu cell
         var indexPath: NSIndexPath = NSIndexPath(forRow: 1, inSection: 0)
         var cell: MenuCell? = tableView.cellForRowAtIndexPath(indexPath) as MenuCell?
@@ -125,12 +137,12 @@ class MenuViewController: UITableViewController, SlideNavigationControllerDelega
             return
         }
         
-        cell!.countTextLabel.text = String(sectionItems[0].count)
+        cell!.countTextLabel.text = String(allTasks[0].count)
         
         var all: Int = 0
-        for i in 0...sectionItems.count-1 {
-            if sectionItems[i].count > 0 {
-                for j in 0...sectionItems[i].count-1 {
+        for i in 0...allTasks.count-1 {
+            if allTasks[i].count > 0 {
+                for j in 0...allTasks[i].count-1 {
                     all++
                 }
             }

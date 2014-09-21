@@ -15,7 +15,7 @@ class AddTagViewController: UIViewController, UITextFieldDelegate, SlideNavigati
     
     override init() {
         super.init(nibName: nil, bundle: nil)
-        title = "Add Tag"
+        title = "Add tag"
     }
     
     override func viewDidLoad() {
@@ -25,7 +25,7 @@ class AddTagViewController: UIViewController, UITextFieldDelegate, SlideNavigati
 
         let addButtonItem = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.Plain, target: self, action: "addTag:")
         navigationItem.rightBarButtonItem = addButtonItem
-        navigationItem.rightBarButtonItem.enabled = false
+        navigationItem.rightBarButtonItem!.enabled = false
         
         circleView = UILabel(frame: CGRect(x: 5, y: 5, width: 20, height: 20))
         circleView.layer.borderColor = UIColor(red: 162/255, green: 186/255, blue: 102/255, alpha: 1.0).CGColor
@@ -84,7 +84,7 @@ class AddTagViewController: UIViewController, UITextFieldDelegate, SlideNavigati
     
     func addTag(sender: AnyObject) {
         let newTag: Tag = Tag(name: textView.text, color: UIColor(CGColor: circleView.layer.borderColor))
-        tags.append(newTag)
+        allTags.append(newTag)
         
         var slideNavigation = SlideNavigationController().sharedInstance()
         slideNavigation.popViewControllerAnimated(true)
@@ -97,7 +97,7 @@ class AddTagViewController: UIViewController, UITextFieldDelegate, SlideNavigati
         
         circleButton.enabled = false
         textView.enabled = false
-        navigationItem.rightBarButtonItem.enabled = false
+        navigationItem.rightBarButtonItem!.enabled = false
     }
     
     func closeCollectionView(sender: AnyObject) {
@@ -107,7 +107,7 @@ class AddTagViewController: UIViewController, UITextFieldDelegate, SlideNavigati
         
         circleButton.enabled = true
         textView.enabled = true
-        navigationItem.rightBarButtonItem.enabled = textView.hasText()
+        navigationItem.rightBarButtonItem!.enabled = textView.hasText()
     }
     
     func collectionView() {
@@ -139,16 +139,17 @@ class AddTagViewController: UIViewController, UITextFieldDelegate, SlideNavigati
                 collectionCellCircleView.layer.borderWidth = 10
                 collectionCellCircleView.layer.cornerRadius = 10
 
-                collectionCellCircleButton = UIButton(frame: CGRect(x: j*40+10, y: i*40+5, width: 30, height: 30))
+                collectionCellCircleButton = UIButton(frame: CGRect(x: j*40+10, y: i*40+5, width: 30, height: 30))//CGRectZero)
                 collectionCellCircleButton.addTarget(self, action: "changeColor:", forControlEvents: UIControlEvents.TouchUpInside)
                 collectionCellCircleButton.backgroundColor = UIColor.whiteColor()
+                
                 collectionCellCircleButton.addSubview(collectionCellCircleView)
             
 //                collectionCellCircleButton.setTranslatesAutoresizingMaskIntoConstraints(false)
-//                colorPickerView.addConstraint(NSLayoutConstraint(item: collectionCellCircleButton, attribute: .Left, relatedBy: .Equal, toItem: colorPickerView, attribute: .Left, multiplier: 1, constant: i*40+5))
-//                colorPickerView.addConstraint(NSLayoutConstraint(item: collectionCellCircleButton, attribute: .Top, relatedBy: .Equal, toItem: colorPickerView, attribute: .Top, multiplier: 1, constant: j*40+10))
-//                colorPickerView.addConstraint(NSLayoutConstraint(item: collectionCellCircleButton, attribute: .Right, relatedBy: .Equal, toItem: colorPickerView, attribute: .Left, multiplier: 1, constant: i*40+35))
-//                colorPickerView.addConstraint(NSLayoutConstraint(item: collectionCellCircleButton, attribute: .Bottom, relatedBy: .Equal, toItem: colorPickerView, attribute: .Top, multiplier: 1, constant: j*40+40))
+//                colorPickerView.addConstraint(NSLayoutConstraint(item: collectionCellCircleButton, attribute: .Left, relatedBy: .Equal, toItem: colorPickerView, attribute: .Left, multiplier: 1, constant: CGFloat(j*40+10)))
+//                colorPickerView.addConstraint(NSLayoutConstraint(item: collectionCellCircleButton, attribute: .Top, relatedBy: .Equal, toItem: colorPickerView, attribute: .Top, multiplier: 1, constant: CGFloat(i*40+5)))
+//                colorPickerView.addConstraint(NSLayoutConstraint(item: collectionCellCircleButton, attribute: .Right, relatedBy: .Equal, toItem: colorPickerView, attribute: .Left, multiplier: 1, constant: CGFloat(j*40+10+30)))
+//                colorPickerView.addConstraint(NSLayoutConstraint(item: collectionCellCircleButton, attribute: .Bottom, relatedBy: .Equal, toItem: colorPickerView, attribute: .Top, multiplier: 1, constant: CGFloat(i*40+5+30)))
             
                 colorPickerView.addSubview(collectionCellCircleButton)
             }
@@ -174,19 +175,11 @@ class AddTagViewController: UIViewController, UITextFieldDelegate, SlideNavigati
     }
     
     func textFieldDidChanged(textField: UITextField!) {
-//        if textField.text.utf16Count > 1 {
-//            if textField.text[advance(textField.text.startIndex, textField.text.utf16Count-2)] == "\u{000A}" {
-//                var a = textField.text[advance(textView.text.startIndex, textField.text.utf16Count-1)]
-//                textField.text = textField.text.substringToIndex(advance(textField.text.startIndex, countElements(textField.text)-2))
-//                textField.text.append(a)
-//            }
-//        }
-        
         if textField.text.utf16Count > maxCharacters {
             textField.text = textField.text.substringToIndex(advance(textField.text.startIndex, maxCharacters))
         }
         
-        navigationItem.rightBarButtonItem.enabled = textView.hasText()
+        navigationItem.rightBarButtonItem!.enabled = textView.hasText()
     }
     
     required init(coder aDecoder: NSCoder) {

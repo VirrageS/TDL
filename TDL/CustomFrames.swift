@@ -4,6 +4,7 @@ func addCustomTextFieldSubview(textField: UITextField) {
     // Input text padding
     textField.leftView = UIView(frame: CGRectMake(0, 0, 5, 1))
     textField.leftViewMode = UITextFieldViewMode.Always
+    
     textField.font = UIFont.systemFontOfSize(13) // font size
 
     // Defining
@@ -64,10 +65,10 @@ func addCustomButtonSubviews(button: UIButton, labelText: String?) {
     
     if labelText != nil {
         buttonTextLabel!.setTranslatesAutoresizingMaskIntoConstraints(false)
-        button.addConstraint(NSLayoutConstraint(item: buttonTextLabel, attribute: .Left, relatedBy: .Equal, toItem: button, attribute: .Left, multiplier: 1, constant: 5))
-        button.addConstraint(NSLayoutConstraint(item: buttonTextLabel, attribute: .Top, relatedBy: .Equal, toItem: button, attribute: .Top, multiplier: 1, constant: 8))
-        button.addConstraint(NSLayoutConstraint(item: buttonTextLabel, attribute: .Right, relatedBy: .Equal, toItem: button, attribute: .Right, multiplier: 1, constant: -30))
-        button.addConstraint(NSLayoutConstraint(item: buttonTextLabel, attribute: .Bottom, relatedBy: .Equal, toItem: button, attribute: .Bottom, multiplier: 1, constant: 0))
+        button.addConstraint(NSLayoutConstraint(item: buttonTextLabel!, attribute: .Left, relatedBy: .Equal, toItem: button, attribute: .Left, multiplier: 1, constant: 5))
+        button.addConstraint(NSLayoutConstraint(item: buttonTextLabel!, attribute: .Top, relatedBy: .Equal, toItem: button, attribute: .Top, multiplier: 1, constant: 8))
+        button.addConstraint(NSLayoutConstraint(item: buttonTextLabel!, attribute: .Right, relatedBy: .Equal, toItem: button, attribute: .Right, multiplier: 1, constant: -30))
+        button.addConstraint(NSLayoutConstraint(item: buttonTextLabel!, attribute: .Bottom, relatedBy: .Equal, toItem: button, attribute: .Bottom, multiplier: 1, constant: 0))
     }
     
     

@@ -3,12 +3,16 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "tag@x1.png"
+      "filename" : "note7@x1.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "tag_good.png"
+      "filename" : "note7_good1.png"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x"
     }
   ],
   "info" : {

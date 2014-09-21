@@ -4,6 +4,8 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
     var textView: UITextField!
     var tagPickerButton: UIButton!
     var dateTextView: UITextField!
+    var separatorLine: UIView!
+    var calendarButton: UIButton!
     var priorityPickerButton: UIButton!
     var tagPickerView: UIView!
     var priorityPickerView: UIView!
@@ -18,7 +20,7 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
     
     override init() {
         super.init(nibName: nil, bundle: nil)
-        title = "Add Item"
+        title = "Add task"
     }
     
     override func viewDidLoad() {
@@ -29,7 +31,7 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
         // Navigation Button
         let addButtonItem = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.Plain, target: self, action: "addTask:")
         navigationItem.rightBarButtonItem = addButtonItem
-        navigationItem.rightBarButtonItem.enabled = false
+        navigationItem.rightBarButtonItem!.enabled = false
 
         // Normal view
         textView = UITextField(frame: CGRectZero)
@@ -42,14 +44,31 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
         tagPickerButton = UIButton(frame: CGRectZero)
         tagPickerButton.addTarget(self, action: "showTagPicker:", forControlEvents: UIControlEvents.TouchUpInside)
         tagPickerButton.backgroundColor = UIColor.whiteColor()
-        addCustomButtonSubviews(tagPickerButton, "School")
+        if allTags.count > 0 {
+            addCustomButtonSubviews(tagPickerButton, allTags[0].name)
+        } else {
+            // #Change to something like placeholder or come up with new idea
+            // addCustomButtonSubviews(tagPickerButton, nil)
+        }
 
+        // Date view
         dateTextView = UITextField(frame: CGRectZero)
-        addCustomTextFieldSubview(dateTextView)
-        dateTextView.addTarget(self, action: "textFieldDidChanged:", forControlEvents: UIControlEvents.EditingChanged)
+        dateTextView.rightView = UIView(frame: CGRectMake(0, 0, 40, 1)) // to make calendarButton working everytime
+        dateTextView.rightViewMode = UITextFieldViewMode.Always // to make calendarButton working everytime
+        addCustomTextFieldSubview(dateTextView) // for separatorLine and extendButton
+        dateTextView.addTarget(self, action: "dateFieldDidChanged:", forControlEvents: UIControlEvents.EditingChanged)
         dateTextView.placeholder = "No due date"
         dateTextView.delegate = self
         
+        separatorLine = UIView(frame: CGRectZero) // to separate dateTextView and calendarButton
+        separatorLine.backgroundColor = UIColor(red: 190/255, green: 190/255, blue: 190/255, alpha: 1.0)
+        
+        calendarButton = UIButton(frame: CGRectZero)
+        calendarButton.setBackgroundImage(UIImage(named: "calendar-icon"), forState: UIControlState.Normal)
+        calendarButton.addTarget(self, action: "showDatePicker:", forControlEvents: UIControlEvents.TouchUpInside)
+        calendarButton.backgroundColor = UIColor.clearColor()
+
+        // Priority view
         priorityPickerButton = UIButton(frame: CGRectZero)
         priorityPickerButton.addTarget(self, action: "showPriorityPicker:", forControlEvents: UIControlEvents.TouchUpInside)
         priorityPickerButton.backgroundColor = UIColor.whiteColor()
@@ -79,6 +98,10 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
         view.addSubview(priorityPickerButton)
         view.addSubview(transparentView)
         
+        // More subviews
+        dateTextView.addSubview(calendarButton)
+        dateTextView.addSubview(separatorLine)
+        
         // Constraints
         textView.setTranslatesAutoresizingMaskIntoConstraints(false)
         view.addConstraint(NSLayoutConstraint(item: textView, attribute: .Left, relatedBy: .Equal, toItem: view, attribute: .Left, multiplier: 1, constant: 30))
@@ -98,6 +121,18 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
         view.addConstraint(NSLayoutConstraint(item: dateTextView, attribute: .Right, relatedBy: .Equal, toItem: view, attribute: .Right, multiplier: 1, constant: -30))
         view.addConstraint(NSLayoutConstraint(item: dateTextView, attribute: .Bottom, relatedBy: .Equal, toItem: tagPickerButton, attribute: .Bottom, multiplier: 1, constant: 40))
         
+        separatorLine.setTranslatesAutoresizingMaskIntoConstraints(false)
+        dateTextView.addConstraint(NSLayoutConstraint(item: separatorLine, attribute: .Left, relatedBy: .Equal, toItem: dateTextView, attribute: .Right, multiplier: 1, constant: -36))
+        dateTextView.addConstraint(NSLayoutConstraint(item: separatorLine, attribute: .Top, relatedBy: .Equal, toItem: dateTextView, attribute: .Top, multiplier: 1, constant: 4))
+        dateTextView.addConstraint(NSLayoutConstraint(item: separatorLine, attribute: .Right, relatedBy: .Equal, toItem: dateTextView, attribute: .Right, multiplier: 1, constant: -35))
+        dateTextView.addConstraint(NSLayoutConstraint(item: separatorLine, attribute: .Bottom, relatedBy: .Equal, toItem: dateTextView, attribute: .Bottom, multiplier: 1, constant: -4))
+        
+        calendarButton.setTranslatesAutoresizingMaskIntoConstraints(false)
+        dateTextView.addConstraint(NSLayoutConstraint(item: calendarButton, attribute: .Left, relatedBy: .Equal, toItem: dateTextView, attribute: .Right, multiplier: 1, constant: -27))
+        dateTextView.addConstraint(NSLayoutConstraint(item: calendarButton, attribute: .Top, relatedBy: .Equal, toItem: dateTextView, attribute: .Top, multiplier: 1, constant: 5))
+        dateTextView.addConstraint(NSLayoutConstraint(item: calendarButton, attribute: .Right, relatedBy: .Equal, toItem: dateTextView, attribute: .Right, multiplier: 1, constant: -7))
+        dateTextView.addConstraint(NSLayoutConstraint(item: calendarButton, attribute: .Bottom, relatedBy: .Equal, toItem: dateTextView, attribute: .Bottom, multiplier: 1, constant: -5))
+        
         priorityPickerButton.setTranslatesAutoresizingMaskIntoConstraints(false)
         view.addConstraint(NSLayoutConstraint(item: priorityPickerButton, attribute: .Left, relatedBy: .Equal, toItem: view, attribute: .Left, multiplier: 1, constant: 30))
         view.addConstraint(NSLayoutConstraint(item: priorityPickerButton, attribute: .Top, relatedBy: .Equal, toItem: dateTextView, attribute: .Bottom, multiplier: 1, constant: 10))
@@ -108,7 +143,7 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
         view.addConstraint(NSLayoutConstraint(item: tagPickerView, attribute: .Left, relatedBy: .Equal, toItem: view, attribute: .Left, multiplier: 1, constant: 55))
         view.addConstraint(NSLayoutConstraint(item: tagPickerView, attribute: .Top, relatedBy: .Equal, toItem: view, attribute: .Top, multiplier: 1, constant: 200))
         view.addConstraint(NSLayoutConstraint(item: tagPickerView, attribute: .Right, relatedBy: .Equal, toItem: view, attribute: .Right, multiplier: 1, constant: -55))
-        view.addConstraint(NSLayoutConstraint(item: tagPickerView, attribute: .Bottom, relatedBy: .Equal, toItem: view, attribute: .Top, multiplier: 1, constant: 200+CGFloat(40*tags.count)))
+        view.addConstraint(NSLayoutConstraint(item: tagPickerView, attribute: .Bottom, relatedBy: .Equal, toItem: view, attribute: .Top, multiplier: 1, constant: 200+CGFloat(40*allTags.count)))
         
         priorityPickerView.setTranslatesAutoresizingMaskIntoConstraints(false)
         view.addConstraint(NSLayoutConstraint(item: priorityPickerView, attribute: .Left, relatedBy: .Equal, toItem: view, attribute: .Left, multiplier: 1, constant: 55))
@@ -118,24 +153,93 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
     }
     
     func addTask(sender: AnyObject) {
+        // Get priority
         var priorityLabel: UILabel? = priorityPickerButton.subviews[0] as? UILabel
-        var priorityLabelText: String = String(priorityLabel!.text[advance(priorityLabel!.text.startIndex, countElements(priorityLabel!.text)-1)])
-        var taskPrority: Int? = priorityLabelText.toInt()
-        
+        if priorityLabel == nil {
+            println("Cannot get priority label. It is nil")
+            return
+        } else if priorityLabel!.text == nil {
+            println("Cannot get priority label text. It is nil")
+            return
+        }
+
+        var priorityLabelText: String = String(priorityLabel!.text![advance(priorityLabel!.text!.startIndex, countElements(priorityLabel!.text!)-1)])
+        var taskPrority: Int = priorityLabelText.toInt()!
+
+        // Get tag
         var tagLabel: UILabel? = tagPickerButton.subviews[0] as? UILabel
+        if tagLabel == nil {
+            println("Cannot get tag label. It is nil")
+            return
+        } else if tagLabel!.text == nil {
+            println("Cannot get tag label text. It is nil")
+            return
+        }
+        
         var taskTag: Tag?
-        for tag in tags {
+        for tag in allTags {
             if tag.name == tagLabel!.text {
                 taskTag = tag
                 break
             }
         }
         
-        let newTask: Task = Task(name: textView.text, completed: false, completionDate: NSDate.date(), priority: taskPrority!-1, tag: taskTag!)
-        sectionItems[0].append(newTask)
-        isOpenTodayTaskCell[0].append(false)
-        open[0].append(false)
+        // Get date
+        var dateFormats = ["dd/MM/yyyy", "dd.MM.yyyy", "MM/dd/yyyy", "MM.dd.yyyy"]
+        var date: NSDate?
+        var section: Int = 0
+        if dateTextView.hasText() {
+            if dateTextView.text.lowercaseString == "today" {
+                date = NSDate.date()
+            } else if dateTextView.text.lowercaseString == "tommorow" {
+                section = 1
+                date = NSDate(timeIntervalSinceNow: NSTimeInterval(60*60*24))
+            } else if dateTextView.text.lowercaseString == "in 1 week" {
+                section = 6
+                date = NSDate(timeIntervalSinceNow: NSTimeInterval(7*60*60*24))
+            } else if dateTextView.text.lowercaseString == "in 1 month" {
+                // #Change in 1 month
+                // section = nil
+                date = NSDate(timeIntervalSinceNow: NSTimeInterval(30*60*60*24))
+            } else {
+                var dateFormatter = NSDateFormatter()
+                
+                for _dateFormat in dateFormats {
+                    dateFormatter.dateFormat = _dateFormat
+                    date = dateFormatter.dateFromString(dateTextView.text)
 
+                    if date != nil {
+                        break
+                    }
+                }
+
+                if date != nil {
+                    println(date!.timeIntervalSinceNow)
+                    
+                    if date!.timeIntervalSinceNow < 0 {
+                        println("Date is outdated")
+                        date = NSDate.date()
+                    } else if date!.timeIntervalSinceNow <= NSTimeInterval(24*60*60*6) {
+                        section = Int((date!.timeIntervalSinceNow)/60/60/24)+1
+                    } else {
+                        println("Date is after 7 days")
+                    }
+                }
+            }
+        }
+        
+        println("Date is set to: \(date)")
+        if date == nil {
+            date = NSDate.date()
+        }
+        
+        // Add task
+        let newTask: Task = Task(name: textView.text, completed: false, dueDate: date!, priority: taskPrority-1, tag: taskTag!)
+        allTasks[section].append(newTask)
+        isOpenTodayTaskCell[section].append(false)
+        isOpenNext7DaysTaskCell[section].append(false)
+
+        // Back to previous controller
         var slideNavigation = SlideNavigationController().sharedInstance()
         slideNavigation.popViewControllerAnimated(true)
     }
@@ -157,7 +261,7 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
         dateTextView.enabled = false
         
         // Disable done button
-        navigationItem.rightBarButtonItem.enabled = false
+        navigationItem.rightBarButtonItem!.enabled = false
         // Set open for true
         tagPickerOpen = true
     }
@@ -179,9 +283,13 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
         dateTextView.enabled = false
         
         // Disable done button
-        navigationItem.rightBarButtonItem.enabled = false
+        navigationItem.rightBarButtonItem!.enabled = false
         // Set open for true
         priorityPickerOpen = true
+    }
+    
+    func showDatePicker(sender: AnyObject) {
+        println("showDatePicker called")
     }
     
     func closePickerView(sender: AnyObject) {
@@ -267,16 +375,16 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
         var tagPickerViewCircle: UILabel!
         var tagPickerViewButton: UIButton!
         
-        for i in 0...tags.count-1 {
+        for i in 0...allTags.count-1 {
             tagPickerViewLabel = UILabel(frame: CGRectZero)
             tagPickerViewLabel.font = UIFont.systemFontOfSize(13)
             tagPickerViewLabel.textColor = UIColor(red: 90/255, green: 90/255, blue: 90/255, alpha: 1.0)
-            tagPickerViewLabel.text = tags[i].name
+            tagPickerViewLabel.text = allTags[i].name
             
             tagPickerViewCircle = UILabel(frame: CGRect(x: 10, y: 15, width: 10, height: 10))
             tagPickerViewCircle.layer.borderWidth = 5
             tagPickerViewCircle.layer.cornerRadius = 5
-            tagPickerViewCircle.layer.borderColor = tags[i].color.CGColor
+            tagPickerViewCircle.layer.borderColor = allTags[i].color.CGColor
             
             tagPickerViewButton = UIButton(frame: CGRectZero)
             tagPickerViewButton.addTarget(self, action: "updateTag:", forControlEvents: UIControlEvents.TouchUpInside)
@@ -301,7 +409,7 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
     }
 
     func updateNavigationItem() {
-        navigationItem.rightBarButtonItem.enabled = textView.hasText()// && dateTextView.hasText()
+        navigationItem.rightBarButtonItem!.enabled = textView.hasText()// && dateTextView.hasText()
     }
     
     override func canBecomeFirstResponder() -> Bool {
@@ -321,6 +429,14 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
     func textFieldDidChanged(textField: UITextField!) {
         if textField.text.utf16Count > maxCharacters {
             textField.text = textField.text.substringToIndex(advance(textField.text.startIndex, maxCharacters))
+        }
+        
+        updateNavigationItem()
+    }
+    
+    func dateFieldDidChanged(textField: UITextField!) {
+        if textField.text.utf16Count > 21 {
+            textField.text = textField.text.substringToIndex(advance(textField.text.startIndex, 21))
         }
         
         updateNavigationItem()

@@ -14,11 +14,11 @@ class DetailTagViewController: UITableViewController, SlideNavigationControllerD
         title = tag.name
 
         isOpenDetailTagCell = [Bool]()
-        for i in 0...sectionItems.count-1 {
-            if sectionItems[i].count > 0 {
-                for j in 0...sectionItems[i].count-1 {
-                    if sectionItems[i][j].tag === tag {
-                        detailTagTasks.append(sectionItems[i][j])
+        for i in 0...allTasks.count-1 {
+            if allTasks[i].count > 0 {
+                for j in 0...allTasks[i].count-1 {
+                    if allTasks[i][j].tag === tag {
+                        detailTagTasks.append(allTasks[i][j])
                         isOpenDetailTagCell.append(false)
                     }
                 }
@@ -34,25 +34,25 @@ class DetailTagViewController: UITableViewController, SlideNavigationControllerD
         tableView.registerClass(DetailTagCell.self, forCellReuseIdentifier: NSStringFromClass(DetailTagCell))
     }
     
-    override func numberOfSectionsInTableView(tableView: UITableView!) -> Int {
+    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(tableView: UITableView!, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return detailTagTasks.count
     }
     
-    override func tableView(tableView: UITableView!, cellForRowAtIndexPath indexPath: NSIndexPath!) -> UITableViewCell! {
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(DetailTagCell), forIndexPath: indexPath) as DetailTagCell
         cell.configureWithList(detailTagTasks[indexPath.row])
         return cell
     }
     
-    override func tableView(tableView: UITableView!, didSelectRowAtIndexPath indexPath: NSIndexPath!) {
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
     
-    override func tableView(tableView: UITableView!, heightForRowAtIndexPath indexPath: NSIndexPath!) -> CGFloat {
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return detailTagCellHeight
     }
     
