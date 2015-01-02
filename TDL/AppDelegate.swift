@@ -1,8 +1,5 @@
 import UIKit
 
-var isOpenTodayTaskCell = [[Bool]]()
-var isOpenNext7DaysTaskCell = [[Bool]]()
-
 var namesForSections: [(day: String, desc: String)] = []
 
 var allTags = [Tag]()
@@ -13,7 +10,7 @@ var tasksForNext7Days = [[Task]]()
 var menuItems = [String]()
 var priorityColors = [UIColor]()
 
-enum UpdateType { // #Delete - not sure if has purpose
+enum UpdateType { // #ToDelete - not sure if has purpose
     case Today
     case All
     case None
@@ -80,20 +77,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             "View all",
             "No due date"
         ]
-
-        for section in 0...allTasks.count-1 {
-            isOpenNext7DaysTaskCell.insert([Bool](), atIndex: section)
-            isOpenTodayTaskCell.insert([Bool](), atIndex: section)
-            
-            if allTasks[section].count > 0 {
-                for row in 0...allTasks[section].count-1 {
-                    isOpenNext7DaysTaskCell[section].insert(false, atIndex: row)
-                    isOpenTodayTaskCell[section].insert(false, atIndex: row)
-                }
-            } else {
-                isOpenNext7DaysTaskCell[section].insert(false, atIndex: 0)
-            }
-        }
 
         let menuController = MenuViewController()
         let slideNavigation = SlideNavigationController()

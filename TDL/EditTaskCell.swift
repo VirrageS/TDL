@@ -100,8 +100,6 @@ class EditTaskCell: UITableViewCell {
         allTasks[cellIndexPath!.section + 1].insert(task, atIndex: allTasks[cellIndexPath!.section+1].count)
         allTasks[cellIndexPath!.section].removeAtIndex(cellIndexPath!.row)
 
-        isOpenNext7DaysTaskCell[cellIndexPath!.section + 1].insert(false, atIndex: allTasks[cellIndexPath!.section+1].count - 1)
-        
         // Delete and insert rows
         editTaskCell!.position = nil
         tableView.beginUpdates()

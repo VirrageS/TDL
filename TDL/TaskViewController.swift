@@ -72,7 +72,7 @@ class TaskViewController: UITableViewController, SlideNavigationControllerDelega
         
         let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(TaskCell), forIndexPath: indexPath) as TaskCell
         cell.configureCell(allTasks[indexPath.section][indexPath.row - extraCount])
-        cell.setButtonsHidden(NSIndexPath(forRow: indexPath.row - extraCount, inSection: indexPath.section), check: 1)
+        //cell.setButtonsHidden(NSIndexPath(forRow: indexPath.row - extraCount, inSection: indexPath.section), check: 1)
         return cell as TaskCell
     }
 

@@ -229,15 +229,14 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
             }
         }
         
-        println("Date is set to: \(date)")
+        println("Date is set to: \(date); Sections is set to: \(section)")
         
-        // Add task
+        // Create task
         let newTask: Task = Task(name: textView.text, completed: false, dueDate: date, priority: taskPrority-1, tag: taskTag!)
         
+        // Insert if we can
         if section != nil {
             allTasks[section!].append(newTask)
-            isOpenTodayTaskCell[section!].append(false)
-            isOpenNext7DaysTaskCell[section!].append(false)
         }
 
         // Back to previous controller
