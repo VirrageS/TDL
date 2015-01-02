@@ -53,7 +53,7 @@ class DetailTagCell: UITableViewCell {
 
     func configureWithList(task: Task) {
         nameTextLabel.text = task.name
-        tagTextLabel.text = task.tag.name
-        circleViewLabel.layer.backgroundColor = task.tag.color.CGColor
+        tagTextLabel.text = (task.tag == nil ? "" : task.tag!.name)
+        circleViewLabel.layer.backgroundColor = (task.tag == nil ? UIColor.whiteColor().CGColor : task.tag!.color.CGColor)
     }
 }

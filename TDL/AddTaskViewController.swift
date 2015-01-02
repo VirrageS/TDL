@@ -187,10 +187,11 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
         // Get date
         var dateFormats = ["dd/MM/yyyy", "dd.MM.yyyy", "MM/dd/yyyy", "MM.dd.yyyy"]
         var date: NSDate?
-        var section: Int = 0
+        var section: Int?
         if dateTextView.hasText() {
             if dateTextView.text.lowercaseString == "today" {
-                date = NSDate.date()
+                section = 0
+                date = NSDate()
             } else if dateTextView.text.lowercaseString == "tommorow" {
                 section = 1
                 date = NSDate(timeIntervalSinceNow: NSTimeInterval(60*60*24))
@@ -214,11 +215,11 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
                 }
 
                 if date != nil {
-                    println(date!.timeIntervalSinceNow)
+                    println("timeIntervalSinceNow: \(date!.timeIntervalSinceNow)")
                     
                     if date!.timeIntervalSinceNow < 0 {
                         println("Date is outdated")
-                        date = NSDate.date()
+                        date = NSDate()
                     } else if date!.timeIntervalSinceNow <= NSTimeInterval(24*60*60*6) {
                         section = Int((date!.timeIntervalSinceNow)/60/60/24)+1
                     } else {
@@ -229,15 +230,15 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
         }
         
         println("Date is set to: \(date)")
-        if date == nil {
-            date = NSDate.date()
-        }
         
         // Add task
-        let newTask: Task = Task(name: textView.text, completed: false, dueDate: date!, priority: taskPrority-1, tag: taskTag!)
-        allTasks[section].append(newTask)
-        isOpenTodayTaskCell[section].append(false)
-        isOpenNext7DaysTaskCell[section].append(false)
+        let newTask: Task = Task(name: textView.text, completed: false, dueDate: date, priority: taskPrority-1, tag: taskTag!)
+        
+        if section != nil {
+            allTasks[section!].append(newTask)
+            isOpenTodayTaskCell[section!].append(false)
+            isOpenNext7DaysTaskCell[section!].append(false)
+        }
 
         // Back to previous controller
         var slideNavigation = SlideNavigationController().sharedInstance()

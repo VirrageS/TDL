@@ -53,8 +53,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         allTasks = [
             [
-                Task(name: "Mow the lawn", completed: false, dueDate: NSDate.date(), priority: 1, tag: allTags[2]),
-                Task(name: "Check mail", completed: false, dueDate: NSDate.date(), priority: 0, tag: allTags[0])
+                Task(name: "Mow the lawn", completed: false, dueDate: NSDate(), priority: 1, tag: allTags[2]),
+                Task(name: "Check mail", completed: false, dueDate: NSDate(), priority: 0, tag: allTags[0])
             ],
             [
                 Task(name: "Write an email to Jennifer", completed: false, dueDate: NSDate(timeIntervalSinceNow: 1*24*60*60), priority: 2, tag: allTags[0]),

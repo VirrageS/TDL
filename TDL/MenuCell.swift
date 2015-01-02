@@ -65,13 +65,13 @@ class MenuCell: UITableViewCell {
         var image: UIImage
         switch(nameTextLabel.text!) {
         case "Today":
-            image = UIImage(named: "today-icon")
+            image = UIImage(named: "today-icon")!
             break
         case "Next 7 Days":
-            image = UIImage(named: "next7days-icon")
+            image = UIImage(named: "next7days-icon")!
             break
         case "Tags":
-            image = UIImage(named: "tag-icon")
+            image = UIImage(named: "tag-icon")!
             break
         default:
             image = UIImage()

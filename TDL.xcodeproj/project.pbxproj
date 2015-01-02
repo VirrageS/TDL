@@ -20,6 +20,7 @@
 		455D6D2219C053CA009AAAEA /* DetailTagCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 455D6D2119C053CA009AAAEA /* DetailTagCell.swift */; };
 		457D74A219CD818D00364182 /* FilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457D74A119CD818D00364182 /* FilterViewController.swift */; };
 		457D74A419CD82B000364182 /* FilterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457D74A319CD82B000364182 /* FilterCell.swift */; };
+		4596A32219D1E1C000FC09F4 /* EditTaskCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4596A32119D1E1C000FC09F4 /* EditTaskCell.swift */; };
 		45993D9A19AA29CA00B371CE /* EditTaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45993D9919AA29CA00B371CE /* EditTaskViewController.swift */; };
 		45A2FC6219A8BDC700ADEABA /* TaskCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A2FC6119A8BDC700ADEABA /* TaskCell.swift */; };
 		45A2FC6419A8BE0000ADEABA /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A2FC6319A8BE0000ADEABA /* Task.swift */; };
@@ -58,6 +59,7 @@
 		455D6D2119C053CA009AAAEA /* DetailTagCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailTagCell.swift; sourceTree = "<group>"; };
 		457D74A119CD818D00364182 /* FilterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterViewController.swift; sourceTree = "<group>"; };
 		457D74A319CD82B000364182 /* FilterCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterCell.swift; sourceTree = "<group>"; };
+		4596A32119D1E1C000FC09F4 /* EditTaskCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditTaskCell.swift; sourceTree = "<group>"; };
 		45993D9919AA29CA00B371CE /* EditTaskViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditTaskViewController.swift; sourceTree = "<group>"; };
 		45A2FC6119A8BDC700ADEABA /* TaskCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = TaskCell.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		45A2FC6319A8BE0000ADEABA /* Task.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Task.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -139,6 +141,7 @@
 				45F367A619AC70A300F6B36B /* TodayTaskViewController.swift */,
 				45DE9C9419A8BB82004AB634 /* TaskViewController.swift */,
 				45A2FC6119A8BDC700ADEABA /* TaskCell.swift */,
+				4596A32119D1E1C000FC09F4 /* EditTaskCell.swift */,
 				45F367BE19ACCCCB00F6B36B /* TodayNoTaskCell.swift */,
 			);
 			name = Tasks;
@@ -337,6 +340,7 @@
 				451CD1B619ABDC8B005DB8DF /* AddTagViewController.swift in Sources */,
 				451CD1AA19ABC09F005DB8DF /* SlideNavigationController.swift in Sources */,
 				451CD1B419ABC77A005DB8DF /* TagCell.swift in Sources */,
+				4596A32219D1E1C000FC09F4 /* EditTaskCell.swift in Sources */,
 				45F367A719AC70A300F6B36B /* TodayTaskViewController.swift in Sources */,
 				457D74A419CD82B000364182 /* FilterCell.swift in Sources */,
 				454CD71419AB4B2C0052FD17 /* MenuViewController.swift in Sources */,

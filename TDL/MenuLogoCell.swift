@@ -2,7 +2,7 @@ import UIKit
 
 let menuLogoCellHeightPortrait: CGFloat = 64.4
 let menuLogoCellHeightLandscape: CGFloat = 32.5
-let menuLogoCellTextFontSize: CGFloat = 14
+let menuLogoCellTextFontSize: CGFloat = 16
 let menuLogoCellColor: UIColor = UIColor(red: 248/255, green: 248/255, blue: 248/255, alpha: 1.0)
 
 class MenuLogoCell: UITableViewCell {

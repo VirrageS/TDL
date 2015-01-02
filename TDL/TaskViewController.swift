@@ -1,6 +1,15 @@
 import UIKit
 
+struct editCell {
+    var open: Bool = false
+    var position: NSIndexPath? = nil
+}
+
+var editTaskCell: editCell?
+
 class TaskViewController: UITableViewController, SlideNavigationControllerDelegate {
+    
+    
     func shouldDisplayMenu() -> Bool {
         return true
     }
@@ -12,6 +21,8 @@ class TaskViewController: UITableViewController, SlideNavigationControllerDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        editTaskCell = editCell()
 
         // Right item to open add task controller
         let addButtonItem = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "openAddTaskController:")
@@ -20,63 +31,90 @@ class TaskViewController: UITableViewController, SlideNavigationControllerDelega
         tableView.backgroundColor = UIColor.whiteColor()
         tableView.separatorStyle = UITableViewCellSeparatorStyle.None
         tableView.registerClass(TaskCell.self, forCellReuseIdentifier: NSStringFromClass(TaskCell))
+        tableView.registerClass(EditTaskCell.self, forCellReuseIdentifier: NSStringFromClass(EditTaskCell))
     }
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        editTaskCell!.position = nil
         tableView.reloadData()
     }
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return namesForSections.count as Int
     }
-    
-//    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-//        return namesForSections[section] as String
-//    }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return allTasks[section].count as Int
+        var extraCount: Int = 0
+        if editTaskCell!.position != nil {
+            if editTaskCell!.position!.section == section {
+                extraCount = 1
+            }
+        }
+        
+        return allTasks[section].count + extraCount as Int
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        if editTaskCell!.position != nil {
+            if editTaskCell!.position!.section == indexPath.section && editTaskCell!.position!.row == indexPath.row-1 {
+                let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(EditTaskCell), forIndexPath: indexPath) as EditTaskCell
+                return cell as EditTaskCell
+            }
+        }
+
+        var extraCount: Int = 0
+        if editTaskCell!.position != nil {
+            if editTaskCell!.position!.section == indexPath.section && editTaskCell!.position!.row < indexPath.row-1 {
+               extraCount = 1
+            }
+        }
+        
         let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(TaskCell), forIndexPath: indexPath) as TaskCell
-        cell.configureCell(allTasks[indexPath.section][indexPath.row])
-        cell.setButtonsHidden(indexPath, check: 1)
+        cell.configureCell(allTasks[indexPath.section][indexPath.row - extraCount])
+        cell.setButtonsHidden(NSIndexPath(forRow: indexPath.row - extraCount, inSection: indexPath.section), check: 1)
         return cell as TaskCell
     }
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
 
-        isOpenNext7DaysTaskCell[indexPath.section][indexPath.row] = isOpenNext7DaysTaskCell[indexPath.section][indexPath.row] ? false : true
-
-        let cell: TaskCell = tableView.cellForRowAtIndexPath(indexPath) as TaskCell!
-        cell.setButtonsHidden(indexPath, check: 1)
-        tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Fade)
+        var nextIndexPath = NSIndexPath(forRow: indexPath.row+1, inSection: indexPath.section)
+        if editTaskCell!.position == nil {
+            editTaskCell!.position = indexPath
+            tableView.insertRowsAtIndexPaths([nextIndexPath], withRowAnimation: UITableViewRowAnimation.Top)
+        } else {
+            if editTaskCell!.position == indexPath {
+                editTaskCell!.position = nil // Close
+                tableView.deleteRowsAtIndexPaths([nextIndexPath], withRowAnimation: UITableViewRowAnimation.Bottom)
+            } else {
+                var previousIndexPath = NSIndexPath(forRow: editTaskCell!.position!.row+1, inSection: editTaskCell!.position!.section)
+                tableView.beginUpdates()
+                
+                tableView.deleteRowsAtIndexPaths([previousIndexPath], withRowAnimation: UITableViewRowAnimation.Bottom)
+                if previousIndexPath.section == indexPath.section { // check if cell is going to be added in same section
+                    if indexPath.row < editTaskCell!.position!.row {
+                        editTaskCell!.position = indexPath
+                        tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: indexPath.row + 1, inSection: indexPath.section)], withRowAnimation: UITableViewRowAnimation.Top)
+                    } else {
+                        editTaskCell!.position = NSIndexPath(forRow: indexPath.row - 1, inSection: indexPath.section)
+                        tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Top)
+                    }
+                } else {
+                    editTaskCell!.position = indexPath
+                    tableView.insertRowsAtIndexPaths([nextIndexPath], withRowAnimation: UITableViewRowAnimation.Top)
+                }
+                
+                tableView.endUpdates()
+            }
+        }
+        
+        tableView.reloadData()
     }
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        var extraHeight: CGFloat?
-        // Extra height when task name is too long
-        if interfaceOrientation.isPortrait {
-    
-            var size: CGSize = String(allTasks[indexPath.section][indexPath.row].name).sizeWithAttributes([NSFontAttributeName: UIFont.systemFontOfSize(17)])
-            if size.width > 238 {
-                size.height = size.height*2
-            }
-            extraHeight = CGFloat(size.height)
-        } else {
-            extraHeight = CGFloat(ceil(Double(allTasks[indexPath.section][indexPath.row].name.utf16Count)/71)*14.5)
-        }
-        
-        // Row height for open cell
-        if isOpenNext7DaysTaskCell[indexPath.section][indexPath.row] {
-            return taskCellHeight + taskCellEditSectionHeight + extraHeight!
-        }
-        
         // Row height for closed cell
-        return taskCellHeight + extraHeight!
+        return taskCellHeight
     }
 
     override func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {

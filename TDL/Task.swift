@@ -4,18 +4,20 @@ import UIKit
 class Task {
     var name: String = ""
     var completed: Bool = false
-    var dueDate: NSDate
+    var dueDate: NSDate?
     var priority: Int = 1
-    var tag: Tag
+    var tag: Tag?
     
-    init(name: String, completed: Bool, dueDate: NSDate, priority: Int, tag: Tag) {
+    init(name: String, completed: Bool, dueDate: NSDate?, priority: Int, tag: Tag?) {
         self.name = name
         self.completed = completed
         self.dueDate = dueDate
         self.priority = priority
         
-        tag.tasks++
-        self.tag = tag
+        if tag != nil {
+            tag!.tasks++
+            self.tag = tag!
+        }
     }
     
     func encodeWithCoder(encoder: NSCoder) {
@@ -28,7 +30,7 @@ class Task {
     func initWithCoder(decoder: NSCoder) -> AnyObject {
         self.name = decoder.decodeObjectForKey("name") as String
         self.completed = decoder.decodeBoolForKey("completed")
-        self.dueDate = decoder.decodeObjectForKey("dueDate") as NSDate
+        self.dueDate = decoder.decodeObjectForKey("dueDate") as? NSDate
         self.priority = decoder.decodeIntegerForKey("priority")
         
         return self;

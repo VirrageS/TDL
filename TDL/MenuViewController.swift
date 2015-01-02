@@ -5,7 +5,6 @@ class MenuViewController: UITableViewController, SlideNavigationControllerDelega
     
     convenience override init() {
         self.init(style: .Plain)
-        title = "Hello"
     }
     
     override func viewDidLoad() {

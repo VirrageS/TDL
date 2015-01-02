@@ -1,6 +1,6 @@
 import UIKit
 
-let taskCellHeight: CGFloat = 45
+let taskCellHeight: CGFloat = 55
 let taskCellEditSectionHeight: CGFloat = 60
 
 let taskCellTextFontSize: CGFloat = 17
@@ -50,17 +50,17 @@ class TaskCell: UITableViewCell {
         separatorLineLabel = UILabel(frame: CGRectZero)
         separatorLineLabel.backgroundColor = UIColor(red: 178/255, green: 178/255, blue: 178/255, alpha: 1.0)
         
-        let completeImage: UIImage = UIImage(named: "complete-image") as UIImage
+        let completeImage: UIImage = UIImage(named: "complete-image") as UIImage!
         completeButton = UIButton.buttonWithType(UIButtonType.System) as UIButton
         completeButton.setImage(completeImage, forState: UIControlState.Normal)
         completeButton.frame = CGRectMake(20, taskCellHeight, 50, 50)
 
-        let postponeImage: UIImage = UIImage(named: "postpone-image") as UIImage
+        let postponeImage: UIImage = UIImage(named: "postpone-image") as UIImage!
         postponeButton = UIButton.buttonWithType(UIButtonType.System) as UIButton
         postponeButton.setImage(postponeImage, forState: UIControlState.Normal)
         postponeButton.frame = CGRectMake(135, taskCellHeight, 50, 50)
-        
-        let editImage: UIImage = UIImage(named: "edit-image") as UIImage
+
+        let editImage: UIImage = UIImage(named: "edit-image") as UIImage!
         editButton = UIButton.buttonWithType(UIButtonType.InfoDark) as UIButton
         editButton.setImage(editImage, forState: UIControlState.Normal)
         editButton.frame = CGRectMake(250, taskCellHeight, 50, 50)
@@ -78,9 +78,9 @@ class TaskCell: UITableViewCell {
         contentView.addSubview(tagTextLabel)
         contentView.addSubview(circleViewLabel)
         contentView.addSubview(separatorLineLabel)
-        contentView.addSubview(completeButton)
-        contentView.addSubview(postponeButton)
-        contentView.addSubview(editButton)
+//        contentView.addSubview(completeButton)
+//        contentView.addSubview(postponeButton)
+//        contentView.addSubview(editButton)
         
         // Constraints
         priorityViewLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
@@ -124,12 +124,12 @@ class TaskCell: UITableViewCell {
     func configureCell(task: Task) {
         var dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "EEEE"
-        dateTextLabel.text = dateFormatter.stringFromDate(task.dueDate)
+        dateTextLabel.text = (task.dueDate == nil ? "No due date" : dateFormatter.stringFromDate(task.dueDate!))
         
         priorityViewLabel.backgroundColor = priorityColors[task.priority]
         nameTextLabel.text = task.name
-        tagTextLabel.text = task.tag.name
-        circleViewLabel.layer.backgroundColor = task.tag.color.CGColor
+        tagTextLabel.text = (task.tag == nil ? "" : task.tag!.name)
+        circleViewLabel.layer.backgroundColor = (task.tag == nil ? UIColor.whiteColor().CGColor : task.tag!.color.CGColor)
     }
 
     func complete(sender: UIButton!) {
@@ -144,13 +144,13 @@ class TaskCell: UITableViewCell {
         
         window = window.rootViewController as UINavigationController
  
-        allTasks[indexPath!.section].removeAtIndex(indexPath!.row)
+        allTasks[indexPath!.section].removeAtIndex(indexPath!.row - 1)
         updateOpenCells(indexPath!)
 
         tableView.beginUpdates()
         tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: UITableViewRowAnimation.Left)
         
-        // Add no task cell if there is no cells
+        // Add "no task cell" if there is no cells
         if allTasks[indexPath!.section].count == 0 && window.topViewController is TodayTaskViewController {
             tableView.insertRowsAtIndexPaths([indexPath!], withRowAnimation: UITableViewRowAnimation.Left)
         }
@@ -175,7 +175,7 @@ class TaskCell: UITableViewCell {
 
         // Change completion date, insert task to tasks list and delete from current section
         var task: Task = allTasks[indexPath!.section][indexPath!.row]
-        task.dueDate = NSDate(timeInterval: NSTimeInterval(60*60*24), sinceDate: task.dueDate)
+        task.dueDate = NSDate(timeInterval: NSTimeInterval(60*60*24), sinceDate: task.dueDate!)
         allTasks[indexPath!.section+1].insert(task, atIndex: allTasks[indexPath!.section+1].count)
         allTasks[indexPath!.section].removeAtIndex(indexPath!.row)
         

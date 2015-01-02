@@ -278,7 +278,7 @@ class SlideNavigationController: UINavigationController, UINavigationControllerD
             customButton!.target = self
             return customButton!
         } else {
-            let image: UIImage = UIImage(named: "menu-button")
+            let image: UIImage = UIImage(named: "menu-button")!
             return UIBarButtonItem(image: image, style: UIBarButtonItemStyle.Plain, target: self, action: selector)
         }
     }
