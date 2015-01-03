@@ -41,12 +41,12 @@ class FilterViewController: UITableViewController, SlideNavigationControllerDele
     
     // #Change
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: false)
+        tableView.deselectRowAtIndexPath(indexPath, animated: true)
         
-//        let detailTagViewController = DetailTagViewController(allFilters[indexPath.row])
- 
-//        let slideNavigation = SlideNavigationController().sharedInstance()
-//        slideNavigation._delegate = detailTagViewController
+        let detailFilterViewController = DetailFilterViewController(text: allFilters[indexPath.row])
+        
+        let slideNavigation = SlideNavigationController().sharedInstance()
+        slideNavigation._delegate = detailFilterViewController
         
         // Check if navigationController is nil
         if navigationController == nil {
@@ -54,7 +54,7 @@ class FilterViewController: UITableViewController, SlideNavigationControllerDele
             return
         }
         
-//        navigationController!.pushViewController(detailTagViewController, animated: true)
+        navigationController!.pushViewController(detailFilterViewController, animated: true)
     }
     
     // 

@@ -63,7 +63,7 @@ class EditTaskViewController: UIViewController, UITableViewDelegate, UITextField
         dateTextView.addTarget(self, action: "dateFieldDidChanged:", forControlEvents: UIControlEvents.EditingChanged)
         if task.dueDate != nil {
             var dateFormatter: NSDateFormatter = NSDateFormatter()
-            dateFormatter.dateFormat = "dd MMM yyyy HH:mm:ss"
+            dateFormatter.dateFormat = "dd MMM yyyy HH:mm"
             dateFormatter.timeZone = NSTimeZone(abbreviation: "UTC")
 
             dateTextView.text = dateFormatter.stringFromDate(task.dueDate!)
@@ -234,7 +234,7 @@ class EditTaskViewController: UIViewController, UITableViewDelegate, UITextField
         }
         
         // Get date
-        var dateFormats = ["dd/MM/yyyy", "dd.MM.yyyy", "MM/dd/yyyy", "MM.dd.yyyy"]
+        var dateFormats = ["dd/MM/yyyy", "dd.MM.yyyy", "MM/dd/yyyy", "MM.dd.yyyy", "dd MMM yyyy HH:mm", "dd MMM yyyy", "MMM dd yyyy", "HH:mm dd MMM yyyy", "HH:mm MMM dd yyyy"]
         var nonTrivialDateFormats = [
             ["today"]: NSDate(),
             ["tommorow", "in 1 day", "in one day", "+1 day", "next day"]: NSDate(timeIntervalSinceNow: NSTimeInterval(60*60*24)),
@@ -354,8 +354,6 @@ class EditTaskViewController: UIViewController, UITableViewDelegate, UITextField
     }
     
     func showDatePicker(sender: AnyObject) {
-        println("showDatePicker called")
-        
         datePickerView.hidden = false
         
         transparentView.enabled = true
@@ -466,8 +464,6 @@ class EditTaskViewController: UIViewController, UITableViewDelegate, UITextField
         var senderLabel: UILabel = sender.subviews[0] as UILabel
         
         if senderLabel.text?.lowercaseString == "pick date" {
-            println("UIDatePicker opened")
-            
             datePicker.hidden = false
             datePickerView.hidden = true
         } else {
@@ -476,11 +472,9 @@ class EditTaskViewController: UIViewController, UITableViewDelegate, UITextField
         }
     }
     
-    func datePickerChanged(datePicker:UIDatePicker) {
-        var dateFormatter = NSDateFormatter()
-        
-        dateFormatter.dateStyle = NSDateFormatterStyle.ShortStyle
-        dateFormatter.timeStyle = NSDateFormatterStyle.ShortStyle
+    func datePickerChanged(datePicker: UIDatePicker) {
+        var dateFormatter: NSDateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "dd MMM yyyy HH:mm"
         
         var strDate = dateFormatter.stringFromDate(datePicker.date)
         dateTextView.text = strDate

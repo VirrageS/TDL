@@ -338,8 +338,6 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
     }
 
     func showDatePicker(sender: AnyObject) {
-        println("showDatePicker called")
-        
         datePickerView.hidden = false
         
         transparentView.enabled = true
@@ -450,8 +448,6 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
         var senderLabel: UILabel = sender.subviews[0] as UILabel
 
         if senderLabel.text?.lowercaseString == "pick date" {
-            println("UIDatePicker opened")
-            
             datePicker.hidden = false
             datePickerView.hidden = true
         } else {
@@ -461,10 +457,8 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
     }
 
     func datePickerChanged(datePicker:UIDatePicker) {
-        var dateFormatter = NSDateFormatter()
-        
-        dateFormatter.dateStyle = NSDateFormatterStyle.ShortStyle
-        dateFormatter.timeStyle = NSDateFormatterStyle.ShortStyle
+        var dateFormatter: NSDateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "dd MMM yyyy HH:mm"
         
         var strDate = dateFormatter.stringFromDate(datePicker.date)
         dateTextView.text = strDate

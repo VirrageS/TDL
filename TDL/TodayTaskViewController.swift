@@ -82,9 +82,7 @@ class TodayTaskViewController: UITableViewController, SlideNavigationControllerD
             }
             
             let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(TaskCell), forIndexPath: indexPath) as TaskCell
-            println("expression value \(indexPath.row - extraCount)")
             cell.configureCell(todayTasks[indexPath.row - extraCount])
-            //cell.setButtonsHidden(NSIndexPath(forRow: indexPath.row - extraCount, inSection: indexPath.section), check: 1)
             return cell as TaskCell
         }
         
