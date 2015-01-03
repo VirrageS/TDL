@@ -37,12 +37,15 @@ class DetailTagViewController: UITableViewController, SlideNavigationControllerD
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let addButtonItem = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "openAddTaskController:")
-        navigationItem.rightBarButtonItem = addButtonItem
+        if tag?.enabled != false {
+            let addButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: "openEditTagViewController:")
+            navigationItem.rightBarButtonItem = addButtonItem
+        }
         
         tableView.backgroundColor = UIColor.whiteColor()
         tableView.separatorColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0)
         tableView.registerClass(TaskCell.self, forCellReuseIdentifier: NSStringFromClass(TaskCell))
+        tableView.registerClass(NoTaskCell.self, forCellReuseIdentifier: NSStringFromClass(NoTaskCell))
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -50,13 +53,19 @@ class DetailTagViewController: UITableViewController, SlideNavigationControllerD
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return detailTagTasks.count
+        return (detailTagTasks.count > 0 ? detailTagTasks.count : 1)
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(TaskCell), forIndexPath: indexPath) as TaskCell
-        cell.configureCell(detailTagTasks[indexPath.row])
-        return cell
+        if (detailTagTasks.count > 0) {
+            let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(TaskCell), forIndexPath: indexPath) as TaskCell
+            cell.configureCell(detailTagTasks[indexPath.row])
+            return cell as TaskCell
+        }
+        
+        let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(NoTaskCell), forIndexPath: indexPath) as NoTaskCell
+        tableView.scrollEnabled = false
+        return cell as NoTaskCell
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -65,18 +74,31 @@ class DetailTagViewController: UITableViewController, SlideNavigationControllerD
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         // Row height for closed cell
-        return taskCellHeight
+        if (detailTagTasks.count > 0) {
+            return taskCellHeight
+        }
+        
+        return noTaskCellHeight
+    }
+    
+    override func tableView(tableView: UITableView, shouldHighlightRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        let cell: AnyObject? = tableView.cellForRowAtIndexPath(indexPath)
+        if cell is NoTaskCell {
+            return false
+        }
+        
+        return true
     }
     
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func openAddTaskController(sender: AnyObject) {
-        let addTaskViewController = AddTaskViewController()
+    func openEditTagViewController(sender: AnyObject) {
+        let editTagViewController = EditTagViewController(tag: tag!)
         
         let slideNavigation = SlideNavigationController().sharedInstance()
-        slideNavigation._delegate = addTaskViewController
+        slideNavigation._delegate = editTagViewController
         
         // Check if navigationController is nil
         if navigationController == nil {
@@ -84,6 +106,6 @@ class DetailTagViewController: UITableViewController, SlideNavigationControllerD
             return
         }
         
-        navigationController!.pushViewController(addTaskViewController, animated: true)
+        navigationController!.pushViewController(editTagViewController, animated: true)
     }
 }

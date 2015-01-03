@@ -17,13 +17,28 @@ class TagViewController: UITableViewController, SlideNavigationControllerDelegat
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+//        var toolbar = UIToolbar(frame: CGRectZero)//(x: 0, y: 0, width: self.view.frame.size.width, height: 44))
+//        //toolbar.backgroundColor = UIColor.blackColor()
+//        var items: NSMutableArray = NSMutableArray()
+//        items.addObject(UIBarButtonItem(title: "Edit", style: UIBarButtonItemStyle.Plain, target: self, action: "editTag:"))
+//        items.addObject(UIBarButtonItem(title: "Add", style: UIBarButtonItemStyle.Plain, target: self, action: "addTag:"))
+//        toolbar.setItems(items, animated: true)
 
         let addButtonItem = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "openAddTagController:")
         navigationItem.rightBarButtonItem = addButtonItem
         
+//        view.addSubview(toolbar)
+        
         tableView.backgroundColor = UIColor.whiteColor()
         tableView.separatorColor = UIColor.clearColor() // transparent separator
         tableView.registerClass(TagCell.self, forCellReuseIdentifier: NSStringFromClass(TagCell))
+        
+//        toolbar.setTranslatesAutoresizingMaskIntoConstraints(false)
+//        view.addConstraint(NSLayoutConstraint(item: toolbar, attribute: .Left, relatedBy: .Equal, toItem: view, attribute: .Left, multiplier: 1, constant: 0))
+//        view.addConstraint(NSLayoutConstraint(item: toolbar, attribute: .Top, relatedBy: .Equal, toItem: view, attribute: .Bottom, multiplier: 1, constant: 200))
+//        view.addConstraint(NSLayoutConstraint(item: toolbar, attribute: .Right, relatedBy: .Equal, toItem: view, attribute: .Right, multiplier: 1, constant: 0))
+        //view.addConstraint(NSLayoutConstraint(item: toolbar, attribute: .Bottom, relatedBy: .Equal, toItem: view, attribute: .Bottom, multiplier: 1, constant: -40))
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {

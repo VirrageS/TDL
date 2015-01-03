@@ -21,7 +21,7 @@ class TodayTaskViewController: UITableViewController, SlideNavigationControllerD
         tableView.backgroundColor = UIColor.whiteColor()
         tableView.separatorStyle = UITableViewCellSeparatorStyle.None
         tableView.registerClass(TaskCell.self, forCellReuseIdentifier: NSStringFromClass(TaskCell))
-        tableView.registerClass(NoTaskCell.self, forCellReuseIdentifier: NSStringFromClass(NoTaskCell))
+        tableView.registerClass(TodayNoTaskCell.self, forCellReuseIdentifier: NSStringFromClass(TodayNoTaskCell))
         tableView.registerClass(EditTaskCell.self, forCellReuseIdentifier: NSStringFromClass(EditTaskCell))
     }
     
@@ -67,11 +67,11 @@ class TodayTaskViewController: UITableViewController, SlideNavigationControllerD
             cell.configureCell(allTasks[indexPath.section][indexPath.row - extraCount])
             //cell.setButtonsHidden(NSIndexPath(forRow: indexPath.row - extraCount, inSection: indexPath.section), check: 1)
             return cell as TaskCell
-        } else {
-            let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(NoTaskCell), forIndexPath: indexPath) as NoTaskCell
-            tableView.scrollEnabled = false
-            return cell as NoTaskCell
         }
+        
+        let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(TodayNoTaskCell), forIndexPath: indexPath) as TodayNoTaskCell
+        tableView.scrollEnabled = false // disable scrolling when there is no cells
+        return cell as TodayNoTaskCell
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -117,12 +117,12 @@ class TodayTaskViewController: UITableViewController, SlideNavigationControllerD
         }
         
         // Row height for "no task" cell
-        return noTaskCellHeight
+        return todayNoTaskCellHeight
     }
     
     override func tableView(tableView: UITableView, shouldHighlightRowAtIndexPath indexPath: NSIndexPath) -> Bool {
         let cell: AnyObject? = tableView.cellForRowAtIndexPath(indexPath)
-        if cell is NoTaskCell {
+        if cell is TodayNoTaskCell {
             return false
         }
         

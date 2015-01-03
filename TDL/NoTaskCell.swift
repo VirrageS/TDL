@@ -1,9 +1,9 @@
 import UIKit
 
-let todayNoTaskCellHeight: CGFloat = 300
-let todayNoTaskCellTextFontSize: CGFloat = 18
+let noTaskCellHeight: CGFloat = 300
+let noTaskCellTextFontSize: CGFloat = 18
 
-class TodayNoTaskCell: UITableViewCell {
+class NoTaskCell: UITableViewCell {
     let nameTextLabel: UILabel
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -11,12 +11,12 @@ class TodayNoTaskCell: UITableViewCell {
         nameTextLabel.backgroundColor = UIColor.whiteColor()
         nameTextLabel.font = UIFont.systemFontOfSize(noTaskCellTextFontSize)
         nameTextLabel.numberOfLines = 2
-        nameTextLabel.text = "No tasks for today.\nHave a nice day :)"
+        nameTextLabel.text = "No tasks to show :C"
         nameTextLabel.textAlignment = NSTextAlignment.Center
         nameTextLabel.textColor = UIColor.blackColor()
         
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-
+        
         contentView.addSubview(nameTextLabel)
         
         nameTextLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
