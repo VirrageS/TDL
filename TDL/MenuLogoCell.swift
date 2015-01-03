@@ -6,38 +6,33 @@ let menuLogoCellTextFontSize: CGFloat = 16
 let menuLogoCellColor: UIColor = UIColor(red: 248/255, green: 248/255, blue: 248/255, alpha: 1.0)
 
 class MenuLogoCell: UITableViewCell {
-    let nameTextLabel: UILabel
     let separatorLineLabel: UILabel
+    let tdlImage: UIImageView
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        nameTextLabel = UILabel(frame: CGRectZero)
-        nameTextLabel.backgroundColor = menuLogoCellColor
-        nameTextLabel.font = UIFont.systemFontOfSize(menuLogoCellTextFontSize)
-        nameTextLabel.numberOfLines = 1
-        nameTextLabel.text = "TDL"
-        nameTextLabel.textAlignment = NSTextAlignment.Left;
-        nameTextLabel.textColor = UIColor.blackColor()
-        
         separatorLineLabel = UILabel(frame: CGRectZero)
         separatorLineLabel.backgroundColor = UIColor(red: 178/255, green: 178/255, blue: 178/255, alpha: 1.0)
         
+        tdlImage = UIImageView(frame: CGRectZero)
+        tdlImage.image = UIImage(named: "tdl-icon")!
+        
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        contentView.addSubview(nameTextLabel)
+
         contentView.addSubview(separatorLineLabel)
+        contentView.addSubview(tdlImage)
         contentView.backgroundColor = menuLogoCellColor
-        
-        nameTextLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
-        contentView.addConstraint(NSLayoutConstraint(item: nameTextLabel, attribute: .Left, relatedBy: .LessThanOrEqual, toItem: contentView, attribute: .Left, multiplier: 1, constant: 20))
-        contentView.addConstraint(NSLayoutConstraint(item: nameTextLabel, attribute: .Top, relatedBy: .GreaterThanOrEqual, toItem: contentView, attribute: .Top, multiplier: 1, constant: 0))
-        contentView.addConstraint(NSLayoutConstraint(item: nameTextLabel, attribute: .Right, relatedBy: .Equal, toItem: contentView, attribute: .Right, multiplier: 1, constant: 0))
-        contentView.addConstraint(NSLayoutConstraint(item: nameTextLabel, attribute: .Bottom, relatedBy: .Equal, toItem: contentView, attribute: .Bottom, multiplier: 1, constant: -10))
         
         separatorLineLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
         contentView.addConstraint(NSLayoutConstraint(item: separatorLineLabel, attribute: .Left, relatedBy: .Equal, toItem: contentView, attribute: .Left, multiplier: 1, constant: 0))
         contentView.addConstraint(NSLayoutConstraint(item: separatorLineLabel, attribute: .Top, relatedBy: .Equal, toItem: contentView, attribute: .Bottom, multiplier: 1, constant: -0.5))
         contentView.addConstraint(NSLayoutConstraint(item: separatorLineLabel, attribute: .Right, relatedBy: .Equal, toItem: contentView, attribute: .Right, multiplier: 1, constant: 0))
         contentView.addConstraint(NSLayoutConstraint(item: separatorLineLabel, attribute: .Bottom, relatedBy: .Equal, toItem: contentView, attribute: .Bottom, multiplier: 1, constant: 0))
+
+        tdlImage.setTranslatesAutoresizingMaskIntoConstraints(false)
+        contentView.addConstraint(NSLayoutConstraint(item: tdlImage, attribute: .Left, relatedBy: .Equal, toItem: contentView, attribute: .Left, multiplier: 1, constant: 10))
+        contentView.addConstraint(NSLayoutConstraint(item: tdlImage, attribute: .Top, relatedBy: .Equal, toItem: contentView, attribute: .Top, multiplier: 1, constant: 30))
+        contentView.addConstraint(NSLayoutConstraint(item: tdlImage, attribute: .Right, relatedBy: .Equal, toItem: contentView, attribute: .Left, multiplier: 1, constant: 90))
+        contentView.addConstraint(NSLayoutConstraint(item: tdlImage, attribute: .Bottom, relatedBy: .Equal, toItem: contentView, attribute: .Bottom, multiplier: 1, constant: -10))
     }
     
     required init(coder aDecoder: NSCoder) {
