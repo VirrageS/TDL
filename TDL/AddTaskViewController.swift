@@ -228,31 +228,29 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
         // Get date
         var dateFormats = ["dd/MM/yyyy", "dd.MM.yyyy", "MM/dd/yyyy", "MM.dd.yyyy"]
         var nonTrivialDateFormats = [
-            ["today"]: (section: 0, time: NSDate()),
-            ["tommorow", "in 1 day", "in one day", "+1 day", "next day"]: (section: 1, time: NSDate(timeIntervalSinceNow: NSTimeInterval(60*60*24))),
-            ["in 1 week", "in one week", "next week", "+1 week"]: (section: 6, time: NSDate(timeIntervalSinceNow: NSTimeInterval(7*60*60*24))),
-            ["in 1 month", "in one month", "next month", "+1 month"]: (section: -1, time: NSDate(timeIntervalSinceNow: NSTimeInterval(30*60*60*24))),
-            ["none", "no due date"]: (section: -1, time: NSDate(timeIntervalSince1970: NSTimeInterval(0)))
+            ["today"]: NSDate(),
+            ["tommorow", "in 1 day", "in one day", "+1 day", "next day"]: NSDate(timeIntervalSinceNow: NSTimeInterval(60*60*24)),
+            ["in 1 week", "in one week", "next week", "+1 week"]: NSDate(timeIntervalSinceNow: NSTimeInterval(7*60*60*24)),
+            ["in 1 month", "in one month", "next month", "+1 month"]: NSDate(timeIntervalSinceNow: NSTimeInterval(30*60*60*24)),
+            ["none", "no due date"]: NSDate(timeIntervalSince1970: NSTimeInterval(0))
         ]
         
         var dueDate: NSDate?
-        var section: Int?
         if dateTextView.hasText() {
             var ok: Bool = false
-            for (dates, parameters) in nonTrivialDateFormats {
-                for date in dates {
+            for (dates, time) in nonTrivialDateFormats {
+                for date in dates as [String] {
                     if dateTextView.text.lowercaseString == (date as String) && !ok {
-                        section = parameters.section
-                        dueDate = parameters.time
-                        
+                        dueDate = time as? NSDate
                         ok = true
                     }
                 }
             }
             
-            section = (section == -1) ? nil : section
-            if (dueDate?.isEqualToDate((NSDate(timeIntervalSince1970: NSTimeInterval(0)) as NSDate)) != nil) {
-                dueDate = nil
+            if ok {
+                if (dueDate!.isEqualToDateIgnoringTime((NSDate(timeIntervalSince1970: NSTimeInterval(0)) as NSDate))) { // #Change - some bugs there
+                    dueDate = nil
+                }
             }
             
             if !ok {
@@ -261,20 +259,18 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
                 for _dateFormat in dateFormats {
                     dateFormatter.dateFormat = _dateFormat
                     dueDate = dateFormatter.dateFromString(dateTextView.text)
-
+                    
                     if dueDate != nil {
                         break
                     }
                 }
-
+                
                 if dueDate != nil {
                     println("timeIntervalSinceNow: \(dueDate!.timeIntervalSinceNow)")
                     
                     if dueDate!.timeIntervalSinceNow < 0 {
                         println("Date is outdated")
                         dueDate = NSDate()
-                    } else if dueDate!.timeIntervalSinceNow <= NSTimeInterval(24*60*60*6) {
-                        section = Int((dueDate!.timeIntervalSinceNow)/60/60/24)+1
                     } else {
                         println("Date is after 7 days")
                     }
@@ -282,15 +278,13 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
             }
         }
         
-        println("Date is set to: \(dueDate); Sections is set to: \(section)")
+        println("Date is set to: \(dueDate)")
         
         // Create task
         let newTask: Task = Task(name: textView.text, completed: false, dueDate: dueDate, priority: taskPrority-1, tag: taskTag)
         
-        // Insert if we can
-        if section != nil {
-            allTasks[section!].append(newTask)
-        }
+        // Insert new task
+        allTasks.append(newTask)
 
         // Back to previous controller
         var slideNavigation = SlideNavigationController().sharedInstance()

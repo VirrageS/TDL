@@ -3,7 +3,7 @@ import UIKit
 var namesForSections: [(day: String, desc: String)] = []
 
 var allTags = [Tag]()
-var allTasks = [[Task]]() // #Change - task must be inserted and got by NSDate not by section
+var allTasks = [Task]() // #Change - task must be inserted and got by NSDate not by section
 var allFilters = [String]()
 var tasksForNext7Days = [[Task]]()
 
@@ -50,24 +50,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         allTasks = [
-            [
-                Task(name: "Mow the lawn", completed: false, dueDate: NSDate(), priority: 1, tag: allTags[2]),
-                Task(name: "Check mail", completed: false, dueDate: NSDate(), priority: 0, tag: allTags[0])
-            ],
-            [
-                Task(name: "Write an email to Jennifer", completed: false, dueDate: NSDate(timeIntervalSinceNow: 1*24*60*60), priority: 2, tag: allTags[0]),
-                Task(name: "Buy milk22", completed: false, dueDate: NSDate(timeIntervalSinceNow: 1*24*60*60), priority: 1, tag: allTags[1])
-            ],
-            [
-                Task(name: "Buy milk31", completed: false, dueDate: NSDate(timeIntervalSinceNow: 2*24*60*60), priority: 1, tag: allTags[0]),
-                Task(name: "Buy milk32", completed: false, dueDate: NSDate(timeIntervalSinceNow: 2*24*60*60), priority: 3, tag: allTags[1]),
-                Task(name: "Buy milk33", completed: false, dueDate: NSDate(timeIntervalSinceNow: 2*24*60*60), priority: 1, tag: allTags[2])
-            ],
-            [
-                Task(name: "Buy milk34", completed: false, dueDate: NSDate(timeIntervalSinceNow: 3*24*60*60), priority: 1, tag: allTags[1])
-            ],[],[
-                Task(name: "Buy milk34", completed: false, dueDate: NSDate(timeIntervalSinceNow: 5*24*60*60), priority: 1, tag: allTags[1])
-            ],[],[],[]
+            Task(name: "Mow the lawn", completed: false, dueDate: NSDate(), priority: 1, tag: allTags[2]),
+            Task(name: "Check mail", completed: false, dueDate: NSDate(), priority: 0, tag: allTags[0]),
+            Task(name: "Write an email to Jennifer", completed: false, dueDate: NSDate(timeIntervalSinceNow: 1*24*60*60), priority: 2, tag: allTags[0]),
+            Task(name: "Buy milk22", completed: false, dueDate: NSDate(timeIntervalSinceNow: 1*24*60*60), priority: 1, tag: allTags[1]),
+            Task(name: "Buy milk31", completed: false, dueDate: NSDate(timeIntervalSinceNow: 2*24*60*60), priority: 1, tag: allTags[0]),
+            Task(name: "Buy milk32", completed: false, dueDate: NSDate(timeIntervalSinceNow: 2*24*60*60), priority: 3, tag: allTags[1]),
+            Task(name: "Buy milk33", completed: false, dueDate: NSDate(timeIntervalSinceNow: 2*24*60*60), priority: 1, tag: allTags[2]),
+            Task(name: "Buy milk34", completed: false, dueDate: NSDate(timeIntervalSinceNow: 3*24*60*60), priority: 1, tag: allTags[1]),
+            Task(name: "Buy milk34", completed: false, dueDate: NSDate(timeIntervalSinceNow: 5*24*60*60), priority: 1, tag: allTags[1])
         ]
         
         allFilters = [

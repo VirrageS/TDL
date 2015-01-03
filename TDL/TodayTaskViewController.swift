@@ -1,6 +1,22 @@
 import UIKit
 
+var todayTasks = [Task]()
+
+func updateTodayTasks() {
+    todayTasks.removeAll(keepCapacity: false)
+    for i in 0...allTasks.count-1 {
+        if allTasks[i].dueDate != nil {
+            if allTasks[i].dueDate!.isEqualToDateIgnoringTime(NSDate(timeIntervalSinceNow: NSTimeInterval(0))) {
+                todayTasks.append(allTasks[i])
+            }
+        }
+    }
+
+}
+
 class TodayTaskViewController: UITableViewController, SlideNavigationControllerDelegate {
+    
+    
     func shouldDisplayMenu() -> Bool {
         return true
     }
@@ -27,6 +43,8 @@ class TodayTaskViewController: UITableViewController, SlideNavigationControllerD
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        editTaskCell!.position = nil
+        updateTodayTasks()
         tableView.reloadData()
     }
     
@@ -44,11 +62,11 @@ class TodayTaskViewController: UITableViewController, SlideNavigationControllerD
             }
         }
         
-        return (allTasks[section].count > 0 ? allTasks[section].count + extraCount : 1) as Int
+        return (todayTasks.count > 0 ? todayTasks.count + extraCount : 1) as Int
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if allTasks[indexPath.section].count > 0 {
+        if todayTasks.count > 0 {
             if editTaskCell!.position != nil {
                 if editTaskCell!.position!.section == indexPath.section && editTaskCell!.position!.row == indexPath.row-1 {
                     let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(EditTaskCell), forIndexPath: indexPath) as EditTaskCell
@@ -64,7 +82,8 @@ class TodayTaskViewController: UITableViewController, SlideNavigationControllerD
             }
             
             let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(TaskCell), forIndexPath: indexPath) as TaskCell
-            cell.configureCell(allTasks[indexPath.section][indexPath.row - extraCount])
+            println("expression value \(indexPath.row - extraCount)")
+            cell.configureCell(todayTasks[indexPath.row - extraCount])
             //cell.setButtonsHidden(NSIndexPath(forRow: indexPath.row - extraCount, inSection: indexPath.section), check: 1)
             return cell as TaskCell
         }
@@ -112,7 +131,7 @@ class TodayTaskViewController: UITableViewController, SlideNavigationControllerD
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         // Row height for normal cell
-        if allTasks[indexPath.section].count > 0 {
+        if todayTasks.count > 0 {
             return taskCellHeight
         }
         
@@ -189,8 +208,8 @@ class TodayTaskViewController: UITableViewController, SlideNavigationControllerD
         navigationController!.pushViewController(addTaskViewController, animated: true)
     }
     
-    func openEditTaskController(indexPath: NSIndexPath) {
-        let editTaskViewController: EditTaskViewController = EditTaskViewController(indexPath: indexPath)
+    func openEditTaskController(task: Task) {
+        let editTaskViewController: EditTaskViewController = EditTaskViewController(task: task)
         
         let slideNavigation = SlideNavigationController().sharedInstance()
         slideNavigation._delegate = editTaskViewController

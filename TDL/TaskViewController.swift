@@ -6,6 +6,25 @@ struct editCell {
 }
 
 var editTaskCell: editCell?
+var weekTasks = [[Task]]()
+
+func updateWeekTasks() {
+    weekTasks.removeAll(keepCapacity: false)
+    for i in 0...6 {
+        weekTasks.insert([Task](), atIndex: i)
+    }
+    
+    for i in 0...allTasks.count-1 {
+        if allTasks[i].dueDate != nil {
+            for j in 0...6 {
+                if allTasks[i].dueDate!.isEqualToDateIgnoringTime(NSDate(timeIntervalSinceNow: NSTimeInterval(j*24*60*60))) {
+                    weekTasks[j].append(allTasks[i])
+                    break
+                }
+            }
+        }
+    }
+}
 
 class TaskViewController: UITableViewController, SlideNavigationControllerDelegate {
     
@@ -37,6 +56,7 @@ class TaskViewController: UITableViewController, SlideNavigationControllerDelega
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         editTaskCell!.position = nil
+        updateWeekTasks()
         tableView.reloadData()
     }
 
@@ -52,7 +72,7 @@ class TaskViewController: UITableViewController, SlideNavigationControllerDelega
             }
         }
         
-        return allTasks[section].count + extraCount as Int
+        return weekTasks[section].count + extraCount as Int
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -71,7 +91,7 @@ class TaskViewController: UITableViewController, SlideNavigationControllerDelega
         }
         
         let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(TaskCell), forIndexPath: indexPath) as TaskCell
-        cell.configureCell(allTasks[indexPath.section][indexPath.row - extraCount])
+        cell.configureCell(weekTasks[indexPath.section][indexPath.row - extraCount])
         //cell.setButtonsHidden(NSIndexPath(forRow: indexPath.row - extraCount, inSection: indexPath.section), check: 1)
         return cell as TaskCell
     }
@@ -180,8 +200,8 @@ class TaskViewController: UITableViewController, SlideNavigationControllerDelega
         navigationController!.pushViewController(addTaskViewController, animated: true)
     }
 
-    func openEditTaskController(indexPath: NSIndexPath) {
-        let editTaskViewController: EditTaskViewController = EditTaskViewController(indexPath: indexPath)
+    func openEditTaskController(task: Task) {
+        let editTaskViewController: EditTaskViewController = EditTaskViewController(task: task)
         
         let slideNavigation = SlideNavigationController().sharedInstance()
         slideNavigation._delegate = editTaskViewController

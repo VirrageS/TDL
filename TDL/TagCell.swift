@@ -59,12 +59,8 @@ class TagCell: UITableViewCell {
         
         var count: Int = 0
         for i in 0...allTasks.count-1 {
-            if allTasks[i].count > 0 {
-                for j in 0...allTasks[i].count-1 {
-                    if allTasks[i][j].tag === allTags[row] {
-                        count++
-                    }
-                }
+            if allTasks[i].tag === allTags[row] {
+                count++
             }
         }
         

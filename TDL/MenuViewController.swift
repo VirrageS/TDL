@@ -32,14 +32,7 @@ class MenuViewController: UITableViewController, SlideNavigationControllerDelega
             return cell as MenuLogoCell
         }
         
-        var all: Int = 0
-        for i in 0...allTasks.count-1 {
-            if allTasks[i].count > 0 {
-                for j in 0...allTasks[i].count-1 {
-                    all++
-                }
-            }
-        }
+        var all: Int = allTasks.count
         
         let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(MenuCell), forIndexPath: indexPath) as MenuCell
         cell.configure(menuItems[indexPath.row-1])
@@ -136,19 +129,30 @@ class MenuViewController: UITableViewController, SlideNavigationControllerDelega
             return
         }
         
-        cell!.countTextLabel.text = String(allTasks[0].count)
-        
-        var all: Int = 0
+        var firstCount: Int = 0
         for i in 0...allTasks.count-1 {
-            if allTasks[i].count > 0 {
-                for j in 0...allTasks[i].count-1 {
-                    all++
+            if allTasks[i].dueDate != nil {
+                if allTasks[i].dueDate!.isEqualToDateIgnoringTime(NSDate(timeIntervalSinceNow: NSTimeInterval(0))) {
+                    firstCount++
+                }
+            }
+        }
+        cell!.countTextLabel.text = String(firstCount) // #Change
+        
+        var secondCount: Int = 0
+        for i in 0...allTasks.count-1 {
+            if allTasks[i].dueDate != nil {
+                for j in 0...6 {
+                    if allTasks[i].dueDate!.isEqualToDateIgnoringTime(NSDate(timeIntervalSinceNow: NSTimeInterval(j*24*60*60))) {
+                        secondCount++
+                        break
+                    }
                 }
             }
         }
         
         indexPath = NSIndexPath(forRow: 2, inSection: 0)
         cell = tableView.cellForRowAtIndexPath(indexPath) as MenuCell?
-        cell!.countTextLabel.text = String(all)
+        cell!.countTextLabel.text = String(secondCount)
     }
 }

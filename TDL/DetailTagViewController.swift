@@ -22,12 +22,8 @@ class DetailTagViewController: UITableViewController, SlideNavigationControllerD
         
         detailTagTasks.removeAll(keepCapacity: false)
         for i in 0...allTasks.count-1 {
-            if allTasks[i].count > 0 {
-                for j in 0...allTasks[i].count-1 {
-                    if allTasks[i][j].tag === self.tag! {
-                        detailTagTasks.append(allTasks[i][j])
-                    }
-                }
+            if allTasks[i].tag === self.tag! {
+                detailTagTasks.append(allTasks[i])
             }
         }
         

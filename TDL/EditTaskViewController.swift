@@ -1,7 +1,7 @@
 import UIKit
 
 class EditTaskViewController: UIViewController, UITableViewDelegate, UITextFieldDelegate, SlideNavigationControllerDelegate {
-    let path: NSIndexPath
+    let task: Task
     var textView: UITextField!
     var tagPickerButton: UIButton!
     var dateTextView: UITextField!
@@ -22,8 +22,8 @@ class EditTaskViewController: UIViewController, UITableViewDelegate, UITextField
         return false
     }
     
-    init(indexPath: NSIndexPath) {
-        self.path = indexPath
+    init(task: Task) {
+        self.task = task
         super.init(nibName: nil, bundle: nil)
         title = "Edit Task"
     }
@@ -42,15 +42,17 @@ class EditTaskViewController: UIViewController, UITableViewDelegate, UITextField
         textView = UITextField(frame: CGRectZero)
         addCustomTextFieldSubview(textView)
         textView.addTarget(self, action: "textFieldDidChanged:", forControlEvents: UIControlEvents.EditingChanged)
-        textView.text = allTasks[path.section][path.row].name
+        textView.text = task.name
         textView.delegate = self
         textView.becomeFirstResponder()
         
         tagPickerButton = UIButton(frame: CGRectZero)
         tagPickerButton.addTarget(self, action: "showTagPicker:", forControlEvents: UIControlEvents.TouchUpInside)
         tagPickerButton.backgroundColor = UIColor.whiteColor()
-        if allTasks[path.section][path.row].tag != nil {
-            addCustomButtonSubviews(tagPickerButton, allTasks[path.section][path.row].tag!.name)
+        if task.tag != nil {
+            addCustomButtonSubviews(tagPickerButton, task.tag!.name)
+        } else {
+            addCustomButtonSubviews(tagPickerButton, nil)
         }
         
         // Date view
@@ -59,12 +61,12 @@ class EditTaskViewController: UIViewController, UITableViewDelegate, UITextField
         dateTextView.rightViewMode = UITextFieldViewMode.Always // to make calendarButton working everytime
         addCustomTextFieldSubview(dateTextView) // for separatorLine and extendButton
         dateTextView.addTarget(self, action: "dateFieldDidChanged:", forControlEvents: UIControlEvents.EditingChanged)
-        if allTasks[path.section][path.row].dueDate != nil {
+        if task.dueDate != nil {
             var dateFormatter: NSDateFormatter = NSDateFormatter()
             dateFormatter.dateFormat = "dd MMM yyyy HH:mm:ss"
             dateFormatter.timeZone = NSTimeZone(abbreviation: "UTC")
 
-            dateTextView.text = dateFormatter.stringFromDate(allTasks[path.section][path.row].dueDate!)
+            dateTextView.text = dateFormatter.stringFromDate(task.dueDate!)
         } else {
              dateTextView.placeholder = "No due date"
         }
@@ -82,7 +84,7 @@ class EditTaskViewController: UIViewController, UITableViewDelegate, UITextField
         priorityPickerButton = UIButton(frame: CGRectZero)
         priorityPickerButton.addTarget(self, action: "showPriorityPicker:", forControlEvents: UIControlEvents.TouchUpInside)
         priorityPickerButton.backgroundColor = UIColor.whiteColor()
-        addCustomButtonSubviews(priorityPickerButton, "Priority " + String(allTasks[path.section][path.row].priority + 1))
+        addCustomButtonSubviews(priorityPickerButton, "Priority " + String(task.priority + 1))
         
         // Transparent view
         tagPickerView = UIView(frame: CGRectZero)
@@ -225,7 +227,7 @@ class EditTaskViewController: UIViewController, UITableViewDelegate, UITextField
         
         var taskTag: Tag?
         for tag in allTags {
-            if tag.name == tagLabel!.text {
+            if tag.name == tagLabel!.text { // #Change - may cause conflict if tags have the same name
                 taskTag = tag
                 break
             }
@@ -234,31 +236,29 @@ class EditTaskViewController: UIViewController, UITableViewDelegate, UITextField
         // Get date
         var dateFormats = ["dd/MM/yyyy", "dd.MM.yyyy", "MM/dd/yyyy", "MM.dd.yyyy"]
         var nonTrivialDateFormats = [
-            ["today"]: (section: 0, time: NSDate()),
-            ["tommorow", "in 1 day", "in one day", "+1 day", "next day"]: (section: 1, time: NSDate(timeIntervalSinceNow: NSTimeInterval(60*60*24))),
-            ["in 1 week", "in one week", "next week", "+1 week"]: (section: 6, time: NSDate(timeIntervalSinceNow: NSTimeInterval(7*60*60*24))),
-            ["in 1 month", "in one month", "next month", "+1 month"]: (section: -1, time: NSDate(timeIntervalSinceNow: NSTimeInterval(30*60*60*24))),
-            ["none", "no due date"]: (section: -1, time: NSDate(timeIntervalSince1970: NSTimeInterval(0)))
+            ["today"]: NSDate(),
+            ["tommorow", "in 1 day", "in one day", "+1 day", "next day"]: NSDate(timeIntervalSinceNow: NSTimeInterval(60*60*24)),
+            ["in 1 week", "in one week", "next week", "+1 week"]: NSDate(timeIntervalSinceNow: NSTimeInterval(7*60*60*24)),
+            ["in 1 month", "in one month", "next month", "+1 month"]: NSDate(timeIntervalSinceNow: NSTimeInterval(30*60*60*24)),
+            ["none", "no due date"]: NSDate(timeIntervalSince1970: NSTimeInterval(0))
         ]
         
         var dueDate: NSDate?
-        var section: Int?
         if dateTextView.hasText() {
             var ok: Bool = false
-            for (dates, parameters) in nonTrivialDateFormats {
-                for date in dates {
+            for (dates, time) in nonTrivialDateFormats {
+                for date in dates as [String] {
                     if dateTextView.text.lowercaseString == (date as String) && !ok {
-                        section = parameters.section
-                        dueDate = parameters.time
-                        
-                        ok = true
+                       dueDate = time as? NSDate
+                       ok = true
                     }
                 }
             }
             
-            section = (section == -1) ? nil : section
-            if (dueDate?.isEqualToDate((NSDate(timeIntervalSince1970: NSTimeInterval(0)) as NSDate)) != nil) {
-                dueDate = nil
+            if ok {
+                if (dueDate!.isEqualToDateIgnoringTime((NSDate(timeIntervalSince1970: NSTimeInterval(0)) as NSDate))) { // #Change - some bugs there
+                    dueDate = nil
+                }
             }
             
             if !ok {
@@ -279,8 +279,6 @@ class EditTaskViewController: UIViewController, UITableViewDelegate, UITextField
                     if dueDate!.timeIntervalSinceNow < 0 {
                         println("Date is outdated")
                         dueDate = NSDate()
-                    } else if dueDate!.timeIntervalSinceNow <= NSTimeInterval(24*60*60*6) {
-                        section = Int((dueDate!.timeIntervalSinceNow)/60/60/24)+1
                     } else {
                         println("Date is after 7 days")
                     }
@@ -290,9 +288,19 @@ class EditTaskViewController: UIViewController, UITableViewDelegate, UITextField
         
         println("Date is set to: \(dueDate)")
         
-        // Create new task
+        // Delete previous task
+        if allTasks.count > 0 {
+            for i in 0...allTasks.count-1 {
+                if allTasks[i] === self.task {
+                    allTasks.removeAtIndex(i)
+                    break
+                }
+            }
+        }
+
+        // Create and insert new task
         let newTask: Task = Task(name: textView.text, completed: false, dueDate: dueDate, priority: taskPrority - 1, tag: taskTag)
-        allTasks[path.section][path.row] = newTask // #Change - we dont change position even if due date has changed
+        allTasks.append(newTask)
         
         // Back to previous controller
         var slideNavigation = SlideNavigationController().sharedInstance()

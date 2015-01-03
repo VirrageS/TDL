@@ -111,12 +111,8 @@ class EditTagViewController: UIViewController, UITextFieldDelegate, SlideNavigat
                     
                     if allTasks.count > 0 {
                         for i in 0...allTasks.count-1 {
-                            if allTasks[i].count > 0 {
-                                for j in 0...allTasks[i].count-1 {
-                                    if allTasks[i][j].tag === tag! {
-                                        allTasks[i][j].tag = newTag
-                                    }
-                                }
+                            if allTasks[i].tag === tag! {
+                                allTasks[i].tag = newTag
                             }
                         }
                     }
@@ -139,12 +135,8 @@ class EditTagViewController: UIViewController, UITextFieldDelegate, SlideNavigat
                     
                 if allTasks.count > 0 {
                     for i in 0...allTasks.count-1 {
-                        if allTasks[i].count > 0 {
-                            for j in 0...allTasks[i].count-1 {
-                                if allTasks[i][j].tag === tag! {
-                                    allTasks[i][j].tag = allTags[0]
-                                }
-                            }
+                        if allTasks[i].tag === tag! {
+                            allTasks[i].tag = allTags[0]
                         }
                     }
                 }
