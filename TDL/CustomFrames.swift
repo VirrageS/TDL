@@ -43,34 +43,33 @@ func addCustomTextFieldSubview(textField: UITextField) {
 }
 
 func addCustomButtonSubviews(button: UIButton, labelText: String?) {
-    var buttonTextLabel: UILabel?
+    var buttonTextLabel: UILabel
+    
+    buttonTextLabel = UILabel(frame: CGRectZero)
+    buttonTextLabel.font = UIFont.systemFontOfSize(13)
     if labelText != nil {
-        buttonTextLabel = UILabel(frame: CGRectZero)
-        buttonTextLabel!.font = UIFont.systemFontOfSize(13)
-        buttonTextLabel!.text = labelText!
-        buttonTextLabel!.textAlignment = NSTextAlignment.Left
-        buttonTextLabel!.textColor = UIColor.blackColor()
+        buttonTextLabel.text = labelText!
+        buttonTextLabel.textColor = UIColor.blackColor()
+    } else {
+        buttonTextLabel.text = "None"
+        buttonTextLabel.textColor = UIColor(red: 206/255, green: 206/255, blue: 211/255, alpha: 1.0)
     }
+    buttonTextLabel.textAlignment = NSTextAlignment.Left
     
     var buttonBottomBorder = UIView(frame: CGRectZero)
     buttonBottomBorder.backgroundColor = UIColor(red: 170/255, green: 170/255, blue: 170/255, alpha: 1.0)
     
     var buttonExtendImage = UIImageView(image: UIImage(named: "extend-image"))
     
-    if labelText != nil {
-        button.addSubview(buttonTextLabel!)
-    }
+    button.addSubview(buttonTextLabel)
     button.addSubview(buttonBottomBorder)
     button.addSubview(buttonExtendImage)
-    
-    if labelText != nil {
-        buttonTextLabel!.setTranslatesAutoresizingMaskIntoConstraints(false)
-        button.addConstraint(NSLayoutConstraint(item: buttonTextLabel!, attribute: .Left, relatedBy: .Equal, toItem: button, attribute: .Left, multiplier: 1, constant: 5))
-        button.addConstraint(NSLayoutConstraint(item: buttonTextLabel!, attribute: .Top, relatedBy: .Equal, toItem: button, attribute: .Top, multiplier: 1, constant: 8))
-        button.addConstraint(NSLayoutConstraint(item: buttonTextLabel!, attribute: .Right, relatedBy: .Equal, toItem: button, attribute: .Right, multiplier: 1, constant: -30))
-        button.addConstraint(NSLayoutConstraint(item: buttonTextLabel!, attribute: .Bottom, relatedBy: .Equal, toItem: button, attribute: .Bottom, multiplier: 1, constant: 0))
-    }
-    
+
+    buttonTextLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
+    button.addConstraint(NSLayoutConstraint(item: buttonTextLabel, attribute: .Left, relatedBy: .Equal, toItem: button, attribute: .Left, multiplier: 1, constant: 5))
+    button.addConstraint(NSLayoutConstraint(item: buttonTextLabel, attribute: .Top, relatedBy: .Equal, toItem: button, attribute: .Top, multiplier: 1, constant: 8))
+    button.addConstraint(NSLayoutConstraint(item: buttonTextLabel, attribute: .Right, relatedBy: .Equal, toItem: button, attribute: .Right, multiplier: 1, constant: -30))
+    button.addConstraint(NSLayoutConstraint(item: buttonTextLabel, attribute: .Bottom, relatedBy: .Equal, toItem: button, attribute: .Bottom, multiplier: 1, constant: 0))
     
     buttonBottomBorder.setTranslatesAutoresizingMaskIntoConstraints(false)
     button.addConstraint(NSLayoutConstraint(item: buttonBottomBorder, attribute: .Left, relatedBy: .Equal, toItem: button, attribute: .Left, multiplier: 1, constant: 0))

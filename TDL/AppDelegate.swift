@@ -29,9 +29,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         ]
         
         allTags = [
-            Tag(name: "Home", color: UIColor.greenColor()),
-            Tag(name: "School", color: UIColor.grayColor()),
-            Tag(name: "Work", color: UIColor.redColor())
+            Tag(name: "None", color: UIColor.clearColor(), enabled: false),
+            Tag(name: "Home", color: UIColor.greenColor(), enabled: true),
+            Tag(name: "School", color: UIColor.grayColor(), enabled: true),
+            Tag(name: "Work", color: UIColor.redColor(), enabled: true)
         ]
         
         priorityColors = [

@@ -56,7 +56,15 @@ class EditTaskViewController: UIViewController, UITableViewDelegate, UITextField
         dateTextView.rightViewMode = UITextFieldViewMode.Always // to make calendarButton working everytime
         addCustomTextFieldSubview(dateTextView) // for separatorLine and extendButton
         dateTextView.addTarget(self, action: "dateFieldDidChanged:", forControlEvents: UIControlEvents.EditingChanged)
-        dateTextView.placeholder = (allTasks[path.section][path.row].dueDate == nil ? "No due date" : "There is a date")
+        if allTasks[path.section][path.row].dueDate != nil {
+            var dateFormatter: NSDateFormatter = NSDateFormatter()
+            dateFormatter.dateFormat = "dd MMM yyyy HH:mm:ss"
+            dateFormatter.timeZone = NSTimeZone(abbreviation: "UTC")
+
+            dateTextView.text = dateFormatter.stringFromDate(allTasks[path.section][path.row].dueDate!)
+        } else {
+             dateTextView.placeholder = "No due date"
+        }
         dateTextView.delegate = self
         
         separatorLine = UIView(frame: CGRectZero) // to separate dateTextView and calendarButton
@@ -184,7 +192,7 @@ class EditTaskViewController: UIViewController, UITableViewDelegate, UITextField
         }
         
         // Get date
-        var dateFormats = ["dd/MM/yyyy", "dd.MM.yyyy", "MM/dd/yyyy", "MM.dd.yyyy"]
+        var dateFormats = ["dd/MM/yyyy", "dd.MM.yyyy", "MM/dd/yyyy", "MM.dd.yyyy", "dd MMM yyyy"]
         var date: NSDate?
         var section: Int?
         if dateTextView.hasText() {
@@ -230,9 +238,9 @@ class EditTaskViewController: UIViewController, UITableViewDelegate, UITextField
         
         println("Date is set to: \(date)")
         
-        // Complete editing task
+        // Create new task
         let newTask: Task = Task(name: textView.text, completed: false, dueDate: date, priority: taskPrority - 1, tag: taskTag)
-        allTasks[path.section][path.row] = newTask
+        allTasks[path.section][path.row] = newTask // #Change - we dont change position even if due date has changed
         
         // Back to previous controller
         var slideNavigation = SlideNavigationController().sharedInstance()

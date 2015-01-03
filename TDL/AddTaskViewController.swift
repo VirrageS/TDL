@@ -8,10 +8,13 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
     var calendarButton: UIButton!
     var priorityPickerButton: UIButton!
     var tagPickerView: UIView!
+    var datePickerView: UIView!
     var priorityPickerView: UIView!
     var transparentView: UIButton!
+    var datePicker: UIDatePicker!
     
     var priorityPickerOpen: Bool = false
+    var datePickerOpen: Bool = false
     var tagPickerOpen: Bool = false
     
     func shouldDisplayMenu() -> Bool {
@@ -45,7 +48,7 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
         tagPickerButton.addTarget(self, action: "showTagPicker:", forControlEvents: UIControlEvents.TouchUpInside)
         tagPickerButton.backgroundColor = UIColor.whiteColor()
         if allTags.count > 0 {
-            addCustomButtonSubviews(tagPickerButton, allTags[0].name)
+            addCustomButtonSubviews(tagPickerButton, nil)
         } else {
             // #Change to something like placeholder or come up with new idea
             // addCustomButtonSubviews(tagPickerButton, nil)
@@ -72,7 +75,7 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
         priorityPickerButton = UIButton(frame: CGRectZero)
         priorityPickerButton.addTarget(self, action: "showPriorityPicker:", forControlEvents: UIControlEvents.TouchUpInside)
         priorityPickerButton.backgroundColor = UIColor.whiteColor()
-        addCustomButtonSubviews(priorityPickerButton, "Priority 1")
+        addCustomButtonSubviews(priorityPickerButton, "Priority 4")
         
         // Transparent view
         tagPickerView = UIView(frame: CGRectZero)
@@ -80,16 +83,36 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
         tagPickerView.hidden = true
         addTagPickerViewSubviews()
         
+        datePickerView = UIView(frame: CGRectZero)
+        datePickerView.backgroundColor = UIColor.whiteColor()
+        datePickerView.hidden = true
+        addDatePickerViewSubviews()
+        
         priorityPickerView = UIView(frame: CGRectZero)
         priorityPickerView.backgroundColor = UIColor.whiteColor()
         priorityPickerView.hidden = true
         addPriorityPickerViewSubviews()
         
+        
+        var doneButton = UIButton.buttonWithType(UIButtonType.System) as UIButton
+        doneButton.frame = CGRectZero
+        doneButton.setTitle("Done", forState: UIControlState.Normal)
+        doneButton.addTarget(self, action: "closePickerView:", forControlEvents: UIControlEvents.TouchUpInside)
+        doneButton.backgroundColor = UIColor.whiteColor()
+        
+        datePicker = UIDatePicker(frame: CGRectZero)
+        datePicker.addTarget(self, action: "datePickerChanged:", forControlEvents: UIControlEvents.ValueChanged)
+        datePicker.backgroundColor = UIColor.whiteColor()
+        datePicker.hidden = true
+        datePicker.addSubview(doneButton)
+        
         transparentView = UIButton(frame: view.frame)
         transparentView.addTarget(self, action: "closePickerView:", forControlEvents: UIControlEvents.TouchUpInside)
         transparentView.enabled = false
         transparentView.addSubview(tagPickerView)
+        transparentView.addSubview(datePickerView)
         transparentView.addSubview(priorityPickerView)
+        transparentView.addSubview(datePicker)
 
         // View subviews
         view.addSubview(textView)
@@ -145,11 +168,29 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
         view.addConstraint(NSLayoutConstraint(item: tagPickerView, attribute: .Right, relatedBy: .Equal, toItem: view, attribute: .Right, multiplier: 1, constant: -55))
         view.addConstraint(NSLayoutConstraint(item: tagPickerView, attribute: .Bottom, relatedBy: .Equal, toItem: view, attribute: .Top, multiplier: 1, constant: 200+CGFloat(40*allTags.count)))
         
+        datePickerView.setTranslatesAutoresizingMaskIntoConstraints(false)
+        view.addConstraint(NSLayoutConstraint(item: datePickerView, attribute: .Left, relatedBy: .Equal, toItem: view, attribute: .Left, multiplier: 1, constant: 35))
+        view.addConstraint(NSLayoutConstraint(item: datePickerView, attribute: .Top, relatedBy: .Equal, toItem: view, attribute: .Top, multiplier: 1, constant: 200))
+        view.addConstraint(NSLayoutConstraint(item: datePickerView, attribute: .Right, relatedBy: .Equal, toItem: view, attribute: .Right, multiplier: 1, constant: -35))
+        view.addConstraint(NSLayoutConstraint(item: datePickerView, attribute: .Bottom, relatedBy: .Equal, toItem: view, attribute: .Top, multiplier: 1, constant: 350))
+        
         priorityPickerView.setTranslatesAutoresizingMaskIntoConstraints(false)
         view.addConstraint(NSLayoutConstraint(item: priorityPickerView, attribute: .Left, relatedBy: .Equal, toItem: view, attribute: .Left, multiplier: 1, constant: 55))
         view.addConstraint(NSLayoutConstraint(item: priorityPickerView, attribute: .Top, relatedBy: .Equal, toItem: view, attribute: .Top, multiplier: 1, constant: 250))
         view.addConstraint(NSLayoutConstraint(item: priorityPickerView, attribute: .Right, relatedBy: .Equal, toItem: view, attribute: .Right, multiplier: 1, constant: -55))
         view.addConstraint(NSLayoutConstraint(item: priorityPickerView, attribute: .Bottom, relatedBy: .Equal, toItem: view, attribute: .Top, multiplier: 1, constant: 250+CGFloat(40*priorityColors.count)))
+        
+        datePicker.setTranslatesAutoresizingMaskIntoConstraints(false)
+        view.addConstraint(NSLayoutConstraint(item: datePicker, attribute: .Left, relatedBy: .Equal, toItem: view, attribute: .Left, multiplier: 1, constant: 0))
+        view.addConstraint(NSLayoutConstraint(item: datePicker, attribute: .Top, relatedBy: .Equal, toItem: view, attribute: .Top, multiplier: 1, constant: 300))
+        view.addConstraint(NSLayoutConstraint(item: datePicker, attribute: .Right, relatedBy: .Equal, toItem: view, attribute: .Right, multiplier: 1, constant: 0))
+        view.addConstraint(NSLayoutConstraint(item: datePicker, attribute: .Bottom, relatedBy: .Equal, toItem: view, attribute: .Top, multiplier: 1, constant: 485))
+        
+        doneButton.setTranslatesAutoresizingMaskIntoConstraints(false)
+        view.addConstraint(NSLayoutConstraint(item: doneButton, attribute: .Left, relatedBy: .Equal, toItem: view, attribute: .Left, multiplier: 1, constant: 0))
+        view.addConstraint(NSLayoutConstraint(item: doneButton, attribute: .Top, relatedBy: .Equal, toItem: datePicker, attribute: .Bottom, multiplier: 1, constant: 0))
+        view.addConstraint(NSLayoutConstraint(item: doneButton, attribute: .Right, relatedBy: .Equal, toItem: view, attribute: .Right, multiplier: 1, constant: 0))
+        view.addConstraint(NSLayoutConstraint(item: doneButton, attribute: .Bottom, relatedBy: .Equal, toItem: datePicker, attribute: .Bottom, multiplier: 1, constant: 40))
     }
     
     func addTask(sender: AnyObject) {
@@ -178,7 +219,7 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
         
         var taskTag: Tag?
         for tag in allTags {
-            if tag.name == tagLabel!.text {
+            if tag.name == tagLabel!.text && tag.enabled != false {
                 taskTag = tag
                 break
             }
@@ -186,42 +227,54 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
         
         // Get date
         var dateFormats = ["dd/MM/yyyy", "dd.MM.yyyy", "MM/dd/yyyy", "MM.dd.yyyy"]
-        var date: NSDate?
+        var nonTrivialDateFormats = [
+            ["today"]: (section: 0, time: NSDate()),
+            ["tommorow", "in 1 day", "in one day", "+1 day", "next day"]: (section: 1, time: NSDate(timeIntervalSinceNow: NSTimeInterval(60*60*24))),
+            ["in 1 week", "in one week", "next week", "+1 week"]: (section: 6, time: NSDate(timeIntervalSinceNow: NSTimeInterval(7*60*60*24))),
+            ["in 1 month", "in one month", "next month", "+1 month"]: (section: -1, time: NSDate(timeIntervalSinceNow: NSTimeInterval(30*60*60*24))),
+            ["none", "no due date"]: (section: -1, time: NSDate(timeIntervalSince1970: NSTimeInterval(0)))
+        ]
+        
+        var dueDate: NSDate?
         var section: Int?
         if dateTextView.hasText() {
-            if dateTextView.text.lowercaseString == "today" {
-                section = 0
-                date = NSDate()
-            } else if dateTextView.text.lowercaseString == "tommorow" {
-                section = 1
-                date = NSDate(timeIntervalSinceNow: NSTimeInterval(60*60*24))
-            } else if dateTextView.text.lowercaseString == "in 1 week" {
-                section = 6
-                date = NSDate(timeIntervalSinceNow: NSTimeInterval(7*60*60*24))
-            } else if dateTextView.text.lowercaseString == "in 1 month" {
-                // #Change in 1 month
-                // section = nil
-                date = NSDate(timeIntervalSinceNow: NSTimeInterval(30*60*60*24))
-            } else {
+            var ok: Bool = false
+            for (dates, parameters) in nonTrivialDateFormats {
+                for date in dates {
+                    if dateTextView.text.lowercaseString == (date as String) && !ok {
+                        section = parameters.section
+                        dueDate = parameters.time
+                        
+                        ok = true
+                    }
+                }
+            }
+            
+            section = (section == -1) ? nil : section
+            if (dueDate?.isEqualToDate((NSDate(timeIntervalSince1970: NSTimeInterval(0)) as NSDate)) != nil) {
+                dueDate = nil
+            }
+            
+            if !ok {
                 var dateFormatter = NSDateFormatter()
                 
                 for _dateFormat in dateFormats {
                     dateFormatter.dateFormat = _dateFormat
-                    date = dateFormatter.dateFromString(dateTextView.text)
+                    dueDate = dateFormatter.dateFromString(dateTextView.text)
 
-                    if date != nil {
+                    if dueDate != nil {
                         break
                     }
                 }
 
-                if date != nil {
-                    println("timeIntervalSinceNow: \(date!.timeIntervalSinceNow)")
+                if dueDate != nil {
+                    println("timeIntervalSinceNow: \(dueDate!.timeIntervalSinceNow)")
                     
-                    if date!.timeIntervalSinceNow < 0 {
+                    if dueDate!.timeIntervalSinceNow < 0 {
                         println("Date is outdated")
-                        date = NSDate()
-                    } else if date!.timeIntervalSinceNow <= NSTimeInterval(24*60*60*6) {
-                        section = Int((date!.timeIntervalSinceNow)/60/60/24)+1
+                        dueDate = NSDate()
+                    } else if dueDate!.timeIntervalSinceNow <= NSTimeInterval(24*60*60*6) {
+                        section = Int((dueDate!.timeIntervalSinceNow)/60/60/24)+1
                     } else {
                         println("Date is after 7 days")
                     }
@@ -229,10 +282,10 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
             }
         }
         
-        println("Date is set to: \(date); Sections is set to: \(section)")
+        println("Date is set to: \(dueDate); Sections is set to: \(section)")
         
         // Create task
-        let newTask: Task = Task(name: textView.text, completed: false, dueDate: date, priority: taskPrority-1, tag: taskTag!)
+        let newTask: Task = Task(name: textView.text, completed: false, dueDate: dueDate, priority: taskPrority-1, tag: taskTag)
         
         // Insert if we can
         if section != nil {
@@ -254,6 +307,7 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
         
         // Disable button
         tagPickerButton.enabled = false
+        calendarButton.enabled = false
         priorityPickerButton.enabled = false
         
         // Disable text fields
@@ -276,6 +330,7 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
         
         // Disable button
         tagPickerButton.enabled = false
+        calendarButton.enabled = false
         priorityPickerButton.enabled = false
         
         // Disable text fields
@@ -287,18 +342,41 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
         // Set open for true
         priorityPickerOpen = true
     }
-    
+
     func showDatePicker(sender: AnyObject) {
         println("showDatePicker called")
+        
+        datePickerView.hidden = false
+        
+        transparentView.enabled = true
+        transparentView.backgroundColor = UIColor(red: 104/255, green: 104/255, blue: 104/255, alpha: 0.75)
+        
+        // Disable button
+        tagPickerButton.enabled = false
+        calendarButton.enabled = false
+        priorityPickerButton.enabled = false
+        
+        // Disable text fields
+        textView.enabled = false
+        dateTextView.enabled = false
+        
+        // Disable done button
+        navigationItem.rightBarButtonItem!.enabled = false
+        // Set open for true
+        datePickerOpen = true
     }
     
     func closePickerView(sender: AnyObject) {
+        // Hide date picker
+        datePicker.hidden = true
+        
         // Hide transparent view
         transparentView.enabled = false
         transparentView.backgroundColor = UIColor.clearColor()
         
         // Enable buttons
         tagPickerButton.enabled = true
+        calendarButton.enabled = true
         priorityPickerButton.enabled = true
         
         // Enable text fields
@@ -315,6 +393,125 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
         } else if tagPickerOpen {
             tagPickerView.hidden = true
             tagPickerOpen = false
+        } else if datePickerOpen {
+            datePickerView.hidden = true
+            datePickerOpen = false
+        }
+    }
+    
+    func updateTag(sender: UIButton) {
+        var mainLabel: UILabel = tagPickerButton.subviews[0] as UILabel
+        var senderLabel: UILabel = sender.subviews[0] as UILabel
+        mainLabel.text = senderLabel.text
+        
+        if allTags[sender.tag].enabled != false { // if is enabled
+            mainLabel.textColor = UIColor.blackColor()
+        } else {
+            mainLabel.textColor = UIColor(red: 206/255, green: 206/255, blue: 211/255, alpha: 1.0)
+        }
+        
+        closePickerView(sender)
+    }
+    
+    func addTagPickerViewSubviews() {
+        var tagPickerViewLabel: UILabel!
+        var tagPickerViewCircle: UILabel!
+        var tagPickerViewButton: UIButton!
+        
+        for i in 0...allTags.count-1 {
+            tagPickerViewLabel = UILabel(frame: CGRectZero)
+            tagPickerViewLabel.font = UIFont.systemFontOfSize(13)
+            tagPickerViewLabel.textColor = ((allTags[i].enabled != false) ? UIColor(red: 90/255, green: 90/255, blue: 90/255, alpha: 1.0) : UIColor(red: 206/255, green: 206/255, blue: 211/255, alpha: 1.0))
+            tagPickerViewLabel.text = allTags[i].name
+            
+            tagPickerViewCircle = UILabel(frame: CGRect(x: 10, y: 15, width: 10, height: 10))
+            tagPickerViewCircle.layer.borderWidth = 5
+            tagPickerViewCircle.layer.cornerRadius = 5
+            tagPickerViewCircle.layer.borderColor = allTags[i].color.CGColor
+            
+            tagPickerViewButton = UIButton(frame: CGRectZero)
+            tagPickerViewButton.addTarget(self, action: "updateTag:", forControlEvents: UIControlEvents.TouchUpInside)
+            tagPickerViewButton.tag = i
+            tagPickerViewButton.backgroundColor = UIColor.whiteColor()
+            tagPickerViewButton.addSubview(tagPickerViewLabel)
+            tagPickerViewButton.addSubview(tagPickerViewCircle)
+            
+            tagPickerView.addSubview(tagPickerViewButton)
+            
+            tagPickerViewButton.setTranslatesAutoresizingMaskIntoConstraints(false)
+            tagPickerView.addConstraint(NSLayoutConstraint(item: tagPickerViewButton, attribute: .Left, relatedBy: .Equal, toItem: tagPickerView, attribute: .Left, multiplier: 1, constant: 0))
+            tagPickerView.addConstraint(NSLayoutConstraint(item: tagPickerViewButton, attribute: .Top, relatedBy: .Equal, toItem: tagPickerView, attribute: .Top, multiplier: 1, constant: CGFloat(i*40)))
+            tagPickerView.addConstraint(NSLayoutConstraint(item: tagPickerViewButton, attribute: .Right, relatedBy: .Equal, toItem: tagPickerView, attribute: .Right, multiplier: 1, constant: 0))
+            tagPickerView.addConstraint(NSLayoutConstraint(item: tagPickerViewButton, attribute: .Bottom, relatedBy: .Equal, toItem: tagPickerView, attribute: .Top, multiplier: 1, constant: CGFloat(i*40)+40))
+            
+            tagPickerViewLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
+            tagPickerViewButton.addConstraint(NSLayoutConstraint(item: tagPickerViewLabel, attribute: .Left, relatedBy: .Equal, toItem: tagPickerViewButton, attribute: .Left, multiplier: 1, constant: 30))
+            tagPickerViewButton.addConstraint(NSLayoutConstraint(item: tagPickerViewLabel, attribute: .Top, relatedBy: .Equal, toItem: tagPickerViewButton, attribute: .Top, multiplier: 1, constant: 0))
+            tagPickerViewButton.addConstraint(NSLayoutConstraint(item: tagPickerViewLabel, attribute: .Right, relatedBy: .Equal, toItem: tagPickerViewButton, attribute: .Right, multiplier: 1, constant: 0))
+            tagPickerViewButton.addConstraint(NSLayoutConstraint(item: tagPickerViewLabel, attribute: .Bottom, relatedBy: .Equal, toItem: tagPickerViewButton, attribute: .Bottom, multiplier: 1, constant: 0))
+        }
+    }
+    
+    func updateDate(sender: UIButton) {
+        var senderLabel: UILabel = sender.subviews[0] as UILabel
+
+        if senderLabel.text?.lowercaseString == "pick date" {
+            println("UIDatePicker opened")
+            
+            datePicker.hidden = false
+            datePickerView.hidden = true
+        } else {
+            dateTextView.text = senderLabel.text
+            closePickerView(sender)
+        }
+    }
+
+    func datePickerChanged(datePicker:UIDatePicker) {
+        var dateFormatter = NSDateFormatter()
+        
+        dateFormatter.dateStyle = NSDateFormatterStyle.ShortStyle
+        dateFormatter.timeStyle = NSDateFormatterStyle.ShortStyle
+        
+        var strDate = dateFormatter.stringFromDate(datePicker.date)
+        dateTextView.text = strDate
+    }
+    
+    func addDatePickerViewSubviews() {
+        var datePickerViewLabel: UILabel!
+        var datePickerViewButton: UIButton!
+        
+        let datePickOptions = [
+            ["Today", "Tommorow", "+1 week"],
+            ["+1 month", "Pick date", "No due date"]
+        ]
+        
+        for i in 0...datePickOptions.count-1 {
+            for j in 0...datePickOptions[i].count-1 {
+                datePickerViewLabel = UILabel(frame: CGRectZero)
+                datePickerViewLabel.font = UIFont.systemFontOfSize(13)
+                datePickerViewLabel.textAlignment = NSTextAlignment.Center
+                datePickerViewLabel.textColor = UIColor(red: 90/255, green: 90/255, blue: 90/255, alpha: 1.0)
+                datePickerViewLabel.text = datePickOptions[i][j]
+                
+                datePickerViewButton = UIButton(frame: CGRectZero)
+                datePickerViewButton.addTarget(self, action: "updateDate:", forControlEvents: UIControlEvents.TouchUpInside)
+                datePickerViewButton.backgroundColor = UIColor.whiteColor()
+                datePickerViewButton.addSubview(datePickerViewLabel)
+                
+                datePickerView.addSubview(datePickerViewButton)
+                
+                datePickerViewButton.setTranslatesAutoresizingMaskIntoConstraints(false)
+                datePickerView.addConstraint(NSLayoutConstraint(item: datePickerViewButton, attribute: .Left, relatedBy: .Equal, toItem: datePickerView, attribute: .Left, multiplier: 1, constant: CGFloat(j*80+5)))
+                datePickerView.addConstraint(NSLayoutConstraint(item: datePickerViewButton, attribute: .Top, relatedBy: .Equal, toItem: datePickerView, attribute: .Top, multiplier: 1, constant: CGFloat(i*60)))
+                datePickerView.addConstraint(NSLayoutConstraint(item: datePickerViewButton, attribute: .Right, relatedBy: .Equal, toItem: datePickerView, attribute: .Left, multiplier: 1, constant: CGFloat(j*80+85)))
+                datePickerView.addConstraint(NSLayoutConstraint(item: datePickerViewButton, attribute: .Bottom, relatedBy: .Equal, toItem: datePickerView, attribute: .Top, multiplier: 1, constant: CGFloat(i*60)+60))
+                
+                datePickerViewLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
+                datePickerViewButton.addConstraint(NSLayoutConstraint(item: datePickerViewLabel, attribute: .Left, relatedBy: .Equal, toItem: datePickerViewButton, attribute: .Left, multiplier: 1, constant: 0))
+                datePickerViewButton.addConstraint(NSLayoutConstraint(item: datePickerViewLabel, attribute: .Top, relatedBy: .Equal, toItem: datePickerViewButton, attribute: .Top, multiplier: 1, constant: 0))
+                datePickerViewButton.addConstraint(NSLayoutConstraint(item: datePickerViewLabel, attribute: .Right, relatedBy: .Equal, toItem: datePickerViewButton, attribute: .Right, multiplier: 1, constant: 0))
+                datePickerViewButton.addConstraint(NSLayoutConstraint(item: datePickerViewLabel, attribute: .Bottom, relatedBy: .Equal, toItem: datePickerViewButton, attribute: .Bottom, multiplier: 1, constant: 0))
+            }
         }
     }
     
@@ -322,6 +519,11 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
         var mainLabel: UILabel = priorityPickerButton.subviews[0] as UILabel
         var senderLabel: UILabel = sender.subviews[0] as UILabel
         mainLabel.text = senderLabel.text
+        if mainLabel.text != "None" {
+            mainLabel.textColor = UIColor.blackColor()
+        } else {
+            mainLabel.textColor = UIColor(red: 206/255, green: 206/255, blue: 211/255, alpha: 1.0)
+        }
         
         closePickerView(sender)
     }
@@ -359,52 +561,6 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
             priorityPickerViewButton.addConstraint(NSLayoutConstraint(item: priorityPickerViewLabel, attribute: .Top, relatedBy: .Equal, toItem: priorityPickerViewButton, attribute: .Top, multiplier: 1, constant: 0))
             priorityPickerViewButton.addConstraint(NSLayoutConstraint(item: priorityPickerViewLabel, attribute: .Right, relatedBy: .Equal, toItem: priorityPickerViewButton, attribute: .Right, multiplier: 1, constant: 0))
             priorityPickerViewButton.addConstraint(NSLayoutConstraint(item: priorityPickerViewLabel, attribute: .Bottom, relatedBy: .Equal, toItem: priorityPickerViewButton, attribute: .Bottom, multiplier: 1, constant: 0))
-        }
-    }
-
-    func updateTag(sender: UIButton) {
-        var mainLabel: UILabel = tagPickerButton.subviews[0] as UILabel
-        var senderLabel: UILabel = sender.subviews[0] as UILabel
-        mainLabel.text = senderLabel.text
-        
-        closePickerView(sender)
-    }
-    
-    func addTagPickerViewSubviews() {
-        var tagPickerViewLabel: UILabel!
-        var tagPickerViewCircle: UILabel!
-        var tagPickerViewButton: UIButton!
-        
-        for i in 0...allTags.count-1 {
-            tagPickerViewLabel = UILabel(frame: CGRectZero)
-            tagPickerViewLabel.font = UIFont.systemFontOfSize(13)
-            tagPickerViewLabel.textColor = UIColor(red: 90/255, green: 90/255, blue: 90/255, alpha: 1.0)
-            tagPickerViewLabel.text = allTags[i].name
-            
-            tagPickerViewCircle = UILabel(frame: CGRect(x: 10, y: 15, width: 10, height: 10))
-            tagPickerViewCircle.layer.borderWidth = 5
-            tagPickerViewCircle.layer.cornerRadius = 5
-            tagPickerViewCircle.layer.borderColor = allTags[i].color.CGColor
-            
-            tagPickerViewButton = UIButton(frame: CGRectZero)
-            tagPickerViewButton.addTarget(self, action: "updateTag:", forControlEvents: UIControlEvents.TouchUpInside)
-            tagPickerViewButton.backgroundColor = UIColor.whiteColor()
-            tagPickerViewButton.addSubview(tagPickerViewLabel)
-            tagPickerViewButton.addSubview(tagPickerViewCircle)
-            
-            tagPickerView.addSubview(tagPickerViewButton)
-            
-            tagPickerViewButton.setTranslatesAutoresizingMaskIntoConstraints(false)
-            tagPickerView.addConstraint(NSLayoutConstraint(item: tagPickerViewButton, attribute: .Left, relatedBy: .Equal, toItem: tagPickerView, attribute: .Left, multiplier: 1, constant: 0))
-            tagPickerView.addConstraint(NSLayoutConstraint(item: tagPickerViewButton, attribute: .Top, relatedBy: .Equal, toItem: tagPickerView, attribute: .Top, multiplier: 1, constant: CGFloat(i*40)))
-            tagPickerView.addConstraint(NSLayoutConstraint(item: tagPickerViewButton, attribute: .Right, relatedBy: .Equal, toItem: tagPickerView, attribute: .Right, multiplier: 1, constant: 0))
-            tagPickerView.addConstraint(NSLayoutConstraint(item: tagPickerViewButton, attribute: .Bottom, relatedBy: .Equal, toItem: tagPickerView, attribute: .Top, multiplier: 1, constant: CGFloat(i*40)+40))
-            
-            tagPickerViewLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
-            tagPickerViewButton.addConstraint(NSLayoutConstraint(item: tagPickerViewLabel, attribute: .Left, relatedBy: .Equal, toItem: tagPickerViewButton, attribute: .Left, multiplier: 1, constant: 30))
-            tagPickerViewButton.addConstraint(NSLayoutConstraint(item: tagPickerViewLabel, attribute: .Top, relatedBy: .Equal, toItem: tagPickerViewButton, attribute: .Top, multiplier: 1, constant: 0))
-            tagPickerViewButton.addConstraint(NSLayoutConstraint(item: tagPickerViewLabel, attribute: .Right, relatedBy: .Equal, toItem: tagPickerViewButton, attribute: .Right, multiplier: 1, constant: 0))
-            tagPickerViewButton.addConstraint(NSLayoutConstraint(item: tagPickerViewLabel, attribute: .Bottom, relatedBy: .Equal, toItem: tagPickerViewButton, attribute: .Bottom, multiplier: 1, constant: 0))
         }
     }
 

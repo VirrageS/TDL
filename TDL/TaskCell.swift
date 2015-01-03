@@ -92,13 +92,19 @@ class TaskCell: UITableViewCell {
 
     func configureCell(task: Task) {
         var dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "EEEE"
+        dateFormatter.dateFormat = "EEEE" // #Change - if date is > 7 days should set format to "dd MMM yyyy"
         dateTextLabel.text = (task.dueDate == nil ? "No due date" : dateFormatter.stringFromDate(task.dueDate!))
         
         priorityViewLabel.backgroundColor = priorityColors[task.priority]
         nameTextLabel.text = task.name
-        tagTextLabel.text = (task.tag == nil ? "" : task.tag!.name)
-        circleViewLabel.layer.backgroundColor = (task.tag == nil ? UIColor.whiteColor().CGColor : task.tag!.color.CGColor)
+        
+        if task.tag != nil && task.tag?.enabled != false {
+            tagTextLabel.text = task.tag!.name
+            circleViewLabel.layer.backgroundColor = task.tag!.color.CGColor
+        } else {
+            tagTextLabel.text = ""
+            circleViewLabel.layer.backgroundColor = UIColor.clearColor().CGColor
+        }
     }
     
     required init(coder aDecoder: NSCoder) {

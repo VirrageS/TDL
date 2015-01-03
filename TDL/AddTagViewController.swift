@@ -83,7 +83,7 @@ class AddTagViewController: UIViewController, UITextFieldDelegate, SlideNavigati
     }
     
     func addTag(sender: AnyObject) {
-        let newTag: Tag = Tag(name: textView.text, color: UIColor(CGColor: circleView.layer.borderColor))
+        let newTag: Tag = Tag(name: textView.text, color: UIColor(CGColor: circleView.layer.borderColor), enabled: true)
         allTags.append(newTag)
         
         var slideNavigation = SlideNavigationController().sharedInstance()

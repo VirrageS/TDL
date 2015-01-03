@@ -13,8 +13,8 @@ class FilterViewController: UITableViewController, SlideNavigationControllerDele
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let addButtonItem = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "openAddFilterController:")
-        navigationItem.rightBarButtonItem = addButtonItem
+//        let addButtonItem = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "openAddFilterController:")
+//        navigationItem.rightBarButtonItem = addButtonItem
         
         tableView.backgroundColor = UIColor.whiteColor()
         tableView.separatorColor = UIColor.clearColor() // transparent separator
