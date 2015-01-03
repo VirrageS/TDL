@@ -73,6 +73,9 @@ class MenuCell: UITableViewCell {
         case "Tags":
             image = UIImage(named: "tag-icon")!
             break
+        case "Filters":
+            image = UIImage(named: "filter-icon")!
+            break
         default:
             image = UIImage()
             break

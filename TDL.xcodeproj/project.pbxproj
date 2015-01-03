@@ -118,7 +118,7 @@
 			name = Tags;
 			sourceTree = "<group>";
 		};
-		45492BCF1A5869B20051C9C5 /* Cell */ = {
+		45492BCF1A5869B20051C9C5 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
 				45F367BE19ACCCCB00F6B36B /* TodayNoTaskCell.swift */,
@@ -126,7 +126,7 @@
 				45A2FC6119A8BDC700ADEABA /* TaskCell.swift */,
 				4596A32119D1E1C000FC09F4 /* EditTaskCell.swift */,
 			);
-			name = Cell;
+			name = Cells;
 			sourceTree = "<group>";
 		};
 		45492BD01A5869C50051C9C5 /* Controllers */ = {
@@ -163,7 +163,7 @@
 			isa = PBXGroup;
 			children = (
 				45492BD01A5869C50051C9C5 /* Controllers */,
-				45492BCF1A5869B20051C9C5 /* Cell */,
+				45492BCF1A5869B20051C9C5 /* Cells */,
 			);
 			name = Tasks;
 			sourceTree = "<group>";

@@ -148,7 +148,9 @@ class EditTaskCell: UITableViewCell {
             tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: UITableViewRowAnimation.Left)
             tableView.deleteRowsAtIndexPaths([cellIndexPath!], withRowAnimation: UITableViewRowAnimation.Left)
 
-            tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: weekTasks[cellIndexPath!.section + 1].count - 1, inSection: cellIndexPath!.section + 1)], withRowAnimation: UITableViewRowAnimation.Left)
+            if cellIndexPath!.section + 1 <= 6 {
+                tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: weekTasks[cellIndexPath!.section + 1].count - 1, inSection: cellIndexPath!.section + 1)], withRowAnimation: UITableViewRowAnimation.Left)
+            }
             
             tableView.reloadData()
             tableView.endUpdates()
