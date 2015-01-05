@@ -42,7 +42,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1.0)
         ]
 
-        // Names for sections (Today, Tommorow, ...)
+        // Names for sections (Today, Tomorrow, ...)
         let day: NSTimeInterval = 60*60*24
         for i in 0...6 {
             var newDay: NSTimeInterval = day * NSTimeInterval(i)
@@ -93,9 +93,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if calendar.isDateInToday(date) { // Today
             dateFormatter.dateFormat = "ccc LLL dd"
             return (day: "Today ", desc: dateFormatter.stringFromDate(date))
-        } else if calendar.isDateInTomorrow(date) { // Tommorow
+        } else if calendar.isDateInTomorrow(date) { // Tomorrow
             dateFormatter.dateFormat = "ccc LLL dd"
-            return (day: "Tommorow ", desc: dateFormatter.stringFromDate(date))
+            return (day: "Tomorrow ", desc: dateFormatter.stringFromDate(date))
         }
     
         // Full name of day

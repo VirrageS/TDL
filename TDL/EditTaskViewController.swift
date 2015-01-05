@@ -180,7 +180,7 @@ class EditTaskViewController: UIViewController, UITableViewDelegate, UITextField
         view.addConstraint(NSLayoutConstraint(item: datePickerView, attribute: .Left, relatedBy: .Equal, toItem: view, attribute: .Left, multiplier: 1, constant: 35))
         view.addConstraint(NSLayoutConstraint(item: datePickerView, attribute: .Top, relatedBy: .Equal, toItem: view, attribute: .Top, multiplier: 1, constant: 200))
         view.addConstraint(NSLayoutConstraint(item: datePickerView, attribute: .Right, relatedBy: .Equal, toItem: view, attribute: .Right, multiplier: 1, constant: -35))
-        view.addConstraint(NSLayoutConstraint(item: datePickerView, attribute: .Bottom, relatedBy: .Equal, toItem: view, attribute: .Top, multiplier: 1, constant: 350))
+        view.addConstraint(NSLayoutConstraint(item: datePickerView, attribute: .Bottom, relatedBy: .Equal, toItem: view, attribute: .Top, multiplier: 1, constant: 365))
         
         priorityPickerView.setTranslatesAutoresizingMaskIntoConstraints(false)
         view.addConstraint(NSLayoutConstraint(item: priorityPickerView, attribute: .Left, relatedBy: .Equal, toItem: view, attribute: .Left, multiplier: 1, constant: 55))
@@ -237,7 +237,7 @@ class EditTaskViewController: UIViewController, UITableViewDelegate, UITextField
         var dateFormats = ["dd/MM/yyyy", "dd.MM.yyyy", "MM/dd/yyyy", "MM.dd.yyyy", "dd MMM yyyy HH:mm", "dd MMM yyyy", "MMM dd yyyy", "HH:mm dd MMM yyyy", "HH:mm MMM dd yyyy"]
         var nonTrivialDateFormats = [
             ["today"]: NSDate(),
-            ["tommorow", "in 1 day", "in one day", "+1 day", "next day"]: NSDate(timeIntervalSinceNow: NSTimeInterval(60*60*24)),
+            ["tomorrow", "in 1 day", "in one day", "+1 day", "next day"]: NSDate(timeIntervalSinceNow: NSTimeInterval(60*60*24)),
             ["in 1 week", "in one week", "next week", "+1 week"]: NSDate(timeIntervalSinceNow: NSTimeInterval(7*60*60*24)),
             ["in 1 month", "in one month", "next month", "+1 month"]: NSDate(timeIntervalSinceNow: NSTimeInterval(30*60*60*24)),
             ["none", "no due date"]: NSDate(timeIntervalSince1970: NSTimeInterval(0))
@@ -481,38 +481,57 @@ class EditTaskViewController: UIViewController, UITableViewDelegate, UITextField
     }
     
     func addDatePickerViewSubviews() {
+        var datePickerIconView: UIImageView!
         var datePickerViewLabel: UILabel!
         var datePickerViewButton: UIButton!
         
         let datePickOptions = [
-            ["Today", "Tommorow", "+1 week"],
-            ["+1 month", "Pick date", "No due date"]
+            [
+                (name: "Today", image: "today-icon"),
+                (name: "Tomorrow", image: "tomorrow-icon"),
+                (name: "+1 week", image: "week-icon")
+            ],
+            [
+                (name: "+1 month", image: "month-icon"),
+                (name: "Pick date", image: "pick-date-icon"),
+                (name: "No due date", image: "no-due-date-icon")
+            ]
         ]
         
         for i in 0...datePickOptions.count-1 {
             for j in 0...datePickOptions[i].count-1 {
+                datePickerIconView = UIImageView(frame: CGRectZero)
+                datePickerIconView.image = UIImage(named: datePickOptions[i][j].image)
+                
                 datePickerViewLabel = UILabel(frame: CGRectZero)
                 datePickerViewLabel.font = UIFont.systemFontOfSize(13)
                 datePickerViewLabel.textAlignment = NSTextAlignment.Center
                 datePickerViewLabel.textColor = UIColor(red: 90/255, green: 90/255, blue: 90/255, alpha: 1.0)
-                datePickerViewLabel.text = datePickOptions[i][j]
+                datePickerViewLabel.text = datePickOptions[i][j].name
                 
                 datePickerViewButton = UIButton(frame: CGRectZero)
                 datePickerViewButton.addTarget(self, action: "updateDate:", forControlEvents: UIControlEvents.TouchUpInside)
-                datePickerViewButton.backgroundColor = UIColor.whiteColor()
+                datePickerViewButton.backgroundColor = UIColor.clearColor()
                 datePickerViewButton.addSubview(datePickerViewLabel)
+                datePickerViewButton.addSubview(datePickerIconView)
                 
                 datePickerView.addSubview(datePickerViewButton)
                 
                 datePickerViewButton.setTranslatesAutoresizingMaskIntoConstraints(false)
                 datePickerView.addConstraint(NSLayoutConstraint(item: datePickerViewButton, attribute: .Left, relatedBy: .Equal, toItem: datePickerView, attribute: .Left, multiplier: 1, constant: CGFloat(j*80+5)))
-                datePickerView.addConstraint(NSLayoutConstraint(item: datePickerViewButton, attribute: .Top, relatedBy: .Equal, toItem: datePickerView, attribute: .Top, multiplier: 1, constant: CGFloat(i*60)))
+                datePickerView.addConstraint(NSLayoutConstraint(item: datePickerViewButton, attribute: .Top, relatedBy: .Equal, toItem: datePickerView, attribute: .Top, multiplier: 1, constant: CGFloat(i*75+10)))
                 datePickerView.addConstraint(NSLayoutConstraint(item: datePickerViewButton, attribute: .Right, relatedBy: .Equal, toItem: datePickerView, attribute: .Left, multiplier: 1, constant: CGFloat(j*80+85)))
-                datePickerView.addConstraint(NSLayoutConstraint(item: datePickerViewButton, attribute: .Bottom, relatedBy: .Equal, toItem: datePickerView, attribute: .Top, multiplier: 1, constant: CGFloat(i*60)+60))
+                datePickerView.addConstraint(NSLayoutConstraint(item: datePickerViewButton, attribute: .Bottom, relatedBy: .Equal, toItem: datePickerView, attribute: .Top, multiplier: 1, constant: CGFloat(i*75)+65+10))
+                
+                datePickerIconView.setTranslatesAutoresizingMaskIntoConstraints(false)
+                datePickerView.addConstraint(NSLayoutConstraint(item: datePickerIconView, attribute: .Left, relatedBy: .Equal, toItem: datePickerViewButton, attribute: .Left, multiplier: 1, constant: 25))
+                datePickerView.addConstraint(NSLayoutConstraint(item: datePickerIconView, attribute: .Top, relatedBy: .Equal, toItem: datePickerViewButton, attribute: .Top, multiplier: 1, constant: 8))
+                datePickerView.addConstraint(NSLayoutConstraint(item: datePickerIconView, attribute: .Right, relatedBy: .Equal, toItem: datePickerViewButton, attribute: .Left, multiplier: 1, constant: 25+32))
+                datePickerView.addConstraint(NSLayoutConstraint(item: datePickerIconView, attribute: .Bottom, relatedBy: .Equal, toItem: datePickerViewButton, attribute: .Top, multiplier: 1, constant: 8+32))
                 
                 datePickerViewLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
                 datePickerViewButton.addConstraint(NSLayoutConstraint(item: datePickerViewLabel, attribute: .Left, relatedBy: .Equal, toItem: datePickerViewButton, attribute: .Left, multiplier: 1, constant: 0))
-                datePickerViewButton.addConstraint(NSLayoutConstraint(item: datePickerViewLabel, attribute: .Top, relatedBy: .Equal, toItem: datePickerViewButton, attribute: .Top, multiplier: 1, constant: 0))
+                datePickerViewButton.addConstraint(NSLayoutConstraint(item: datePickerViewLabel, attribute: .Top, relatedBy: .Equal, toItem: datePickerViewButton, attribute: .Bottom, multiplier: 1, constant: -20))
                 datePickerViewButton.addConstraint(NSLayoutConstraint(item: datePickerViewLabel, attribute: .Right, relatedBy: .Equal, toItem: datePickerViewButton, attribute: .Right, multiplier: 1, constant: 0))
                 datePickerViewButton.addConstraint(NSLayoutConstraint(item: datePickerViewLabel, attribute: .Bottom, relatedBy: .Equal, toItem: datePickerViewButton, attribute: .Bottom, multiplier: 1, constant: 0))
             }
