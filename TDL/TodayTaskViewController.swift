@@ -1,17 +1,27 @@
 import UIKit
 
-var todayTasks = [Task]()
+var todayTasks = [[Task]]()
 
 func updateTodayTasks() {
     todayTasks.removeAll(keepCapacity: false)
+    todayTasks.append([Task]())
+    todayTasks.append([Task]())
+    
     for i in 0...allTasks.count-1 {
         if allTasks[i].dueDate != nil {
-            if allTasks[i].dueDate!.isEqualToDateIgnoringTime(NSDate(timeIntervalSinceNow: NSTimeInterval(0))) {
-                todayTasks.append(allTasks[i])
+            if !allTasks[i].dueDate!.isEqualToDateIgnoringTime(NSDate(timeIntervalSinceNow: NSTimeInterval(0))) && allTasks[i].dueDate!.isEarlierThanDate(NSDate(timeIntervalSinceNow: NSTimeInterval(0))) {
+                todayTasks[0].append(allTasks[i])
             }
         }
     }
-
+    
+    for i in 0...allTasks.count-1 {
+        if allTasks[i].dueDate != nil {
+            if allTasks[i].dueDate!.isEqualToDateIgnoringTime(NSDate(timeIntervalSinceNow: NSTimeInterval(0))) {
+                todayTasks[1].append(allTasks[i])
+            }
+        }
+    }
 }
 
 class TodayTaskViewController: UITableViewController, SlideNavigationControllerDelegate {
@@ -31,6 +41,9 @@ class TodayTaskViewController: UITableViewController, SlideNavigationControllerD
         
         editTaskCell = editCell()
         
+        todayTasks.append([Task]())
+        todayTasks.append([Task]())
+        
         let addButtonItem = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "openAddTaskController:")
         navigationItem.rightBarButtonItem = addButtonItem
         
@@ -44,29 +57,35 @@ class TodayTaskViewController: UITableViewController, SlideNavigationControllerD
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         editTaskCell!.position = nil
+        
         updateTodayTasks()
+        
         tableView.reloadData()
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        // #Change - more numberOfSections if there is task with date < NSDate().date
-        
-        return 1
+        return 2
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        var extraCount: Int = 0
+        var extraCount: [Int] = [0, 0]
         if editTaskCell!.position != nil {
-            if editTaskCell!.position!.section == section {
-                extraCount = 1
+            for i in 0...1 {
+                if editTaskCell!.position!.section == i {
+                    extraCount[i] = 1
+                }
             }
         }
         
-        return (todayTasks.count > 0 ? todayTasks.count + extraCount : 1) as Int
+        if (todayTasks[0].count + todayTasks[1].count) > 0 {
+            return todayTasks[section].count > 0 ? todayTasks[section].count + extraCount[section] : 0 as Int
+        } else {
+            return 1 - section as Int
+        }
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if todayTasks.count > 0 {
+        if (todayTasks[0].count + todayTasks[1].count) > 0 {
             if editTaskCell!.position != nil {
                 if editTaskCell!.position!.section == indexPath.section && editTaskCell!.position!.row == indexPath.row-1 {
                     let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(EditTaskCell), forIndexPath: indexPath) as EditTaskCell
@@ -74,15 +93,17 @@ class TodayTaskViewController: UITableViewController, SlideNavigationControllerD
                 }
             }
             
-            var extraCount: Int = 0
+            var extraCount: [Int] = [0, 0]
             if editTaskCell!.position != nil {
-                if editTaskCell!.position!.section == indexPath.section && editTaskCell!.position!.row < indexPath.row-1 {
-                    extraCount = 1
+                for i in 0...1 {
+                    if editTaskCell!.position!.section == i && editTaskCell!.position!.row < indexPath.row-1 {
+                        extraCount[i] = 1
+                    }
                 }
             }
             
             let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(TaskCell), forIndexPath: indexPath) as TaskCell
-            cell.configureCell(todayTasks[indexPath.row - extraCount])
+            cell.configureCell(todayTasks[indexPath.section][indexPath.row - extraCount[indexPath.section]])
             return cell as TaskCell
         }
         
@@ -129,7 +150,7 @@ class TodayTaskViewController: UITableViewController, SlideNavigationControllerD
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         // Row height for normal cell
-        if todayTasks.count > 0 {
+        if (todayTasks[0].count + todayTasks[1].count) > 0 {
             return taskCellHeight
         }
         
@@ -147,49 +168,44 @@ class TodayTaskViewController: UITableViewController, SlideNavigationControllerD
     }
     
     // #Change - add view for header - "Today" and if there is any date before so set it up also
-    //    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView {
-    //        var headerView: UIView
-    //        var dayName: UILabel
-    //        var descText: UILabel
-    //
-    //        headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.size.width, height: 30))
-    //        headerView.backgroundColor = UIColor(red: 220/255, green: 220/255, blue: 220/255, alpha: 0.95)
-    //
-    //        var dayNameSize: CGSize = String(namesForSections[section].day).sizeWithAttributes([NSFontAttributeName: UIFont.systemFontOfSize(13)])
-    //        dayName = UILabel(frame: CGRectZero)
-    //        dayName.textColor = UIColor.blackColor()
-    //        dayName.font = UIFont.systemFontOfSize(13)
-    //        dayName.text = String(namesForSections[section].day)
-    //        dayName.backgroundColor = UIColor.clearColor()
-    //
-    //        descText = UILabel(frame: CGRectZero)
-    //        descText.textColor = UIColor(red: 150/255, green: 150/255, blue: 150/255, alpha: 1)
-    //        descText.font = UIFont.systemFontOfSize(10)
-    //        descText.text = String(namesForSections[section].desc)
-    //        descText.backgroundColor = UIColor.clearColor()
-    //
-    //        headerView.addSubview(dayName)
-    //        headerView.addSubview(descText)
-    //
-    //        // Constraints
-    //        dayName.setTranslatesAutoresizingMaskIntoConstraints(false)
-    //        headerView.addConstraint(NSLayoutConstraint(item: dayName, attribute: .Left, relatedBy: .Equal, toItem: headerView, attribute: .Left, multiplier: 1, constant: 15))
-    //        headerView.addConstraint(NSLayoutConstraint(item: dayName, attribute: .Top, relatedBy: .Equal, toItem: headerView, attribute: .Top, multiplier: 1, constant: 0))
-    //        headerView.addConstraint(NSLayoutConstraint(item: dayName, attribute: .Right, relatedBy: .Equal, toItem: headerView, attribute: .Left, multiplier: 1, constant: 15+dayNameSize.width+1))
-    //        headerView.addConstraint(NSLayoutConstraint(item: dayName, attribute: .Bottom, relatedBy: .Equal, toItem: headerView, attribute: .Bottom, multiplier: 1, constant: 0))
-    //
-    //        descText.setTranslatesAutoresizingMaskIntoConstraints(false)
-    //        headerView.addConstraint(NSLayoutConstraint(item: descText, attribute: .Left, relatedBy: .Equal, toItem: dayName, attribute: .Right, multiplier: 1, constant: 5))
-    //        headerView.addConstraint(NSLayoutConstraint(item: descText, attribute: .Top, relatedBy: .Equal, toItem: headerView, attribute: .Top, multiplier: 1, constant: 0))
-    //        headerView.addConstraint(NSLayoutConstraint(item: descText, attribute: .Right, relatedBy: .Equal, toItem: headerView, attribute: .Right, multiplier: 1, constant: 0))
-    //        headerView.addConstraint(NSLayoutConstraint(item: descText, attribute: .Bottom, relatedBy: .Equal, toItem: headerView, attribute: .Bottom, multiplier: 1, constant: 0))
-    //
-    //        return headerView
-    //    }
-    //
-    //    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-    //        return 30
-    //    }
+    override func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        view.tintColor = UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1)
+    }
+    
+    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView {
+        var headerView: UIView
+        var dayName: UILabel
+        var descText: UILabel
+        
+        headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.size.width, height: 30))
+        headerView.backgroundColor = UIColor(red: 220/255, green: 220/255, blue: 220/255, alpha: 0.95)
+        
+        var dayNameSize: CGSize = (todayTasks[0].count > 0 && section == 0) ? String("Overdue").sizeWithAttributes([NSFontAttributeName: UIFont.systemFontOfSize(13)]) : String("Today").sizeWithAttributes([NSFontAttributeName: UIFont.systemFontOfSize(13)])
+        dayName = UILabel(frame: CGRectZero)
+        dayName.textColor = (todayTasks[0].count > 0 && section == 0) ? UIColor.redColor() : UIColor.blackColor()
+        dayName.font = UIFont.systemFontOfSize(13)
+        dayName.text = (todayTasks[0].count > 0 && section == 0) ? String("Overdue") : String("Today")
+        dayName.backgroundColor = UIColor.clearColor()
+        
+        headerView.addSubview(dayName)
+        
+        // Constraints
+        dayName.setTranslatesAutoresizingMaskIntoConstraints(false)
+        headerView.addConstraint(NSLayoutConstraint(item: dayName, attribute: .Left, relatedBy: .Equal, toItem: headerView, attribute: .Left, multiplier: 1, constant: 15))
+        headerView.addConstraint(NSLayoutConstraint(item: dayName, attribute: .Top, relatedBy: .Equal, toItem: headerView, attribute: .Top, multiplier: 1, constant: 0))
+        headerView.addConstraint(NSLayoutConstraint(item: dayName, attribute: .Right, relatedBy: .Equal, toItem: headerView, attribute: .Left, multiplier: 1, constant: 15+dayNameSize.width+1))
+        headerView.addConstraint(NSLayoutConstraint(item: dayName, attribute: .Bottom, relatedBy: .Equal, toItem: headerView, attribute: .Bottom, multiplier: 1, constant: 0))
+        
+        return headerView
+    }
+    
+    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if todayTasks[0].count > 0 {
+            return 30
+        }
+        
+        return 0
+    }
     
     func openAddTaskController(sender: AnyObject) {
         let addTaskViewController = AddTaskViewController()

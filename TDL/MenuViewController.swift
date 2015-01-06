@@ -129,15 +129,9 @@ class MenuViewController: UITableViewController, SlideNavigationControllerDelega
             return
         }
         
-        var firstCount: Int = 0
-        for i in 0...allTasks.count-1 {
-            if allTasks[i].dueDate != nil {
-                if allTasks[i].dueDate!.isEqualToDateIgnoringTime(NSDate(timeIntervalSinceNow: NSTimeInterval(0))) {
-                    firstCount++
-                }
-            }
-        }
-        cell!.countTextLabel.text = String(firstCount) // #Change
+        var firstCount: Int = (todayTasks[0].count + todayTasks[1].count)
+        cell!.countTextLabel.text = String(firstCount)
+        cell!.countTextLabel.textColor = todayTasks[0].count > 0 ? UIColor.redColor() : UIColor.blackColor()
         
         var secondCount: Int = 0
         for i in 0...allTasks.count-1 {

@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-class Task {
+class Task: NSObject {
     var name: String = ""
     var completed: Bool = false
     var dueDate: NSDate?
@@ -25,6 +25,7 @@ class Task {
         encoder.encodeBool(self.completed, forKey: "completed")
         encoder.encodeObject(self.dueDate, forKey: "dueDate")
         encoder.encodeInteger(self.priority, forKey: "priority")
+        encoder.encodeObject(self.tag, forKey: "tag")
     }
     
     func initWithCoder(decoder: NSCoder) -> AnyObject {
@@ -32,6 +33,7 @@ class Task {
         self.completed = decoder.decodeBoolForKey("completed")
         self.dueDate = decoder.decodeObjectForKey("dueDate") as? NSDate
         self.priority = decoder.decodeIntegerForKey("priority")
+        self.tag = decoder.decodeObjectForKey("tag") as? Tag
         
         return self;
     }

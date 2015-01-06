@@ -106,7 +106,7 @@ class EditTagViewController: UIViewController, UITextFieldDelegate, SlideNavigat
 
         if allTags.count > 0 {
             for i in 0...allTags.count-1 {
-                if allTags[i] === tag! { // #Change - can be conflict if 2 tags have the same name
+                if allTags[i] === tag! {
                     allTags[i] = newTag
                     
                     if allTasks.count > 0 {
@@ -130,7 +130,7 @@ class EditTagViewController: UIViewController, UITextFieldDelegate, SlideNavigat
     
     func deleteTag(sender: AnyObject) {
         for i in 0...allTags.count-1 {
-            if allTags[i] === tag! { // #Change - can be conflict if 2 tags have the same name
+            if allTags[i] === tag! {
                 allTags.removeAtIndex(i)
                     
                 if allTasks.count > 0 {

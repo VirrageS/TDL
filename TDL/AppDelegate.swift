@@ -3,7 +3,7 @@ import UIKit
 var namesForSections: [(day: String, desc: String)] = []
 
 var allTags = [Tag]()
-var allTasks = [Task]() // #Change - task must be inserted and got by NSDate not by section
+var allTasks = [Task]()
 var allFilters = [String]()
 var tasksForNext7Days = [[Task]]()
 
@@ -21,6 +21,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow!
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: NSDictionary?) -> Bool {
+        loadInitialData()
+        
         menuItems = [
             "Today",
             "Next 7 Days",
@@ -50,6 +52,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         allTasks = [
+            Task(name: "Buy new keyboard", completed: false, dueDate: NSDate(timeIntervalSinceNow: -3*24*60*60), priority: 1, tag: allTags[2]),
+            Task(name: "Study to math exam", completed: false, dueDate: NSDate(timeIntervalSinceNow: -1*24*60*60), priority: 1, tag: allTags[2]),
             Task(name: "Mow the lawn", completed: false, dueDate: NSDate(), priority: 1, tag: allTags[2]),
             Task(name: "Check mail", completed: false, dueDate: NSDate(), priority: 0, tag: allTags[0]),
             Task(name: "Write an email to Jennifer", completed: false, dueDate: NSDate(timeIntervalSinceNow: 1*24*60*60), priority: 2, tag: allTags[0]),
@@ -106,20 +110,42 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return (day: _day, desc: _desc)
     }
     
-    /*
-    
+    func applicationWillTerminate(application: UIApplication) {
+        updateData()
+    }
     
     func updateData() {
-    let documentsDirectory = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
-    let finalPath = documentsDirectory.stringByAppendingPathComponent("tdl.plist") as String
-    NSKeyedArchiver.archiveRootObject(self.listItems, toFile: finalPath)
+        //    let documentsDirectory = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
+        //    let finalPath = documentsDirectory.stringByAppendingPathComponent("tdl.plist") as String
+        //    NSKeyedArchiver.archiveRootObject(self.listItems, toFile: finalPath)
+        
+        
+        var paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
+        var path = paths.stringByAppendingPathComponent("todayTasks.plist")
+        var fileManager = NSFileManager.defaultManager()
+        if (!(fileManager.fileExistsAtPath(path)))
+        {
+            var bundle : NSString? = NSBundle.mainBundle().pathForResource("todayTasks", ofType: "plist")
+            if bundle != nil {
+                fileManager.copyItemAtPath(bundle!, toPath: path, error: nil)
+            } else {
+                println("BIG FUCKING ERROR")
+            }
+        }
+        
+        var data: NSMutableDictionary = NSMutableDictionary(object: todayTasks, forKey: "todayTasks")
+        data.writeToFile(path, atomically: true)
     }
     
     func loadInitialData() {
-    let finalPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0].stringByAppendingPathComponent("tdl.plist") as String
-    if NSFileManager.defaultManager().fileExistsAtPath(finalPath) {
-    listItems = NSKeyedUnarchiver.unarchiveObjectWithFile(finalPath) as NSMutableArray
+        //    let finalPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0].stringByAppendingPathComponent("tdl.plist") as String
+        //    if NSFileManager.defaultManager().fileExistsAtPath(finalPath) {
+        //    listItems = NSKeyedUnarchiver.unarchiveObjectWithFile(finalPath) as NSMutableArray
+        //    }
+        var paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
+        var path = paths.stringByAppendingPathComponent("todayTasks.plist")
+        let save = NSDictionary(contentsOfFile: path)
+        
+        print(save)
     }
-    }
-    */
 }

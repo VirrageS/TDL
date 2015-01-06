@@ -39,7 +39,6 @@ class FilterViewController: UITableViewController, SlideNavigationControllerDele
         return filterCellHeight
     }
     
-    // #Change
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         

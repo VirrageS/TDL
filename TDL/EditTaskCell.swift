@@ -85,7 +85,7 @@ class EditTaskCell: UITableViewCell {
             tableView.endUpdates()
         } else if window.topViewController is TodayTaskViewController {
             let cellIndexPath = NSIndexPath(forRow: indexPath!.row - 1, inSection: indexPath!.section)
-            var task: Task = todayTasks[cellIndexPath!.row]
+            var task: Task = todayTasks[cellIndexPath!.section][cellIndexPath!.row]
             
             for i in 0...allTasks.count-1 {
                 if allTasks[i] === task {
@@ -103,8 +103,8 @@ class EditTaskCell: UITableViewCell {
             tableView.deleteRowsAtIndexPaths([cellIndexPath!], withRowAnimation: UITableViewRowAnimation.Left)
             
             // Add "no task" cell if there is no cells
-            if todayTasks.count == 0 {
-                tableView.insertRowsAtIndexPaths([cellIndexPath!], withRowAnimation: UITableViewRowAnimation.Left)
+            if (todayTasks[0].count + todayTasks[1].count) == 0 {
+                tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Left)
             }
             tableView.reloadData()
             tableView.endUpdates()
@@ -157,11 +157,13 @@ class EditTaskCell: UITableViewCell {
         } else if window.topViewController is TodayTaskViewController {
             // Change due date
             let cellIndexPath = NSIndexPath(forRow: indexPath!.row - 1, inSection: indexPath!.section)
-            var task: Task = todayTasks[cellIndexPath!.row]
+            var task: Task = todayTasks[cellIndexPath!.section][cellIndexPath!.row]
             
+            var date: NSDate?
             for i in 0...allTasks.count-1 {
                 if allTasks[i] === task {
                     allTasks[i].dueDate = NSDate(timeInterval: NSTimeInterval(60*60*24), sinceDate: task.dueDate!)
+                    date = allTasks[i].dueDate!
                     break
                 }
             }
@@ -172,12 +174,20 @@ class EditTaskCell: UITableViewCell {
             updateTodayTasks()
 
             tableView.beginUpdates()
+
             tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: UITableViewRowAnimation.Left)
             tableView.deleteRowsAtIndexPaths([cellIndexPath!], withRowAnimation: UITableViewRowAnimation.Left)
             
+            if date!.isEqualToDateIgnoringTime(NSDate(timeIntervalSinceNow: NSTimeInterval(0))) {
+                // insert to Today
+                tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: todayTasks[cellIndexPath!.section + 1].count - 1, inSection: cellIndexPath!.section + 1)], withRowAnimation: UITableViewRowAnimation.Left)
+            } else if !date!.isEqualToDateIgnoringTime(NSDate(timeIntervalSinceNow: NSTimeInterval(0))) && date!.isEarlierThanDate(NSDate(timeIntervalSinceNow: NSTimeInterval(0))) {
+                tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: todayTasks[cellIndexPath!.section].count - 1, inSection: cellIndexPath!.section)], withRowAnimation: UITableViewRowAnimation.Left)
+            }
+            
             // Add no task cell if there is no cells
-            if todayTasks.count == 0 {
-                tableView.insertRowsAtIndexPaths([cellIndexPath!], withRowAnimation: UITableViewRowAnimation.Left)
+            if (todayTasks[0].count + todayTasks[1].count) == 0 {
+                tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Left)
             }
             
             tableView.reloadData()
@@ -209,7 +219,7 @@ class EditTaskCell: UITableViewCell {
             controller.openEditTaskController(weekTasks[indexPath!.section][indexPath!.row - 1])
         } else {
             let controller = window.topViewController as TodayTaskViewController
-            controller.openEditTaskController(todayTasks[indexPath!.row - 1])
+            controller.openEditTaskController(todayTasks[indexPath!.section][indexPath!.row - 1])
         }
     }
     
