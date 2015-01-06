@@ -278,7 +278,6 @@ class EditTaskViewController: UIViewController, UITableViewDelegate, UITextField
                     
                     if dueDate!.timeIntervalSinceNow < 0 {
                         println("Date is outdated")
-                        dueDate = NSDate()
                     } else {
                         println("Date is after 7 days")
                     }
@@ -614,8 +613,8 @@ class EditTaskViewController: UIViewController, UITableViewDelegate, UITextField
     }
     
     func dateFieldDidChanged(textField: UITextField!) {
-        if textField.text.utf16Count > 21 {
-            textField.text = textField.text.substringToIndex(advance(textField.text.startIndex, 21))
+        if textField.text.utf16Count > maxDateTextCharacters {
+            textField.text = textField.text.substringToIndex(advance(textField.text.startIndex, maxDateTextCharacters))
         }
         
         updateNavigationItem()

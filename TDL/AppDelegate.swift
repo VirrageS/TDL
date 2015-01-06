@@ -16,6 +16,9 @@ enum UpdateType { // #ToDelete - not sure if has purpose
     case None
 }
 
+let maxDateTextCharacters = 21
+let maxCharacters = 25
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow!
@@ -115,37 +118,44 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func updateData() {
-        //    let documentsDirectory = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
-        //    let finalPath = documentsDirectory.stringByAppendingPathComponent("tdl.plist") as String
-        //    NSKeyedArchiver.archiveRootObject(self.listItems, toFile: finalPath)
+//        let documentsDirectory = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
+//        let finalPath = documentsDirectory.stringByAppendingPathComponent("todayTasks.plist") as String
+//        NSKeyedArchiver.archiveRootObject(todayTasks, toFile: finalPath)
+//        
+//
         
         
-        var paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
-        var path = paths.stringByAppendingPathComponent("todayTasks.plist")
-        var fileManager = NSFileManager.defaultManager()
-        if (!(fileManager.fileExistsAtPath(path)))
-        {
-            var bundle : NSString? = NSBundle.mainBundle().pathForResource("todayTasks", ofType: "plist")
-            if bundle != nil {
-                fileManager.copyItemAtPath(bundle!, toPath: path, error: nil)
-            } else {
-                println("BIG FUCKING ERROR")
-            }
-        }
+//        var paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
+//        var path = paths.stringByAppendingPathComponent("todayTaskses.plist")
+//        var fileManager = NSFileManager.defaultManager()
+//        if (!(fileManager.fileExistsAtPath(path)))
+//        {
+//            var bundle : NSString? = NSBundle.mainBundle().pathForResource("todayTaskses", ofType: "plist")
+//            if bundle != nil {
+//                fileManager.copyItemAtPath(bundle!, toPath: path, error: nil)
+//            } else {
+//                println("BIG FUCKING ERROR")
+//            }
+//        }
+//        
+//        var data: NSMutableDictionary = NSMutableDictionary(object: allTags, forKey: "todayTaskes")
+//        data.writeToFile(path, atomically: true)
         
-        var data: NSMutableDictionary = NSMutableDictionary(object: todayTasks, forKey: "todayTasks")
-        data.writeToFile(path, atomically: true)
+        let data = NSKeyedArchiver.archivedDataWithRootObject(allTags)
+        NSUserDefaults.standardUserDefaults().setObject(data, forKey: "tags")
+        
+        loadInitialData()
     }
     
     func loadInitialData() {
-        //    let finalPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0].stringByAppendingPathComponent("tdl.plist") as String
-        //    if NSFileManager.defaultManager().fileExistsAtPath(finalPath) {
-        //    listItems = NSKeyedUnarchiver.unarchiveObjectWithFile(finalPath) as NSMutableArray
-        //    }
-        var paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
-        var path = paths.stringByAppendingPathComponent("todayTasks.plist")
-        let save = NSDictionary(contentsOfFile: path)
+//        var paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
+//        var path = paths.stringByAppendingPathComponent("todayTaskses.plist")
+//        let save = NSMutableDictionary(contentsOfFile: path)
+//        
+//        print(save)
         
-        print(save)
+        if let data = NSUserDefaults.standardUserDefaults().objectForKey("tags") as? NSData {
+            allTags = NSKeyedUnarchiver.unarchiveObjectWithData(data) as [Tag]
+        }
     }
 }

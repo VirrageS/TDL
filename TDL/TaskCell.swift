@@ -67,7 +67,7 @@ class TaskCell: UITableViewCell {
         nameTextLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
         contentView.addConstraint(NSLayoutConstraint(item: nameTextLabel, attribute: .Left, relatedBy: .Equal, toItem: contentView, attribute: .Left, multiplier: 1, constant: 20))
         contentView.addConstraint(NSLayoutConstraint(item: nameTextLabel, attribute: .Top, relatedBy: .Equal, toItem: contentView, attribute: .Top, multiplier: 1, constant: 10))
-        contentView.addConstraint(NSLayoutConstraint(item: nameTextLabel, attribute: .Right, relatedBy: .Equal, toItem: contentView, attribute: .Right, multiplier: 1, constant: -55))
+        contentView.addConstraint(NSLayoutConstraint(item: nameTextLabel, attribute: .Right, relatedBy: .Equal, toItem: contentView, attribute: .Right, multiplier: 1, constant: -20))
         
         dateTextLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
         contentView.addConstraint(NSLayoutConstraint(item: dateTextLabel, attribute: .Left, relatedBy: .Equal, toItem: contentView, attribute: .Left, multiplier: 1, constant: 20))
@@ -92,9 +92,21 @@ class TaskCell: UITableViewCell {
 
     func configureCell(task: Task) {
         var dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "EEEE" // #Change - if date is > 7 days should set format to "dd MMM yyyy"
-        dateTextLabel.text = (task.dueDate == nil ? "No due date" : dateFormatter.stringFromDate(task.dueDate!))
         
+        if task.dueDate != nil {
+            if (task.dueDate!.isLaterThanDate(NSDate(timeIntervalSinceNow: NSTimeInterval(6*24*60*60))) && !task.dueDate!.isEqualToDateIgnoringTime(NSDate(timeIntervalSinceNow: NSTimeInterval(6*24*60*60))))
+                ||
+                (task.dueDate!.isEarlierThanDate(NSDate()) && !task.dueDate!.isEqualToDateIgnoringTime(NSDate())) {
+                dateFormatter.dateFormat = "dd MMM yyyy"
+            } else {
+                dateFormatter.dateFormat = "EEEE"
+            }
+            
+            dateTextLabel.text = dateFormatter.stringFromDate(task.dueDate!)
+        } else {
+            dateTextLabel.text = "No due date"
+        }
+
         priorityViewLabel.backgroundColor = priorityColors[task.priority]
         nameTextLabel.text = task.name
         

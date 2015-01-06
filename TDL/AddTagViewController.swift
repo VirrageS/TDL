@@ -1,7 +1,5 @@
 import UIKit
 
-let maxCharacters = 30
-
 class AddTagViewController: UIViewController, UITextFieldDelegate, SlideNavigationControllerDelegate {
     var circleView: UILabel!
     var circleButton: UIButton!
