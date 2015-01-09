@@ -25,7 +25,7 @@ class AddTagViewController: UIViewController, UITextFieldDelegate, SlideNavigati
         navigationItem.rightBarButtonItem = addButtonItem
         navigationItem.rightBarButtonItem!.enabled = false
         
-        circleView = UILabel(frame: CGRect(x: 5, y: 5, width: 20, height: 20))
+        circleView = UILabel(frame: CGRect(x: 7.5, y: 5, width: 20, height: 20))
         circleView.layer.borderColor = UIColor(red: 162/255, green: 186/255, blue: 102/255, alpha: 1.0).CGColor
         circleView.layer.borderWidth = 10
         circleView.layer.cornerRadius = 10
@@ -34,7 +34,7 @@ class AddTagViewController: UIViewController, UITextFieldDelegate, SlideNavigati
         circleButton.addTarget(self, action: "openCollectionView:", forControlEvents: UIControlEvents.TouchUpInside)
         circleButton.backgroundColor = UIColor.whiteColor()
         circleButton.addSubview(circleView)
-        addCustomButtonSubviews(circleButton, nil)
+        addCustomButtonSubviews(circleButton, "")
 
         textView = UITextField(frame: CGRectZero)
         addCustomTextFieldSubview(textView)
@@ -64,11 +64,11 @@ class AddTagViewController: UIViewController, UITextFieldDelegate, SlideNavigati
         circleButton.setTranslatesAutoresizingMaskIntoConstraints(false)
         view.addConstraint(NSLayoutConstraint(item: circleButton, attribute: .Left, relatedBy: .Equal, toItem: view, attribute: .Left, multiplier: 1, constant: 20))
         view.addConstraint(NSLayoutConstraint(item: circleButton, attribute: .Top, relatedBy: .Equal, toItem: view, attribute: .Top, multiplier: 1, constant: 100))
-        view.addConstraint(NSLayoutConstraint(item: circleButton, attribute: .Right, relatedBy: .Equal, toItem: view, attribute: .Left, multiplier: 1, constant: 50))
+        view.addConstraint(NSLayoutConstraint(item: circleButton, attribute: .Right, relatedBy: .Equal, toItem: view, attribute: .Left, multiplier: 1, constant: 55))
         view.addConstraint(NSLayoutConstraint(item: circleButton, attribute: .Bottom, relatedBy: .Equal, toItem: view, attribute: .Top, multiplier: 1, constant: 130))
         
         textView.setTranslatesAutoresizingMaskIntoConstraints(false)
-        view.addConstraint(NSLayoutConstraint(item: textView, attribute: .Left, relatedBy: .Equal, toItem: view, attribute: .Left, multiplier: 1, constant: 60))
+        view.addConstraint(NSLayoutConstraint(item: textView, attribute: .Left, relatedBy: .Equal, toItem: view, attribute: .Left, multiplier: 1, constant: 65))
         view.addConstraint(NSLayoutConstraint(item: textView, attribute: .Top, relatedBy: .Equal, toItem: view, attribute: .Top, multiplier: 1, constant: 100))
         view.addConstraint(NSLayoutConstraint(item: textView, attribute: .Right, relatedBy: .Equal, toItem: view, attribute: .Right, multiplier: 1, constant: -30))
         view.addConstraint(NSLayoutConstraint(item: textView, attribute: .Bottom, relatedBy: .Equal, toItem: view, attribute: .Top, multiplier: 1, constant: 130))
@@ -82,7 +82,19 @@ class AddTagViewController: UIViewController, UITextFieldDelegate, SlideNavigati
     
     func addTag(sender: AnyObject) {
         let newTag: Tag = Tag(name: textView.text, color: UIColor(CGColor: circleView.layer.borderColor), enabled: true)
-        allTags.append(newTag)
+        
+        var ok: Bool = true
+        for i in 0...allTags.count - 1 {
+            if allTags[i].name.lowercaseString == newTag.name.lowercaseString {
+                ok = false
+            }
+        }
+        
+        if ok {
+            allTags.append(newTag)
+        } else {
+            // #Change display error
+        }
         
         var slideNavigation = SlideNavigationController().sharedInstance()
         slideNavigation.popViewControllerAnimated(true)

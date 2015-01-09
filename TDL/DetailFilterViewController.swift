@@ -22,33 +22,41 @@ class DetailFilterViewController: UITableViewController, SlideNavigationControll
 
         switch (text! as String) {
             case "Priority 1":
-                for i in 0...allTasks.count-1 {
-                    if allTasks[i].priority == 0 {
-                        detailFilterTasks.append(allTasks[i])
+                if allTasks.count > 0 {
+                    for i in 0...allTasks.count-1 {
+                        if allTasks[i].priority == 0 {
+                            detailFilterTasks.append(allTasks[i])
+                        }
                     }
                 }
             break
             
             case "Priority 2":
-                for i in 0...allTasks.count-1 {
-                    if allTasks[i].priority == 1 {
-                        detailFilterTasks.append(allTasks[i])
+                if allTasks.count > 0 {
+                    for i in 0...allTasks.count-1 {
+                        if allTasks[i].priority == 1 {
+                            detailFilterTasks.append(allTasks[i])
+                        }
                     }
                 }
             break
             
             case "Priority 3":
-                for i in 0...allTasks.count-1 {
-                    if allTasks[i].priority == 2 {
-                        detailFilterTasks.append(allTasks[i])
+                if allTasks.count > 0 {
+                    for i in 0...allTasks.count-1 {
+                        if allTasks[i].priority == 2 {
+                            detailFilterTasks.append(allTasks[i])
+                        }
                     }
                 }
             break
             
             case "Priority 4":
-                for i in 0...allTasks.count-1 {
-                    if allTasks[i].priority == 3 {
-                        detailFilterTasks.append(allTasks[i])
+                if allTasks.count > 0 {
+                    for i in 0...allTasks.count-1 {
+                        if allTasks[i].priority == 3 {
+                            detailFilterTasks.append(allTasks[i])
+                        }
                     }
                 }
             break
@@ -58,9 +66,11 @@ class DetailFilterViewController: UITableViewController, SlideNavigationControll
             break
 
             case "No due date":
-                for i in 0...allTasks.count-1 {
-                    if allTasks[i].dueDate == nil {
-                        detailFilterTasks.append(allTasks[i])
+                if allTasks.count > 0 {
+                    for i in 0...allTasks.count-1 {
+                        if allTasks[i].dueDate == nil {
+                            detailFilterTasks.append(allTasks[i])
+                        }
                     }
                 }
             break

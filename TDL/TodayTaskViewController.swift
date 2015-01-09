@@ -7,18 +7,21 @@ func updateTodayTasks() {
     todayTasks.append([Task]())
     todayTasks.append([Task]())
     
-    for i in 0...allTasks.count-1 {
-        if allTasks[i].dueDate != nil {
-            if !allTasks[i].dueDate!.isEqualToDateIgnoringTime(NSDate(timeIntervalSinceNow: NSTimeInterval(0))) && allTasks[i].dueDate!.isEarlierThanDate(NSDate(timeIntervalSinceNow: NSTimeInterval(0))) {
-                todayTasks[0].append(allTasks[i])
+    // If there is any task we can proceed
+    if allTasks.count > 0 {
+        for i in 0...allTasks.count-1 {
+            if allTasks[i].dueDate != nil {
+                if !allTasks[i].dueDate!.isEqualToDateIgnoringTime(NSDate(timeIntervalSinceNow: NSTimeInterval(0))) && allTasks [i].dueDate!.isEarlierThanDate(NSDate(timeIntervalSinceNow: NSTimeInterval(0))) {
+                    todayTasks[0].append(allTasks[i])
+                }
             }
         }
-    }
-    
-    for i in 0...allTasks.count-1 {
-        if allTasks[i].dueDate != nil {
-            if allTasks[i].dueDate!.isEqualToDateIgnoringTime(NSDate(timeIntervalSinceNow: NSTimeInterval(0))) {
-                todayTasks[1].append(allTasks[i])
+        
+        for i in 0...allTasks.count-1 {
+            if allTasks[i].dueDate != nil {
+                if allTasks[i].dueDate!.isEqualToDateIgnoringTime(NSDate(timeIntervalSinceNow: NSTimeInterval(0))) {
+                    todayTasks[1].append(allTasks[i])
+                }
             }
         }
     }

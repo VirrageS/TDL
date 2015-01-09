@@ -20,24 +20,19 @@ class Task: NSObject, NSCoding {
         }
     }
     
-    func encodeWithCoder(encoder: NSCoder) {
-        encoder.encodeObject(self.name, forKey: "name")
-        encoder.encodeBool(self.completed, forKey: "completed")
-        encoder.encodeObject(self.dueDate, forKey: "dueDate")
-        encoder.encodeInteger(self.priority, forKey: "priority")
-        encoder.encodeObject(self.tag, forKey: "tag")
+    func encodeWithCoder(aCoder: NSCoder) {
+        aCoder.encodeObject(self.name, forKey: "name")
+        aCoder.encodeBool(self.completed, forKey: "completed")
+        aCoder.encodeObject(self.dueDate, forKey: "dueDate")
+        aCoder.encodeInteger(self.priority, forKey: "priority")
+        aCoder.encodeObject(self.tag, forKey: "tag")
     }
     
-    func initWithCoder(decoder: NSCoder) {
-        self.name = decoder.decodeObjectForKey("name") as String
-        self.completed = decoder.decodeBoolForKey("completed")
-        self.dueDate = decoder.decodeObjectForKey("dueDate") as? NSDate
-        self.priority = decoder.decodeIntegerForKey("priority")
-        self.tag = decoder.decodeObjectForKey("tag") as? Tag
-    }
-    
-    required convenience init(coder decoder: NSCoder) {
-        self.init(name: "", completed: false, dueDate: nil, priority: 0, tag: nil)
-        initWithCoder(decoder)
+    required init(coder aDecoder: NSCoder) {
+        self.name = aDecoder.decodeObjectForKey("name") as String
+        self.completed = aDecoder.decodeBoolForKey("completed")
+        self.dueDate = aDecoder.decodeObjectForKey("dueDate") as? NSDate
+        self.priority = aDecoder.decodeIntegerForKey("priority")
+        self.tag = aDecoder.decodeObjectForKey("tag") as? Tag
     }
 }

@@ -14,12 +14,14 @@ func updateWeekTasks() {
         weekTasks.insert([Task](), atIndex: i)
     }
     
-    for i in 0...allTasks.count-1 {
-        if allTasks[i].dueDate != nil {
-            for j in 0...6 {
-                if allTasks[i].dueDate!.isEqualToDateIgnoringTime(NSDate(timeIntervalSinceNow: NSTimeInterval(j*24*60*60))) {
-                    weekTasks[j].append(allTasks[i])
-                    break
+    if allTasks.count > 0 {
+        for i in 0...allTasks.count-1 {
+            if allTasks[i].dueDate != nil {
+                for j in 0...6 {
+                    if allTasks[i].dueDate!.isEqualToDateIgnoringTime(NSDate(timeIntervalSinceNow: NSTimeInterval(j*24*60*60))) {
+                        weekTasks[j].append(allTasks[i])
+                        break
+                    }
                 }
             }
         }

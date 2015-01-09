@@ -27,6 +27,7 @@ class MenuViewController: UITableViewController, SlideNavigationControllerDelega
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        // First row reserved for logo cell
         if indexPath.row == 0 {
             let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(MenuLogoCell), forIndexPath: indexPath) as MenuLogoCell
             return cell as MenuLogoCell
@@ -134,12 +135,14 @@ class MenuViewController: UITableViewController, SlideNavigationControllerDelega
         cell!.countTextLabel.textColor = todayTasks[0].count > 0 ? UIColor.redColor() : UIColor.blackColor()
         
         var secondCount: Int = 0
-        for i in 0...allTasks.count-1 {
-            if allTasks[i].dueDate != nil {
-                for j in 0...6 {
-                    if allTasks[i].dueDate!.isEqualToDateIgnoringTime(NSDate(timeIntervalSinceNow: NSTimeInterval(j*24*60*60))) {
-                        secondCount++
-                        break
+        if allTasks.count > 0 {
+            for i in 0...allTasks.count-1 {
+                if allTasks[i].dueDate != nil {
+                    for j in 0...6 {
+                        if allTasks[i].dueDate!.isEqualToDateIgnoringTime(NSDate(timeIntervalSinceNow: NSTimeInterval(j*24*60*60))) {
+                            secondCount++
+                            break
+                        }
                     }
                 }
             }

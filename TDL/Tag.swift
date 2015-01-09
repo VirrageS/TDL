@@ -13,22 +13,17 @@ class Tag: NSObject, NSCoding {
         self.enabled = enabled
     }
     
-    func encodeWithCoder(encoder: NSCoder) {
-        encoder.encodeObject(self.name, forKey: "name")
-        encoder.encodeObject(self.color, forKey: "color")
-        encoder.encodeBool(self.enabled!, forKey: "enabled")
-        encoder.encodeInteger(self.tasks, forKey: "tasks")
+    func encodeWithCoder(aCoder: NSCoder) {
+        aCoder.encodeObject(self.name, forKey: "name")
+        aCoder.encodeObject(self.color, forKey: "color")
+        aCoder.encodeBool(self.enabled!, forKey: "enabled")
+        aCoder.encodeInteger(self.tasks, forKey: "tasks")
     }
     
-    func initWithCoder(decoder: NSCoder) {
-        self.name = decoder.decodeObjectForKey("name") as String
-        self.color = decoder.decodeObjectForKey("color") as UIColor
-        self.enabled = decoder.decodeBoolForKey("enabled") as Bool
-        self.tasks = decoder.decodeIntegerForKey("tasks") as Int
-    }
-    
-    required convenience init(coder decoder: NSCoder) {
-        self.init(name: "", color: UIColor.clearColor(), enabled: false)
-        initWithCoder(decoder)
+    required init(coder aDecoder: NSCoder) {
+        self.name = aDecoder.decodeObjectForKey("name") as String
+        self.color = aDecoder.decodeObjectForKey("color") as UIColor
+        self.enabled = aDecoder.decodeBoolForKey("enabled") as Bool
+        self.tasks = aDecoder.decodeIntegerForKey("tasks") as Int
     }
 }

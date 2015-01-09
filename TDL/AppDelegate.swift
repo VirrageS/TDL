@@ -16,16 +16,18 @@ enum UpdateType { // #ToDelete - not sure if has purpose
     case None
 }
 
-let maxDateTextCharacters = 21
-let maxCharacters = 25
+let maxDateTextCharacters = 21 // Maximum characters in date box
+let maxCharacters = 25 // Maximum characters in task name
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow!
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: NSDictionary?) -> Bool {
+        // Loading allTasks and allTags
         loadInitialData()
         
+        // Name for rows in left menu
         menuItems = [
             "Today",
             "Next 7 Days",
@@ -33,13 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             "Filters"
         ]
         
-        allTags = [
-            Tag(name: "None", color: UIColor.clearColor(), enabled: false),
-            Tag(name: "Home", color: UIColor.greenColor(), enabled: true),
-            Tag(name: "School", color: UIColor.grayColor(), enabled: true),
-            Tag(name: "Work", color: UIColor.redColor(), enabled: true)
-        ]
-        
+        // Colors which priority have
         priorityColors = [
             UIColor(red: 183/255, green: 73/255, blue: 50/255, alpha: 1.0),
             UIColor(red: 61/255, green: 99/255, blue: 163/255, alpha: 1.0),
@@ -47,27 +43,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1.0)
         ]
 
-        // Names for sections (Today, Tomorrow, ...)
+        // Names for sections in TaskViewController (Today, Tomorrow, ...)
         let day: NSTimeInterval = 60*60*24
         for i in 0...6 {
             var newDay: NSTimeInterval = day * NSTimeInterval(i)
             namesForSections.append(formatDate(NSDate(timeIntervalSinceNow: newDay)))
         }
         
-        allTasks = [
-            Task(name: "Buy new keyboard", completed: false, dueDate: NSDate(timeIntervalSinceNow: -3*24*60*60), priority: 1, tag: allTags[2]),
-            Task(name: "Study to math exam", completed: false, dueDate: NSDate(timeIntervalSinceNow: -1*24*60*60), priority: 1, tag: allTags[2]),
-            Task(name: "Mow the lawn", completed: false, dueDate: NSDate(), priority: 1, tag: allTags[2]),
-            Task(name: "Check mail", completed: false, dueDate: NSDate(), priority: 0, tag: allTags[0]),
-            Task(name: "Write an email to Jennifer", completed: false, dueDate: NSDate(timeIntervalSinceNow: 1*24*60*60), priority: 2, tag: allTags[0]),
-            Task(name: "Buy milk22", completed: false, dueDate: NSDate(timeIntervalSinceNow: 1*24*60*60), priority: 1, tag: allTags[1]),
-            Task(name: "Buy milk31", completed: false, dueDate: NSDate(timeIntervalSinceNow: 2*24*60*60), priority: 1, tag: allTags[0]),
-            Task(name: "Buy milk32", completed: false, dueDate: NSDate(timeIntervalSinceNow: 2*24*60*60), priority: 3, tag: allTags[1]),
-            Task(name: "Buy milk33", completed: false, dueDate: NSDate(timeIntervalSinceNow: 2*24*60*60), priority: 1, tag: allTags[2]),
-            Task(name: "Buy milk34", completed: false, dueDate: NSDate(timeIntervalSinceNow: 3*24*60*60), priority: 1, tag: allTags[1]),
-            Task(name: "Buy milk34", completed: false, dueDate: NSDate(timeIntervalSinceNow: 5*24*60*60), priority: 1, tag: allTags[1])
-        ]
-        
+        // Names for filters aviable
         allFilters = [
             "Priority 1",
             "Priority 2",
@@ -77,10 +60,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             "No due date"
         ]
 
+        // Initing left menu
         let menuController = MenuViewController()
         let slideNavigation = SlideNavigationController()
         slideNavigation.sharedInstance().menu = menuController
  
+        // Initing main menu (today tasks)
         let mainController = TodayTaskViewController()
         slideNavigation.sharedInstance()._delegate = mainController
         slideNavigation.pushViewController(mainController, animated: true)
@@ -91,6 +76,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window.rootViewController = slideNavigation
         window.makeKeyAndVisible()
         return true
+    }
+
+    func applicationWillTerminate(application: UIApplication) {
+        // Saving all data when application will terminate
+        saveAllData()
     }
     
     func formatDate(date: NSDate) -> (day: String, desc: String) {
@@ -112,50 +102,54 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         var _desc: String = dateFormatter.stringFromDate(date)
         return (day: _day, desc: _desc)
     }
-    
-    func applicationWillTerminate(application: UIApplication) {
-        updateData()
-    }
-    
-    func updateData() {
-//        let documentsDirectory = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
-//        let finalPath = documentsDirectory.stringByAppendingPathComponent("todayTasks.plist") as String
-//        NSKeyedArchiver.archiveRootObject(todayTasks, toFile: finalPath)
-//        
-//
+
+    func saveAllData() {
+        var documentDirectories: NSArray = []
+        var documentDirectory: String = ""
+        var path: String = ""
         
+        documentDirectories = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
+        documentDirectory = documentDirectories.objectAtIndex(0) as String
+        path = documentDirectory.stringByAppendingPathComponent("allTasks.archive")
+        if NSKeyedArchiver.archiveRootObject(allTasks, toFile: path) {
+            // println("Success writing [allTasks] to file!")
+        } else {
+            println("Unable to write [allTasks] to file!")
+        }
         
-//        var paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
-//        var path = paths.stringByAppendingPathComponent("todayTaskses.plist")
-//        var fileManager = NSFileManager.defaultManager()
-//        if (!(fileManager.fileExistsAtPath(path)))
-//        {
-//            var bundle : NSString? = NSBundle.mainBundle().pathForResource("todayTaskses", ofType: "plist")
-//            if bundle != nil {
-//                fileManager.copyItemAtPath(bundle!, toPath: path, error: nil)
-//            } else {
-//                println("BIG FUCKING ERROR")
-//            }
-//        }
-//        
-//        var data: NSMutableDictionary = NSMutableDictionary(object: allTags, forKey: "todayTaskes")
-//        data.writeToFile(path, atomically: true)
-        
-        let data = NSKeyedArchiver.archivedDataWithRootObject(allTags)
-        NSUserDefaults.standardUserDefaults().setObject(data, forKey: "tags")
-        
-        loadInitialData()
+        path = documentDirectory.stringByAppendingPathComponent("allTags.archive")
+        if NSKeyedArchiver.archiveRootObject(allTags, toFile: path) {
+            // println("Success writing [allTags] to file!")
+        } else {
+            println("Unable to write [allTags] to file!")
+        }
     }
     
     func loadInitialData() {
-//        var paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
-//        var path = paths.stringByAppendingPathComponent("todayTaskses.plist")
-//        let save = NSMutableDictionary(contentsOfFile: path)
-//        
-//        print(save)
+        var documentDirectories: NSArray = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true) as NSArray
+        var documentDirectory: String = documentDirectories.objectAtIndex(0) as String
+        var path: String = ""
         
-        if let data = NSUserDefaults.standardUserDefaults().objectForKey("tags") as? NSData {
-            allTags = NSKeyedUnarchiver.unarchiveObjectWithData(data) as [Tag]
+        // Loading allTasks
+        var tasks = [Task]()
+        path = documentDirectory.stringByAppendingPathComponent("allTasks.archive")
+        if let dataToRetrieve = NSKeyedUnarchiver.unarchiveObjectWithFile(path) as? [Task] {
+            tasks = dataToRetrieve as [Task]
+        }
+        allTasks = tasks
+        
+        // Loading allTags
+        var tags = [Tag]()
+        path = documentDirectory.stringByAppendingPathComponent("allTags.archive")
+        if let dataToRetrieve = NSKeyedUnarchiver.unarchiveObjectWithFile(path) as? [Tag] {
+            tags = dataToRetrieve as [Tag]
+        }
+        
+        if tags.count == 0 { // if there is no tags we must add one
+            allTags.append(Tag(name: "None", color: UIColor.clearColor(), enabled: false))
+            allTags = allTags + tags
+        } else { // if there is one or more we are sure that "none" tag is in there
+            allTags = tags
         }
     }
 }

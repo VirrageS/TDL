@@ -58,9 +58,17 @@ class TagCell: UITableViewCell {
         circleViewLabel.layer.backgroundColor = allTags[row].color.CGColor
         
         var count: Int = 0
-        for i in 0...allTasks.count-1 {
-            if allTasks[i].tag === allTags[row] {
-                count++
+        if allTasks.count > 0 {
+            for i in 0...allTasks.count-1 {
+                if allTasks[i].tag == nil {
+                    if allTags[row].name.lowercaseString == "none" {
+                        count++
+                    }
+                } else {
+                    if allTasks[i].tag!.name == allTags[row].name {
+                        count++
+                    }
+                }
             }
         }
         

@@ -28,7 +28,7 @@ class EditTagViewController: UIViewController, UITextFieldDelegate, SlideNavigat
         navigationItem.rightBarButtonItem = addButtonItem
         navigationItem.rightBarButtonItem!.enabled = true
         
-        circleView = UILabel(frame: CGRect(x: 5, y: 5, width: 20, height: 20))
+        circleView = UILabel(frame: CGRect(x: 7.5, y: 5, width: 20, height: 20))
         circleView.layer.borderColor = tag!.color.CGColor
         circleView.layer.borderWidth = 10
         circleView.layer.cornerRadius = 10
@@ -37,13 +37,12 @@ class EditTagViewController: UIViewController, UITextFieldDelegate, SlideNavigat
         circleButton.addTarget(self, action: "openCollectionView:", forControlEvents: UIControlEvents.TouchUpInside)
         circleButton.backgroundColor = UIColor.whiteColor()
         circleButton.addSubview(circleView)
-        addCustomButtonSubviews(circleButton, nil)
+        addCustomButtonSubviews(circleButton, "")
         
         textView = UITextField(frame: CGRectZero)
         addCustomTextFieldSubview(textView)
         textView.addTarget(self, action: "textFieldDidChanged:", forControlEvents: UIControlEvents.EditingChanged)
         textView.text = tag!.name
-        //textView.placeholder = "Tag"
         textView.delegate = self
         textView.becomeFirstResponder()
         
@@ -79,11 +78,11 @@ class EditTagViewController: UIViewController, UITextFieldDelegate, SlideNavigat
         circleButton.setTranslatesAutoresizingMaskIntoConstraints(false)
         view.addConstraint(NSLayoutConstraint(item: circleButton, attribute: .Left, relatedBy: .Equal, toItem: view, attribute: .Left, multiplier: 1, constant: 20))
         view.addConstraint(NSLayoutConstraint(item: circleButton, attribute: .Top, relatedBy: .Equal, toItem: view, attribute: .Top, multiplier: 1, constant: 100))
-        view.addConstraint(NSLayoutConstraint(item: circleButton, attribute: .Right, relatedBy: .Equal, toItem: view, attribute: .Left, multiplier: 1, constant: 50))
+        view.addConstraint(NSLayoutConstraint(item: circleButton, attribute: .Right, relatedBy: .Equal, toItem: view, attribute: .Left, multiplier: 1, constant: 55))
         view.addConstraint(NSLayoutConstraint(item: circleButton, attribute: .Bottom, relatedBy: .Equal, toItem: view, attribute: .Top, multiplier: 1, constant: 130))
         
         textView.setTranslatesAutoresizingMaskIntoConstraints(false)
-        view.addConstraint(NSLayoutConstraint(item: textView, attribute: .Left, relatedBy: .Equal, toItem: view, attribute: .Left, multiplier: 1, constant: 60))
+        view.addConstraint(NSLayoutConstraint(item: textView, attribute: .Left, relatedBy: .Equal, toItem: view, attribute: .Left, multiplier: 1, constant: 65))
         view.addConstraint(NSLayoutConstraint(item: textView, attribute: .Top, relatedBy: .Equal, toItem: view, attribute: .Top, multiplier: 1, constant: 100))
         view.addConstraint(NSLayoutConstraint(item: textView, attribute: .Right, relatedBy: .Equal, toItem: view, attribute: .Right, multiplier: 1, constant: -30))
         view.addConstraint(NSLayoutConstraint(item: textView, attribute: .Bottom, relatedBy: .Equal, toItem: view, attribute: .Top, multiplier: 1, constant: 130))
@@ -104,7 +103,15 @@ class EditTagViewController: UIViewController, UITextFieldDelegate, SlideNavigat
     func editTag(sender: AnyObject) {
         let newTag: Tag = Tag(name: textView.text, color: UIColor(CGColor: circleView.layer.borderColor), enabled: true)
 
-        if allTags.count > 0 {
+        
+        var ok: Bool = true
+        for i in 0...allTags.count - 1 {
+            if allTags[i].name.lowercaseString == newTag.name.lowercaseString {
+                ok = false
+            }
+        }
+        
+        if ok {
             for i in 0...allTags.count-1 {
                 if allTags[i] === tag! {
                     allTags[i] = newTag
@@ -120,7 +127,7 @@ class EditTagViewController: UIViewController, UITextFieldDelegate, SlideNavigat
                 }
             }
         } else {
-            allTags.append(newTag)
+            // #Change display error
         }
         
         var slideNavigation = SlideNavigationController().sharedInstance()

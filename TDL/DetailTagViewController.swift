@@ -19,9 +19,25 @@ class DetailTagViewController: UITableViewController, SlideNavigationControllerD
         super.viewWillAppear(animated)
         
         detailTagTasks.removeAll(keepCapacity: false)
-        for i in 0...allTasks.count-1 {
-            if allTasks[i].tag === self.tag! {
-                detailTagTasks.append(allTasks[i])
+        if allTasks.count > 0 {
+            for i in 0...allTasks.count-1 {
+                if allTasks[i].tag === self.tag! {
+                    detailTagTasks.append(allTasks[i])
+                }
+            }
+        }
+        
+        if allTasks.count > 0 {
+            for i in 0...allTasks.count-1 {
+                if allTasks[i].tag == nil {
+                    if self.tag!.name.lowercaseString == "none" {
+                        detailTagTasks.append(allTasks[i])
+                    }
+                } else {
+                    if allTasks[i].tag!.name == self.tag!.name {
+                        detailTagTasks.append(allTasks[i])
+                    }
+                }
             }
         }
         
