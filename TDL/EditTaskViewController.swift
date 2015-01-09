@@ -227,7 +227,7 @@ class EditTaskViewController: UIViewController, UITableViewDelegate, UITextField
         
         var taskTag: Tag?
         for tag in allTags {
-            if tag.name == tagLabel!.text { // #Change - may cause conflict if tags have the same name
+            if tag.name == tagLabel!.text {
                 taskTag = tag
                 break
             }
@@ -237,7 +237,7 @@ class EditTaskViewController: UIViewController, UITableViewDelegate, UITextField
         var dateFormats = ["dd/MM/yyyy", "dd.MM.yyyy", "MM/dd/yyyy", "MM.dd.yyyy", "dd MMM yyyy HH:mm", "dd MMM yyyy", "MMM dd yyyy", "HH:mm dd MMM yyyy", "HH:mm MMM dd yyyy"]
         var nonTrivialDateFormats = [
             ["today"]: NSDate(),
-            ["tomorrow", "in 1 day", "in one day", "+1 day", "next day"]: NSDate(timeIntervalSinceNow: NSTimeInterval(60*60*24)),
+            ["tommorow", "tomorrow", "in 1 day", "in one day", "+1 day", "next day"]: NSDate(timeIntervalSinceNow: NSTimeInterval(60*60*24)),
             ["in 1 week", "in one week", "next week", "+1 week"]: NSDate(timeIntervalSinceNow: NSTimeInterval(7*60*60*24)),
             ["in 1 month", "in one month", "next month", "+1 month"]: NSDate(timeIntervalSinceNow: NSTimeInterval(30*60*60*24)),
             ["none", "no due date"]: NSDate(timeIntervalSince1970: NSTimeInterval(0))
@@ -254,13 +254,7 @@ class EditTaskViewController: UIViewController, UITableViewDelegate, UITextField
                     }
                 }
             }
-            
-            if ok {
-                if (dueDate!.isEqualToDateIgnoringTime((NSDate(timeIntervalSince1970: NSTimeInterval(0)) as NSDate))) { // #Change - some bugs there
-                    dueDate = nil
-                }
-            }
-            
+
             if !ok {
                 var dateFormatter = NSDateFormatter()
                 
@@ -272,21 +266,23 @@ class EditTaskViewController: UIViewController, UITableViewDelegate, UITextField
                         break
                     }
                 }
-                
-                if dueDate != nil {
-                    println("timeIntervalSinceNow: \(dueDate!.timeIntervalSinceNow)")
-                    
-                    if dueDate!.timeIntervalSinceNow < 0 {
-                        println("Date is outdated")
-                    } else {
-                        println("Date is after 7 days")
-                    }
-                }
             }
         }
         
-        println("Date is set to: \(dueDate)")
-        
+        if DEBUG {
+            if dueDate != nil {
+                println("timeIntervalSinceNow: \(dueDate!.timeIntervalSinceNow)")
+                
+                if dueDate!.timeIntervalSinceNow < 0 {
+                    println("Date is outdated")
+                } else {
+                    println("Date is after 7 days")
+                }
+            } else {
+                println("Date is nil")
+            }
+        }
+
         // Delete previous task
         if allTasks.count > 0 {
             for i in 0...allTasks.count-1 {

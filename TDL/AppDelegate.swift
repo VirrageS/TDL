@@ -10,12 +10,6 @@ var tasksForNext7Days = [[Task]]()
 var menuItems = [String]()
 var priorityColors = [UIColor]()
 
-enum UpdateType { // #ToDelete - not sure if has purpose
-    case Today
-    case All
-    case None
-}
-
 let maxDateTextCharacters = 21 // Maximum characters in date box
 let maxCharacters = 25 // Maximum characters in task name
 

@@ -28,8 +28,6 @@ func updateTodayTasks() {
 }
 
 class TodayTaskViewController: UITableViewController, SlideNavigationControllerDelegate {
-    
-    
     func shouldDisplayMenu() -> Bool {
         return true
     }
@@ -169,8 +167,7 @@ class TodayTaskViewController: UITableViewController, SlideNavigationControllerD
         
         return true
     }
-    
-    // #Change - add view for header - "Today" and if there is any date before so set it up also
+
     override func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         view.tintColor = UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1)
     }

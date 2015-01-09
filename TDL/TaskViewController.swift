@@ -29,8 +29,6 @@ func updateWeekTasks() {
 }
 
 class TaskViewController: UITableViewController, SlideNavigationControllerDelegate {
-    
-    
     func shouldDisplayMenu() -> Bool {
         return true
     }

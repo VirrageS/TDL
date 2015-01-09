@@ -106,6 +106,36 @@ class EditTaskCell: UITableViewCell {
             if (todayTasks[0].count + todayTasks[1].count) == 0 {
                 tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Left)
             }
+            
+            tableView.reloadData()
+            tableView.endUpdates()
+        } else if window.topViewController is DetailFilterViewController {
+            // Change due date
+            let cellIndexPath = NSIndexPath(forRow: indexPath!.row - 1, inSection: indexPath!.section)
+            var task: Task = detailFilterTasks[cellIndexPath!.row]
+            
+            var date: NSDate?
+            for i in 0...allTasks.count-1 {
+                if allTasks[i] === task {
+                    allTasks.removeAtIndex(i)
+                    break
+                }
+            }
+            
+            // Delete and insert rows
+            editTaskCell!.position = nil
+            
+            updateDetailFilterTasks()
+            
+            tableView.beginUpdates()
+            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: UITableViewRowAnimation.Left)
+            tableView.deleteRowsAtIndexPaths([cellIndexPath!], withRowAnimation: UITableViewRowAnimation.Left)
+            
+            // Add no task cell if there is no cells
+            if detailFilterTasks.count == 0 {
+                tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Left)
+            }
+            
             tableView.reloadData()
             tableView.endUpdates()
         }
@@ -192,6 +222,37 @@ class EditTaskCell: UITableViewCell {
             
             tableView.reloadData()
             tableView.endUpdates()
+        } else if window.topViewController is DetailFilterViewController {
+            // Change due date
+            let cellIndexPath = NSIndexPath(forRow: indexPath!.row - 1, inSection: indexPath!.section)
+            var task: Task = detailFilterTasks[cellIndexPath!.row]
+            
+            var date: NSDate?
+            if task.dueDate != nil {
+                for i in 0...allTasks.count-1 {
+                    if allTasks[i] === task {
+                        allTasks[i].dueDate = NSDate(timeInterval: NSTimeInterval(60*60*24), sinceDate: task.dueDate!)
+                        date = allTasks[i].dueDate!
+                        break
+                    }
+                }
+                
+                // Delete and insert rows
+                editTaskCell!.position = nil
+                
+                updateDetailFilterTasks()
+                
+                tableView.beginUpdates()
+                tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: UITableViewRowAnimation.Left)
+                
+                // Add no task cell if there is no cells
+                if detailFilterTasks.count == 0 {
+                    tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Left)
+                }
+                
+                tableView.reloadData()
+                tableView.endUpdates()
+            }
         }
     }
     
@@ -217,9 +278,12 @@ class EditTaskCell: UITableViewCell {
         if window.topViewController is TaskViewController {
             let controller = window.topViewController as TaskViewController
             controller.openEditTaskController(weekTasks[indexPath!.section][indexPath!.row - 1])
-        } else {
+        } else if window.topViewController is TodayTaskViewController {
             let controller = window.topViewController as TodayTaskViewController
             controller.openEditTaskController(todayTasks[indexPath!.section][indexPath!.row - 1])
+        } else if window.topViewController is DetailFilterViewController {
+            let controller = window.topViewController as DetailFilterViewController
+            controller.openEditTaskController(detailFilterTasks[indexPath!.row - 1])
         }
     }
     
