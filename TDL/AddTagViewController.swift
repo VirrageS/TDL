@@ -93,7 +93,11 @@ class AddTagViewController: UIViewController, UITextFieldDelegate, SlideNavigati
         if ok {
             allTags.append(newTag)
         } else {
-            // #Change display error
+            var alert = UIAlertView()
+            alert.title = "Error"
+            alert.message = "You cannot add new tag with the same name as other tag has"
+            alert.addButtonWithTitle("Back")
+            alert.show()
         }
         
         var slideNavigation = SlideNavigationController().sharedInstance()

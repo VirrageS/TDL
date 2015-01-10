@@ -106,20 +106,22 @@ class EditTagViewController: UIViewController, UITextFieldDelegate, SlideNavigat
         
         var ok: Bool = true
         for i in 0...allTags.count - 1 {
-            if allTags[i].name.lowercaseString == newTag.name.lowercaseString {
+            if allTags[i].name.lowercaseString == newTag.name.lowercaseString && allTags[i].name.lowercaseString != tag!.name.lowercaseString {
                 ok = false
             }
         }
         
         if ok {
             for i in 0...allTags.count-1 {
-                if allTags[i] === tag! {
+                if allTags[i].name.lowercaseString == tag!.name.lowercaseString {
                     allTags[i] = newTag
                     
                     if allTasks.count > 0 {
                         for i in 0...allTasks.count-1 {
-                            if allTasks[i].tag === tag! {
-                                allTasks[i].tag = newTag
+                            if allTasks[i].tag != nil {
+                                if allTasks[i].tag!.name.lowercaseString == tag!.name.lowercaseString {
+                                    allTasks[i].tag = newTag
+                                }
                             }
                         }
                     }
@@ -127,7 +129,11 @@ class EditTagViewController: UIViewController, UITextFieldDelegate, SlideNavigat
                 }
             }
         } else {
-            // #Change display error
+            var alert = UIAlertView()
+            alert.title = "Error"
+            alert.message = "You cannot change name of the tag to the same name as other tag has"
+            alert.addButtonWithTitle("Back")
+            alert.show()
         }
         
         var slideNavigation = SlideNavigationController().sharedInstance()
@@ -137,13 +143,15 @@ class EditTagViewController: UIViewController, UITextFieldDelegate, SlideNavigat
     
     func deleteTag(sender: AnyObject) {
         for i in 0...allTags.count-1 {
-            if allTags[i] === tag! {
+            if allTags[i].name.lowercaseString == tag!.name.lowercaseString {
                 allTags.removeAtIndex(i)
                     
                 if allTasks.count > 0 {
                     for i in 0...allTasks.count-1 {
-                        if allTasks[i].tag === tag! {
-                            allTasks[i].tag = allTags[0]
+                        if allTasks[i].tag != nil  {
+                            if allTasks[i].tag!.name.lowercaseString == tag!.name.lowercaseString {
+                                allTasks[i].tag = allTags[0]
+                            }
                         }
                     }
                 }

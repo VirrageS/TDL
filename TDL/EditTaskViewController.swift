@@ -254,6 +254,12 @@ class EditTaskViewController: UIViewController, UITableViewDelegate, UITextField
                     }
                 }
             }
+            
+            if ok { // we must check if this is "no due date"
+                if dueDate!.isEqualToDateIgnoringTime(NSDate(timeIntervalSince1970: NSTimeInterval(0))) {
+                    dueDate = nil
+                }
+            }
 
             if !ok {
                 var dateFormatter = NSDateFormatter()

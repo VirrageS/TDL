@@ -252,6 +252,12 @@ class EditTaskCell: UITableViewCell {
                 
                 tableView.reloadData()
                 tableView.endUpdates()
+            } else {
+                var alert = UIAlertView()
+                alert.title = "Error"
+                alert.message = "You cannot postpone task if it has no due date. Change the due date first"
+                alert.addButtonWithTitle("Back")
+                alert.show()
             }
         }
     }

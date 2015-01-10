@@ -50,8 +50,9 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
         if allTags.count > 0 {
             addCustomButtonSubviews(tagPickerButton, nil)
         } else {
-            // #Change to something like placeholder or come up with new idea
-            // addCustomButtonSubviews(tagPickerButton, nil)
+            if DEBUG {
+                print("AddTask: allTags.count = 0 ??!")
+            }
         }
 
         // Date view
@@ -244,6 +245,12 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
                         dueDate = time as? NSDate
                         ok = true
                     }
+                }
+            }
+            
+            if ok { // we must check if this is "no due date"
+                if dueDate!.isEqualToDateIgnoringTime(NSDate(timeIntervalSince1970: NSTimeInterval(0))) {
+                    dueDate = nil
                 }
             }
 

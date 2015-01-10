@@ -64,6 +64,18 @@ func updateDetailFilterTasks() {
     default:
         break
     }
+    
+    detailFilterTasks.sort({(t1: Task, t2: Task) -> Bool in
+        if t1.dueDate == nil && t2.dueDate == nil {
+            return t1.name < t2.name
+        } else if t1.dueDate == nil {
+            return true
+        } else if t2.dueDate == nil {
+            return false
+        } else {
+            return t1.dueDate!.isEarlierThanDate(t2.dueDate!)
+        }
+    })
 }
 
 class DetailFilterViewController: UITableViewController, SlideNavigationControllerDelegate {
