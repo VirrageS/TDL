@@ -1,7 +1,7 @@
 TDL
 ===
 
-Simple "To Do List" written in Swift
+ToDoList (TDL) is application written in Swift for iOS devices. It helps you to manage your tasks and have them presented in convinient way.
 
 SCREENSHOTS
 ===
