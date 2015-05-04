@@ -5,7 +5,7 @@ class FilterViewController: UITableViewController, SlideNavigationControllerDele
         return true
     }
     
-    override init() {
+    init() {
         super.init(nibName: nil, bundle: nil)
         title = "Filters"
     }
@@ -30,7 +30,7 @@ class FilterViewController: UITableViewController, SlideNavigationControllerDele
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(FilterCell), forIndexPath: indexPath) as FilterCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(FilterCell), forIndexPath: indexPath) as! FilterCell
         cell.configure(indexPath.row)
         return cell as FilterCell
     }

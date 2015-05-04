@@ -44,7 +44,7 @@ class SlideNavigationController: UINavigationController, UINavigationControllerD
     var leftBarButtonItem: UIBarButtonItem?
     var _menuRevealAnimator: SlideNavigationControllerAnimatorSlide?
    
-    convenience override init() {
+    convenience init() {
         self.init(nibName: nil, bundle: nil)
 
         if DEBUG {
@@ -154,31 +154,31 @@ class SlideNavigationController: UINavigationController, UINavigationControllerD
     }
 
     func switchToViewController(viewController: UIViewController, completion: (Bool) -> Void) {
-        switchToViewController(viewController, slideOutAnimation: true, poptype: PopType.PopTypeRoot, completion)
+        switchToViewController(viewController, slideOutAnimation: true, poptype: PopType.PopTypeRoot, completion: completion)
     }
     
     func popToRootAndSwitchToViewController(viewController: UIViewController, slideOutAnimation: Bool, completion: (Bool) -> Void) {
-        switchToViewController(viewController, slideOutAnimation: slideOutAnimation, poptype: PopType.PopTypeRoot, completion)
+        switchToViewController(viewController, slideOutAnimation: slideOutAnimation, poptype: PopType.PopTypeRoot, completion: completion)
     }
     
     func popToRootAndSwitchToViewController(viewController: UIViewController, completion: (Bool) -> Void) {
-        switchToViewController(viewController, slideOutAnimation: true, poptype: PopType.PopTypeRoot, completion)
+        switchToViewController(viewController, slideOutAnimation: true, poptype: PopType.PopTypeRoot, completion: completion)
     }
 
     func popAllAndSwitchToViewController(viewController: UIViewController, slideOutAnimation: Bool, completion: (Bool) -> Void) {
-        switchToViewController(viewController, slideOutAnimation: slideOutAnimation, poptype: PopType.PopTypeAll, completion)
+        switchToViewController(viewController, slideOutAnimation: slideOutAnimation, poptype: PopType.PopTypeAll, completion: completion)
     }
     
     func popAllAndSwitchToViewController(viewController: UIViewController, completion: (Bool) -> Void) {
-        switchToViewController(viewController, slideOutAnimation: true, poptype: PopType.PopTypeAll, completion)
+        switchToViewController(viewController, slideOutAnimation: true, poptype: PopType.PopTypeAll, completion: completion)
     }
     
     func closeMenuWithCompletion(completion: (Bool) -> Void) {
-        closeMenuWithDuration(MENU_SLIDE_ANIMATION_DURATION, completion)
+        closeMenuWithDuration(MENU_SLIDE_ANIMATION_DURATION, completion: completion)
     }
     
     func openMenu(completion: (Bool) -> Void) {
-        openMenu(MENU_SLIDE_ANIMATION_DURATION, completion)
+        openMenu(MENU_SLIDE_ANIMATION_DURATION, completion: completion)
     }
 
     func isMenuOpen() -> Bool {
@@ -329,7 +329,7 @@ class SlideNavigationController: UINavigationController, UINavigationControllerD
     
     func moveHorizontallyToLocation(location: CGFloat) {
         var rect: CGRect = self.view.frame
-        let orientation: UIInterfaceOrientation = interfaceOrientation
+        let orientation: UIDeviceOrientation = UIDevice.currentDevice().orientation
         if orientation.isLandscape {
             rect.origin.x = 0
             rect.origin.y = location
@@ -375,7 +375,7 @@ class SlideNavigationController: UINavigationController, UINavigationControllerD
     
     func horizontalLocation() -> CGFloat {
         var rect: CGRect = view.frame
-        var orientation: UIInterfaceOrientation = interfaceOrientation
+        let orientation: UIDeviceOrientation = UIDevice.currentDevice().orientation
         
         if orientation.isLandscape {
             return rect.origin.y
@@ -386,7 +386,7 @@ class SlideNavigationController: UINavigationController, UINavigationControllerD
     
     func horizontalSize() -> CGFloat {
         var rect: CGRect = view.frame
-        var orientation: UIInterfaceOrientation = interfaceOrientation
+        let orientation: UIDeviceOrientation = UIDevice.currentDevice().orientation
         
         if orientation.isLandscape {
             return rect.size.height
@@ -395,7 +395,7 @@ class SlideNavigationController: UINavigationController, UINavigationControllerD
         }
     }
     
-    func navigationController(navigationController: UINavigationController!, willShowViewController viewController: UIViewController!, animated: Bool) {
+    func navigationController(navigationController: UINavigationController, willShowViewController viewController: UIViewController, animated: Bool) {
         if DEBUG {
             println("navigationController called")
         }
@@ -410,7 +410,7 @@ class SlideNavigationController: UINavigationController, UINavigationControllerD
     }
     
     func slideOffset() -> CGFloat {
-        return interfaceOrientation.isLandscape ? landscapeSlideOffset : portraitSlideOffset
+        return UIDevice.currentDevice().orientation.isLandscape ? landscapeSlideOffset : portraitSlideOffset
     }
 
     
@@ -437,7 +437,7 @@ class SlideNavigationController: UINavigationController, UINavigationControllerD
         closeMenuWithCompletion({ (Bool) -> Void in })
     }
    
-    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer!, shouldReceiveTouch touch: UITouch!) -> Bool {
+    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldReceiveTouch touch: UITouch) -> Bool {
         if panGestureSideOffset == 0 {
             return true
         }

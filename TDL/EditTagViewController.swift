@@ -101,7 +101,7 @@ class EditTagViewController: UIViewController, UITextFieldDelegate, SlideNavigat
     }
     
     func editTag(sender: AnyObject) {
-        let newTag: Tag = Tag(name: textView.text, color: UIColor(CGColor: circleView.layer.borderColor), enabled: true)
+        let newTag: Tag = Tag(name: textView.text, color: UIColor(CGColor: circleView.layer.borderColor)!, enabled: true)
 
         
         var ok: Bool = true
@@ -243,13 +243,13 @@ class EditTagViewController: UIViewController, UITextFieldDelegate, SlideNavigat
         return true
     }
     
-    func textFieldShouldReturn(textField: UITextField!) -> Bool {
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return false
     }
     
     func textFieldDidChanged(textField: UITextField!) {
-        if textField.text.utf16Count > maxCharacters {
+        if count(textField.text) > maxCharacters {
             textField.text = textField.text.substringToIndex(advance(textField.text.startIndex, maxCharacters))
         }
         

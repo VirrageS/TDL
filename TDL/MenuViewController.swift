@@ -3,7 +3,7 @@ import UIKit
 class MenuViewController: UITableViewController, SlideNavigationControllerDelegate {
     let slideOutAnimationEnabled: Bool = true
     
-    convenience override init() {
+    convenience init() {
         self.init(style: .Plain)
     }
     
@@ -29,13 +29,13 @@ class MenuViewController: UITableViewController, SlideNavigationControllerDelega
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         // First row reserved for logo cell
         if indexPath.row == 0 {
-            let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(MenuLogoCell), forIndexPath: indexPath) as MenuLogoCell
+            let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(MenuLogoCell), forIndexPath: indexPath) as! MenuLogoCell
             return cell as MenuLogoCell
         }
         
         var all: Int = allTasks.count
         
-        let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(MenuCell), forIndexPath: indexPath) as MenuCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(MenuCell), forIndexPath: indexPath) as! MenuCell
         cell.configure(menuItems[indexPath.row-1])
         cell.selected = true
 
@@ -111,7 +111,7 @@ class MenuViewController: UITableViewController, SlideNavigationControllerDelega
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         // Menu cell height for portrait and landscape
         if indexPath.row == 0 {
-            if interfaceOrientation.isLandscape {
+            if UIDevice.currentDevice().orientation.isLandscape {
                 return menuLogoCellHeightLandscape
             }
 
@@ -124,7 +124,7 @@ class MenuViewController: UITableViewController, SlideNavigationControllerDelega
     override func viewDidLayoutSubviews() {
         // Update count in menu cell
         var indexPath: NSIndexPath = NSIndexPath(forRow: 1, inSection: 0)
-        var cell: MenuCell? = tableView.cellForRowAtIndexPath(indexPath) as MenuCell?
+        var cell: MenuCell? = tableView.cellForRowAtIndexPath(indexPath) as! MenuCell?
         if cell == nil {
             println("Menu cell is nil?")
             return
@@ -149,7 +149,7 @@ class MenuViewController: UITableViewController, SlideNavigationControllerDelega
         }
         
         indexPath = NSIndexPath(forRow: 2, inSection: 0)
-        cell = tableView.cellForRowAtIndexPath(indexPath) as MenuCell?
+        cell = tableView.cellForRowAtIndexPath(indexPath) as! MenuCell?
         cell!.countTextLabel.text = String(secondCount)
     }
 }

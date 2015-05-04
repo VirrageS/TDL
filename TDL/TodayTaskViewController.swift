@@ -32,7 +32,7 @@ class TodayTaskViewController: UITableViewController, SlideNavigationControllerD
         return true
     }
     
-    convenience override init() {
+    convenience init() {
         self.init(style: .Plain)
         title = "Today"
     }
@@ -89,7 +89,7 @@ class TodayTaskViewController: UITableViewController, SlideNavigationControllerD
         if (todayTasks[0].count + todayTasks[1].count) > 0 {
             if editTaskCell!.position != nil {
                 if editTaskCell!.position!.section == indexPath.section && editTaskCell!.position!.row == indexPath.row-1 {
-                    let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(EditTaskCell), forIndexPath: indexPath) as EditTaskCell
+                    let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(EditTaskCell), forIndexPath: indexPath) as! EditTaskCell
                     return cell as EditTaskCell
                 }
             }
@@ -103,12 +103,12 @@ class TodayTaskViewController: UITableViewController, SlideNavigationControllerD
                 }
             }
             
-            let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(TaskCell), forIndexPath: indexPath) as TaskCell
+            let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(TaskCell), forIndexPath: indexPath) as! TaskCell
             cell.configureCell(todayTasks[indexPath.section][indexPath.row - extraCount[indexPath.section]])
             return cell as TaskCell
         }
         
-        let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(TodayNoTaskCell), forIndexPath: indexPath) as TodayNoTaskCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(TodayNoTaskCell), forIndexPath: indexPath) as! TodayNoTaskCell
         tableView.scrollEnabled = false // disable scrolling when there is no cells
         return cell as TodayNoTaskCell
     }

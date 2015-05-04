@@ -16,7 +16,8 @@ let D_YEAR = 31556926
 
 //var sharedCalendar:NSCalendar = nil;
 
-let componentFlags : NSCalendarUnit = .YearCalendarUnit | .MonthCalendarUnit | .DayCalendarUnit | .WeekCalendarUnit | .HourCalendarUnit | .MinuteCalendarUnit | .SecondCalendarUnit | .WeekdayCalendarUnit | .WeekdayOrdinalCalendarUnit;
+let componentFlags : NSCalendarUnit = NSCalendarUnit.CalendarUnitYear | NSCalendarUnit.CalendarUnitMonth | NSCalendarUnit.CalendarUnitDay | NSCalendarUnit.CalendarUnitWeekOfYear | NSCalendarUnit.CalendarUnitHour | NSCalendarUnit.CalendarUnitMinute | NSCalendarUnit.CalendarUnitSecond | NSCalendarUnit.CalendarUnitWeekday | NSCalendarUnit.CalendarUnitWeekdayOrdinal;
+
 extension NSDate {
     
     
@@ -401,7 +402,7 @@ extension NSDate {
         var aTimeInterval = NSDate.timeIntervalSinceReferenceDate() + Double(D_MINUTE) * Double(30);
         
         var newDate = NSDate(timeIntervalSinceReferenceDate:aTimeInterval);
-        var components = NSDate.currentCalendar().components(NSCalendarUnit.HourCalendarUnit, fromDate: newDate);
+        var components = NSDate.currentCalendar().components(NSCalendarUnit.CalendarUnitHour, fromDate: newDate);
         return components.hour;
     }
     

@@ -102,7 +102,7 @@ class EditTaskViewController: UIViewController, UITableViewDelegate, UITextField
         priorityPickerView.hidden = true
         addPriorityPickerViewSubviews()
         
-        var doneButton = UIButton.buttonWithType(UIButtonType.System) as UIButton
+        var doneButton = UIButton.buttonWithType(UIButtonType.System) as! UIButton
         doneButton.frame = CGRectZero
         doneButton.setTitle("Done", forState: UIControlState.Normal)
         doneButton.addTarget(self, action: "closePickerView:", forControlEvents: UIControlEvents.TouchUpInside)
@@ -212,7 +212,7 @@ class EditTaskViewController: UIViewController, UITableViewDelegate, UITextField
             return
         }
         
-        var priorityLabelText: String = String(priorityLabel!.text![advance(priorityLabel!.text!.startIndex, countElements(priorityLabel!.text!)-1)])
+        var priorityLabelText: String = String(priorityLabel!.text![advance(priorityLabel!.text!.startIndex, count(priorityLabel!.text!)-1)])
         var taskPrority: Int = priorityLabelText.toInt()!
         
         // Get tag
@@ -247,7 +247,7 @@ class EditTaskViewController: UIViewController, UITableViewDelegate, UITextField
         if dateTextView.hasText() {
             var ok: Bool = false
             for (dates, time) in nonTrivialDateFormats {
-                for date in dates as [String] {
+                for date in dates as! [String] {
                     if dateTextView.text.lowercaseString == (date as String) && !ok {
                        dueDate = time as? NSDate
                        ok = true
@@ -409,8 +409,8 @@ class EditTaskViewController: UIViewController, UITableViewDelegate, UITextField
     }
     
     func updateTag(sender: UIButton) {
-        var mainLabel: UILabel = tagPickerButton.subviews[0] as UILabel
-        var senderLabel: UILabel = sender.subviews[0] as UILabel
+        var mainLabel: UILabel = tagPickerButton.subviews[0] as! UILabel
+        var senderLabel: UILabel = sender.subviews[0] as! UILabel
         mainLabel.text = senderLabel.text
         
         if allTags[sender.tag].enabled != false { // if is enabled
@@ -462,7 +462,7 @@ class EditTaskViewController: UIViewController, UITableViewDelegate, UITextField
     }
     
     func updateDate(sender: UIButton) {
-        var senderLabel: UILabel = sender.subviews[0] as UILabel
+        var senderLabel: UILabel = sender.subviews[0] as! UILabel
         
         if senderLabel.text?.lowercaseString == "pick date" {
             datePicker.hidden = false
@@ -540,8 +540,8 @@ class EditTaskViewController: UIViewController, UITableViewDelegate, UITextField
     }
     
     func updatePriority(sender: UIButton) {
-        var mainLabel: UILabel = priorityPickerButton.subviews[0] as UILabel
-        var senderLabel: UILabel = sender.subviews[0] as UILabel
+        var mainLabel: UILabel = priorityPickerButton.subviews[0] as! UILabel
+        var senderLabel: UILabel = sender.subviews[0] as! UILabel
         mainLabel.text = senderLabel.text
         if mainLabel.text != "None" {
             mainLabel.textColor = UIColor.blackColor()
@@ -596,7 +596,7 @@ class EditTaskViewController: UIViewController, UITableViewDelegate, UITextField
         return true
     }
     
-    func textFieldShouldReturn(textField: UITextField!) -> Bool {
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         
         if textView == textField {
@@ -607,7 +607,7 @@ class EditTaskViewController: UIViewController, UITableViewDelegate, UITextField
     }
     
     func textFieldDidChanged(textField: UITextField!) {
-        if textField.text.utf16Count > maxCharacters {
+        if count(textField.text) > maxCharacters {
             textField.text = textField.text.substringToIndex(advance(textField.text.startIndex, maxCharacters))
         }
         
@@ -615,7 +615,7 @@ class EditTaskViewController: UIViewController, UITableViewDelegate, UITextField
     }
     
     func dateFieldDidChanged(textField: UITextField!) {
-        if textField.text.utf16Count > maxDateTextCharacters {
+        if count(textField.text) > maxDateTextCharacters {
             textField.text = textField.text.substringToIndex(advance(textField.text.startIndex, maxDateTextCharacters))
         }
         

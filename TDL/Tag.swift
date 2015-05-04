@@ -21,8 +21,8 @@ class Tag: NSObject, NSCoding {
     }
     
     required init(coder aDecoder: NSCoder) {
-        self.name = aDecoder.decodeObjectForKey("name") as String
-        self.color = aDecoder.decodeObjectForKey("color") as UIColor
+        self.name = aDecoder.decodeObjectForKey("name") as! String
+        self.color = aDecoder.decodeObjectForKey("color") as! UIColor
         self.enabled = aDecoder.decodeBoolForKey("enabled") as Bool
         self.tasks = aDecoder.decodeIntegerForKey("tasks") as Int
     }

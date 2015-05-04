@@ -15,9 +15,10 @@ let maxCharacters = 25 // Maximum characters in task name
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    var window: UIWindow!
     
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: NSDictionary?) -> Bool {
+    var window: UIWindow?
+    
+    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Loading allTasks and allTags
         loadInitialData()
         
@@ -66,9 +67,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         slideNavigation.setMenuRevealAnimator(SlideNavigationControllerAnimatorSlide())
         
         window = UIWindow(frame: UIScreen.mainScreen().bounds)
-        window.backgroundColor = UIColor.whiteColor()
-        window.rootViewController = slideNavigation
-        window.makeKeyAndVisible()
+        window!.backgroundColor = UIColor.whiteColor()
+        window!.rootViewController = slideNavigation
+        window!.makeKeyAndVisible()
         return true
     }
 
@@ -103,7 +104,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         var path: String = ""
         
         documentDirectories = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
-        documentDirectory = documentDirectories.objectAtIndex(0) as String
+        documentDirectory = documentDirectories.objectAtIndex(0) as! String
         path = documentDirectory.stringByAppendingPathComponent("allTasks.archive")
         if NSKeyedArchiver.archiveRootObject(allTasks, toFile: path) {
             // println("Success writing [allTasks] to file!")
@@ -121,7 +122,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func loadInitialData() {
         var documentDirectories: NSArray = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true) as NSArray
-        var documentDirectory: String = documentDirectories.objectAtIndex(0) as String
+        var documentDirectory: String = documentDirectories.objectAtIndex(0) as! String
         var path: String = ""
         
         // Loading allTasks

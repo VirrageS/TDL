@@ -60,12 +60,12 @@ class DetailTagViewController: UITableViewController, SlideNavigationControllerD
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if (detailTagTasks.count > 0) {
-            let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(TaskCell), forIndexPath: indexPath) as TaskCell
+            let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(TaskCell), forIndexPath: indexPath) as! TaskCell
             cell.configureCell(detailTagTasks[indexPath.row])
             return cell as TaskCell
         }
         
-        let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(NoTaskCell), forIndexPath: indexPath) as NoTaskCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(NoTaskCell), forIndexPath: indexPath) as! NoTaskCell
         tableView.scrollEnabled = false
         return cell as NoTaskCell
     }

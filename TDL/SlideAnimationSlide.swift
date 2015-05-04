@@ -10,10 +10,10 @@ class SlideNavigationControllerAnimatorSlide {
     
     func prepareMenuForAnimation() {
         let menuViewController: UIViewController = _instance!.menu!
-        let orientation: UIInterfaceOrientation = _instance!.interfaceOrientation
+        let orientation: UIDeviceOrientation = UIDevice.currentDevice().orientation
         var rect: CGRect = menuViewController.view.frame
     
-        if UIInterfaceOrientationIsLandscape(orientation) {
+        if orientation.isLandscape {
             if orientation.isLandscape {
                 rect.origin.y = self.slideMovement*(-1)
             } else {
@@ -32,7 +32,7 @@ class SlideNavigationControllerAnimatorSlide {
 
     func animateMenu(progress: CGFloat) {
         let menuViewController: UIViewController = _instance!.menu!
-        let orientation: UIInterfaceOrientation = _instance!.interfaceOrientation
+         let orientation: UIDeviceOrientation = UIDevice.currentDevice().orientation
     
         var location: CGFloat  = CGFloat(self.slideMovement*(-1)) + CGFloat(self.slideMovement*progress)
         location = (location > 0) ? 0 : location;
@@ -54,7 +54,7 @@ class SlideNavigationControllerAnimatorSlide {
 
     func clearMenu() {
         let menuViewController: UIViewController = _instance!.menu!
-        let orientation: UIInterfaceOrientation = _instance!.interfaceOrientation
+        let orientation: UIDeviceOrientation = UIDevice.currentDevice().orientation
         
         var rect: CGRect = menuViewController.view.frame;
     

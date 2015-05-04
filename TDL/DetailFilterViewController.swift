@@ -128,7 +128,7 @@ class DetailFilterViewController: UITableViewController, SlideNavigationControll
         if (detailFilterTasks.count > 0) {
             if editTaskCell!.position != nil {
                 if editTaskCell!.position!.section == indexPath.section && editTaskCell!.position!.row == indexPath.row-1 {
-                    let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(EditTaskCell), forIndexPath: indexPath) as EditTaskCell
+                    let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(EditTaskCell), forIndexPath: indexPath) as! EditTaskCell
                     return cell as EditTaskCell
                 }
             }
@@ -140,12 +140,12 @@ class DetailFilterViewController: UITableViewController, SlideNavigationControll
                 }
             }
             
-            let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(TaskCell), forIndexPath: indexPath) as TaskCell
+            let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(TaskCell), forIndexPath: indexPath) as! TaskCell
             cell.configureCell(detailFilterTasks[indexPath.row - extraCount])
             return cell as TaskCell
         }
         
-        let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(NoTaskCell), forIndexPath: indexPath) as NoTaskCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(NoTaskCell), forIndexPath: indexPath) as! NoTaskCell
         tableView.scrollEnabled = false
         return cell as NoTaskCell
     }

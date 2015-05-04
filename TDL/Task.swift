@@ -29,7 +29,7 @@ class Task: NSObject, NSCoding {
     }
     
     required init(coder aDecoder: NSCoder) {
-        self.name = aDecoder.decodeObjectForKey("name") as String
+        self.name = aDecoder.decodeObjectForKey("name") as! String
         self.completed = aDecoder.decodeBoolForKey("completed")
         self.dueDate = aDecoder.decodeObjectForKey("dueDate") as? NSDate
         self.priority = aDecoder.decodeIntegerForKey("priority")

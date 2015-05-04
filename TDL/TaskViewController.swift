@@ -33,7 +33,7 @@ class TaskViewController: UITableViewController, SlideNavigationControllerDelega
         return true
     }
     
-    convenience override init() {
+    convenience init() {
         self.init(style: .Plain)
         title = "Next 7 Days"
     }
@@ -78,7 +78,7 @@ class TaskViewController: UITableViewController, SlideNavigationControllerDelega
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if editTaskCell!.position != nil {
             if editTaskCell!.position!.section == indexPath.section && editTaskCell!.position!.row == indexPath.row-1 {
-                let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(EditTaskCell), forIndexPath: indexPath) as EditTaskCell
+                let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(EditTaskCell), forIndexPath: indexPath) as! EditTaskCell
                 return cell as EditTaskCell
             }
         }
@@ -90,7 +90,7 @@ class TaskViewController: UITableViewController, SlideNavigationControllerDelega
             }
         }
         
-        let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(TaskCell), forIndexPath: indexPath) as TaskCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(TaskCell), forIndexPath: indexPath) as! TaskCell
         cell.configureCell(weekTasks[indexPath.section][indexPath.row - extraCount])
         //cell.setButtonsHidden(NSIndexPath(forRow: indexPath.row - extraCount, inSection: indexPath.section), check: 1)
         return cell as TaskCell

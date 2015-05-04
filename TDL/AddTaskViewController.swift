@@ -21,7 +21,7 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
         return false
     }
     
-    override init() {
+    init() {
         super.init(nibName: nil, bundle: nil)
         title = "Add task"
     }
@@ -44,16 +44,12 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
         textView.delegate = self
         textView.becomeFirstResponder()
         
+        assert(allTags.count > 0, "AddTask: allTags.count <= 0!")
+        
         tagPickerButton = UIButton(frame: CGRectZero)
         tagPickerButton.addTarget(self, action: "showTagPicker:", forControlEvents: UIControlEvents.TouchUpInside)
         tagPickerButton.backgroundColor = UIColor.whiteColor()
-        if allTags.count > 0 {
-            addCustomButtonSubviews(tagPickerButton, nil)
-        } else {
-            if DEBUG {
-                print("AddTask: allTags.count = 0 ??!")
-            }
-        }
+        addCustomButtonSubviews(tagPickerButton, nil)
 
         // Date view
         dateTextView = UITextField(frame: CGRectZero)
@@ -95,7 +91,7 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
         addPriorityPickerViewSubviews()
         
         
-        var doneButton = UIButton.buttonWithType(UIButtonType.System) as UIButton
+        var doneButton = UIButton.buttonWithType(UIButtonType.System) as! UIButton
         doneButton.frame = CGRectZero
         doneButton.setTitle("Done", forState: UIControlState.Normal)
         doneButton.addTarget(self, action: "closePickerView:", forControlEvents: UIControlEvents.TouchUpInside)
@@ -194,6 +190,7 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
         view.addConstraint(NSLayoutConstraint(item: doneButton, attribute: .Bottom, relatedBy: .Equal, toItem: datePicker, attribute: .Bottom, multiplier: 1, constant: 40))
     }
     
+    // dodaje task
     func addTask(sender: AnyObject) {
         // Get priority
         var priorityLabel: UILabel? = priorityPickerButton.subviews[0] as? UILabel
@@ -205,7 +202,7 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
             return
         }
 
-        var priorityLabelText: String = String(priorityLabel!.text![advance(priorityLabel!.text!.startIndex, countElements(priorityLabel!.text!)-1)])
+        var priorityLabelText: String = String(priorityLabel!.text![advance(priorityLabel!.text!.startIndex, count(priorityLabel!.text!)-1)])
         var taskPrority: Int = priorityLabelText.toInt()!
 
         // Get tag
@@ -240,7 +237,7 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
         if dateTextView.hasText() {
             var ok: Bool = false
             for (dates, time) in nonTrivialDateFormats {
-                for date in dates as [String] {
+                for date in dates as! [String] {
                     if dateTextView.text.lowercaseString == (date as String) && !ok {
                         dueDate = time as? NSDate
                         ok = true
@@ -287,6 +284,9 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
         
         // Insert new task
         allTasks.append(newTask)
+        
+        // Upadate tasks
+        updateTodayTasks()
 
         // Back to previous controller
         var slideNavigation = SlideNavigationController().sharedInstance()
@@ -394,8 +394,8 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
     }
     
     func updateTag(sender: UIButton) {
-        var mainLabel: UILabel = tagPickerButton.subviews[0] as UILabel
-        var senderLabel: UILabel = sender.subviews[0] as UILabel
+        var mainLabel: UILabel = tagPickerButton.subviews[0] as! UILabel
+        var senderLabel: UILabel = sender.subviews[0] as! UILabel
         mainLabel.text = senderLabel.text
         
         if allTags[sender.tag].enabled != false { // if is enabled
@@ -447,7 +447,7 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
     }
     
     func updateDate(sender: UIButton) {
-        var senderLabel: UILabel = sender.subviews[0] as UILabel
+        var senderLabel: UILabel = sender.subviews[0] as! UILabel
 
         if senderLabel.text?.lowercaseString == "pick date" {
             datePicker.hidden = false
@@ -525,8 +525,8 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
     }
     
     func updatePriority(sender: UIButton) {
-        var mainLabel: UILabel = priorityPickerButton.subviews[0] as UILabel
-        var senderLabel: UILabel = sender.subviews[0] as UILabel
+        var mainLabel: UILabel = priorityPickerButton.subviews[0] as! UILabel
+        var senderLabel: UILabel = sender.subviews[0] as! UILabel
         mainLabel.text = senderLabel.text
         if mainLabel.text != "None" {
             mainLabel.textColor = UIColor.blackColor()
@@ -581,7 +581,7 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
         return true
     }
 
-    func textFieldShouldReturn(textField: UITextField!) -> Bool {
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         
         if textView == textField {
@@ -592,7 +592,7 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
     }
     
     func textFieldDidChanged(textField: UITextField!) {
-        if textField.text.utf16Count > maxCharacters {
+        if count(textField.text) > maxCharacters {
             textField.text = textField.text.substringToIndex(advance(textField.text.startIndex, maxCharacters))
         }
         
@@ -600,7 +600,7 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
     }
     
     func dateFieldDidChanged(textField: UITextField!) {
-        if textField.text.utf16Count > maxDateTextCharacters {
+        if count(textField.text) > maxDateTextCharacters {
             textField.text = textField.text.substringToIndex(advance(textField.text.startIndex, maxDateTextCharacters))
         }
         
@@ -614,5 +614,4 @@ class AddTaskViewController: UIViewController, UITableViewDelegate, UITextFieldD
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
 }

@@ -11,7 +11,7 @@ class AddTagViewController: UIViewController, UITextFieldDelegate, SlideNavigati
         return false
     }
     
-    override init() {
+    init() {
         super.init(nibName: nil, bundle: nil)
         title = "Add tag"
     }
@@ -81,7 +81,7 @@ class AddTagViewController: UIViewController, UITextFieldDelegate, SlideNavigati
     }
     
     func addTag(sender: AnyObject) {
-        let newTag: Tag = Tag(name: textView.text, color: UIColor(CGColor: circleView.layer.borderColor), enabled: true)
+        let newTag: Tag = Tag(name: textView.text, color: UIColor(CGColor: circleView.layer.borderColor)!, enabled: true)
         
         var ok: Bool = true
         for i in 0...allTags.count - 1 {
@@ -183,13 +183,13 @@ class AddTagViewController: UIViewController, UITextFieldDelegate, SlideNavigati
         return true
     }
     
-    func textFieldShouldReturn(textField: UITextField!) -> Bool {
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return false
     }
     
     func textFieldDidChanged(textField: UITextField!) {
-        if textField.text.utf16Count > maxCharacters {
+        if count(textField.text) > maxCharacters {
             textField.text = textField.text.substringToIndex(advance(textField.text.startIndex, maxCharacters))
         }
         

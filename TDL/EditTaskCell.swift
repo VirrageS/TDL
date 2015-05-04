@@ -13,16 +13,16 @@ class EditTaskCell: UITableViewCell {
         
         
         let completeImage: UIImage = UIImage(named: "complete-image") as UIImage!
-        completeButton = UIButton.buttonWithType(UIButtonType.System) as UIButton
+        completeButton = UIButton.buttonWithType(UIButtonType.System) as! UIButton
         completeButton.setImage(completeImage, forState: UIControlState.Normal)
         completeButton.frame = CGRectMake(20, 5, 50, 50)
         let postponeImage: UIImage = UIImage(named: "postpone-image") as UIImage!
-        postponeButton = UIButton.buttonWithType(UIButtonType.System) as UIButton
+        postponeButton = UIButton.buttonWithType(UIButtonType.System) as! UIButton
         postponeButton.setImage(postponeImage, forState: UIControlState.Normal)
         postponeButton.frame = CGRectMake(135, 5, 50, 50)
         
         let editImage: UIImage = UIImage(named: "edit-image") as UIImage!
-        editButton = UIButton.buttonWithType(UIButtonType.InfoDark) as UIButton
+        editButton = UIButton.buttonWithType(UIButtonType.InfoDark) as! UIButton
         editButton.setImage(editImage, forState: UIControlState.Normal)
         editButton.frame = CGRectMake(250, 5, 50, 50)
         
@@ -51,8 +51,8 @@ class EditTaskCell: UITableViewCell {
     }
     
     func complete(sender: UIButton!) {
-        let buttonCell = sender.superview?.superview as UITableViewCell
-        let tableView = buttonCell.superview?.superview as UITableView
+        let buttonCell = sender.superview?.superview as! UITableViewCell
+        let tableView = buttonCell.superview?.superview as! UITableView
         let indexPath = tableView.indexPathForCell(buttonCell) as NSIndexPath?
         
         var window: AnyObject = sender.superview!
@@ -60,7 +60,7 @@ class EditTaskCell: UITableViewCell {
             window = window.superview!!
         }
         
-        window = window.rootViewController as UINavigationController
+        window = window.rootViewController as! UINavigationController
         
         if window.topViewController is TaskViewController {
             let cellIndexPath = NSIndexPath(forRow: indexPath!.row - 1, inSection: indexPath!.section)
@@ -142,8 +142,8 @@ class EditTaskCell: UITableViewCell {
     }
     
     func postpone(sender: UIButton!) { // TODO: clean up
-        let buttonCell = sender.superview?.superview as UITableViewCell
-        let tableView = buttonCell.superview?.superview as UITableView
+        let buttonCell = sender.superview?.superview as! UITableViewCell
+        let tableView = buttonCell.superview?.superview as! UITableView
         let indexPath = tableView.indexPathForCell(buttonCell) as NSIndexPath?
         
         if indexPath == nil {
@@ -155,7 +155,7 @@ class EditTaskCell: UITableViewCell {
         while !(window is UIWindow) {
             window = window.superview!!
         }
-        window = window.rootViewController as UINavigationController
+        window = window.rootViewController as! UINavigationController
 
         if window.topViewController is TaskViewController {
             // Change due date
@@ -263,8 +263,8 @@ class EditTaskCell: UITableViewCell {
     }
     
     func edit(sender: UIButton!) {
-        let buttonCell = sender.superview?.superview as UITableViewCell
-        let tableView = buttonCell.superview?.superview as UITableView
+        let buttonCell = sender.superview?.superview as! UITableViewCell
+        let tableView = buttonCell.superview?.superview as! UITableView
         let indexPath = tableView.indexPathForCell(buttonCell) as NSIndexPath?
         
         // Check if indexPath is not nil
@@ -278,17 +278,17 @@ class EditTaskCell: UITableViewCell {
         while !(window is UIWindow) {
             window = window.superview!!
         }
-        window = window.rootViewController as UINavigationController
+        window = window.rootViewController as! UINavigationController
         
         let cellIndexPath = NSIndexPath(forRow: indexPath!.row - 1, inSection: indexPath!.section)
         if window.topViewController is TaskViewController {
-            let controller = window.topViewController as TaskViewController
+            let controller = window.topViewController as! TaskViewController
             controller.openEditTaskController(weekTasks[indexPath!.section][indexPath!.row - 1])
         } else if window.topViewController is TodayTaskViewController {
-            let controller = window.topViewController as TodayTaskViewController
+            let controller = window.topViewController as! TodayTaskViewController
             controller.openEditTaskController(todayTasks[indexPath!.section][indexPath!.row - 1])
         } else if window.topViewController is DetailFilterViewController {
-            let controller = window.topViewController as DetailFilterViewController
+            let controller = window.topViewController as! DetailFilterViewController
             controller.openEditTaskController(detailFilterTasks[indexPath!.row - 1])
         }
     }

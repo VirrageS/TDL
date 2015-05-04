@@ -5,7 +5,7 @@ class TagViewController: UITableViewController, SlideNavigationControllerDelegat
         return true
     }
     
-    override init() {
+    init() {
         super.init(nibName: nil, bundle: nil)
         title = "Tags"
     }
@@ -35,7 +35,7 @@ class TagViewController: UITableViewController, SlideNavigationControllerDelegat
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(TagCell), forIndexPath: indexPath) as TagCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(TagCell), forIndexPath: indexPath) as! TagCell
         cell.configure(indexPath.row)
         return cell as TagCell
     }
