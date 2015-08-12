@@ -13,6 +13,7 @@ class MenuCell: UITableViewCell {
     
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        // name label
         nameTextLabel = UILabel(frame: CGRectZero)
         nameTextLabel.backgroundColor = menuCellColor
         nameTextLabel.font = UIFont.systemFontOfSize(menuCellTextFontSize)
@@ -20,6 +21,7 @@ class MenuCell: UITableViewCell {
         nameTextLabel.textAlignment = NSTextAlignment.Left;
         nameTextLabel.textColor = UIColor.blackColor()
         
+        // count label (badge)
         countTextLabel = UILabel(frame: CGRectZero)
         countTextLabel.backgroundColor = menuCellColor
         countTextLabel.font = UIFont.systemFontOfSize(menuCellCountFontSize)
@@ -27,6 +29,7 @@ class MenuCell: UITableViewCell {
         countTextLabel.textAlignment = NSTextAlignment.Left;
         countTextLabel.textColor = UIColor.blackColor()
         
+        // separator line
         separatorLineLabel = UIView(frame: CGRectZero)
         separatorLineLabel.backgroundColor = UIColor(red: 178/255, green: 178/255, blue: 178/255, alpha: 1.0)
 
@@ -62,6 +65,7 @@ class MenuCell: UITableViewCell {
     func configure(text: String) {
         nameTextLabel.text = text
 
+        // get image fro cell
         var image: UIImage
         switch(nameTextLabel.text!) {
         case "Today":

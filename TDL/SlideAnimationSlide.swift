@@ -14,13 +14,13 @@ class SlideNavigationControllerAnimatorSlide {
         var rect: CGRect = menuViewController.view.frame
     
         if orientation.isLandscape {
-            if orientation.isLandscape {
+            if !orientation.isLandscape {
                 rect.origin.y = self.slideMovement*(-1)
             } else {
                 rect.origin.y = self.slideMovement
             }
         } else {
-            if orientation.isPortrait {
+            if !orientation.isPortrait {
                 rect.origin.x = self.slideMovement*(-1)
             } else {
                 rect.origin.x = self.slideMovement;

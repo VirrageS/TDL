@@ -2,9 +2,13 @@ import Foundation
 import UIKit
 
 class Tag: NSObject, NSCoding {
+    /// Name for the tage
     var name: String = ""
+    /// Color circle of the tag
     var color: UIColor = UIColor.lightGrayColor()
+    /// Determines if the tag can be used or no
     var enabled: Bool?
+    /// Task counter
     var tasks: Int = 0
     
     init(name: String, color: UIColor, enabled: Bool?) {

@@ -39,7 +39,7 @@ class MenuViewController: UITableViewController, SlideNavigationControllerDelega
         cell.configure(menuItems[indexPath.row-1])
         cell.selected = true
 
-        // View for separator line
+        // view for separator line
         var view: UIView
         var separatorLineBottom: UIView
         var separatorLineTop: UIView

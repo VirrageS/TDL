@@ -7,14 +7,14 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>CC8AD1F1-E0D6-42A7-BD51-9BBA1A3F7332</string>
 	<key>IDESourceControlProjectName</key>
-	<string>TDL</string>
+	<string>project</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>A1AC9B9CB0A571C71CB5902FEB59D817DBC4ED86</key>
 		<string>https://github.com/VirrageS/TDL.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>TDL.xcodeproj</string>
+	<string>TDL.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>A1AC9B9CB0A571C71CB5902FEB59D817DBC4ED86</key>

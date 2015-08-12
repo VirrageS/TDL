@@ -98,6 +98,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return (day: _day, desc: _desc)
     }
 
+    /// Save all tasks and tags to file
     func saveAllData() {
         var documentDirectories: NSArray = []
         var documentDirectory: String = ""
@@ -120,6 +121,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
+    /// Reads all tasks and tags saved in file
     func loadInitialData() {
         var documentDirectories: NSArray = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true) as NSArray
         var documentDirectory: String = documentDirectories.objectAtIndex(0) as! String

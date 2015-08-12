@@ -189,7 +189,7 @@ class TodayTaskViewController: UITableViewController, SlideNavigationControllerD
         
         headerView.addSubview(dayName)
         
-        // Constraints
+        // constraints
         dayName.setTranslatesAutoresizingMaskIntoConstraints(false)
         headerView.addConstraint(NSLayoutConstraint(item: dayName, attribute: .Left, relatedBy: .Equal, toItem: headerView, attribute: .Left, multiplier: 1, constant: 15))
         headerView.addConstraint(NSLayoutConstraint(item: dayName, attribute: .Top, relatedBy: .Equal, toItem: headerView, attribute: .Top, multiplier: 1, constant: 0))
@@ -200,6 +200,7 @@ class TodayTaskViewController: UITableViewController, SlideNavigationControllerD
     }
     
     override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        // show header if there is any task
         if todayTasks[0].count > 0 {
             return 30
         }
@@ -213,7 +214,7 @@ class TodayTaskViewController: UITableViewController, SlideNavigationControllerD
         let slideNavigation = SlideNavigationController().sharedInstance()
         slideNavigation._delegate = addTaskViewController
         
-        // Check if navigationController is nil
+        // check if navigationController is nil
         if navigationController == nil {
             println("openAddTaskController - navigationController is nil")
             return
@@ -228,7 +229,7 @@ class TodayTaskViewController: UITableViewController, SlideNavigationControllerD
         let slideNavigation = SlideNavigationController().sharedInstance()
         slideNavigation._delegate = editTaskViewController
         
-        // Check if navigationController is nil
+        // check if navigationController is nil
         if navigationController == nil {
             println("openEditTaskController - navigationController is nil")
             return

@@ -83,6 +83,7 @@ class AddTagViewController: UIViewController, UITextFieldDelegate, SlideNavigati
     func addTag(sender: AnyObject) {
         let newTag: Tag = Tag(name: textView.text, color: UIColor(CGColor: circleView.layer.borderColor)!, enabled: true)
         
+        // check if there is a tag with this name
         var ok: Bool = true
         for i in 0...allTags.count - 1 {
             if allTags[i].name.lowercaseString == newTag.name.lowercaseString {
@@ -90,6 +91,7 @@ class AddTagViewController: UIViewController, UITextFieldDelegate, SlideNavigati
             }
         }
         
+        // if everything is okay add tag otherwise show alert
         if ok {
             allTags.append(newTag)
         } else {

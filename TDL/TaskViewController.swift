@@ -8,6 +8,7 @@ struct editCell {
 var editTaskCell: editCell?
 var weekTasks = [[Task]]()
 
+// function to update all week tasks
 func updateWeekTasks() {
     weekTasks.removeAll(keepCapacity: false)
     for i in 0...6 {
@@ -165,7 +166,7 @@ class TaskViewController: UITableViewController, SlideNavigationControllerDelega
         headerView.addSubview(dayName)
         headerView.addSubview(descText)
 
-        // Constraints
+        // constraints
         dayName.setTranslatesAutoresizingMaskIntoConstraints(false)
         headerView.addConstraint(NSLayoutConstraint(item: dayName, attribute: .Left, relatedBy: .Equal, toItem: headerView, attribute: .Left, multiplier: 1, constant: 15))
         headerView.addConstraint(NSLayoutConstraint(item: dayName, attribute: .Top, relatedBy: .Equal, toItem: headerView, attribute: .Top, multiplier: 1, constant: 0))

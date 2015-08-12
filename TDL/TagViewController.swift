@@ -18,9 +18,11 @@ class TagViewController: UITableViewController, SlideNavigationControllerDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        // add right button to add new tag
         let addButtonItem = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "openAddTagController:")
         navigationItem.rightBarButtonItem = addButtonItem
         
+        // set table view parameters
         tableView.backgroundColor = UIColor.whiteColor()
         tableView.separatorColor = UIColor.clearColor() // transparent separator
         tableView.registerClass(TagCell.self, forCellReuseIdentifier: NSStringFromClass(TagCell))
@@ -35,6 +37,7 @@ class TagViewController: UITableViewController, SlideNavigationControllerDelegat
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        // display cell
         let cell = tableView.dequeueReusableCellWithIdentifier(NSStringFromClass(TagCell), forIndexPath: indexPath) as! TagCell
         cell.configure(indexPath.row)
         return cell as TagCell
@@ -52,7 +55,7 @@ class TagViewController: UITableViewController, SlideNavigationControllerDelegat
         let slideNavigation = SlideNavigationController().sharedInstance()
         slideNavigation._delegate = detailTagViewController
         
-        // Check if navigationController is nil
+        // check if navigationController is nil
         if navigationController == nil {
             println("openDetailTagViewController - navigationController is nil")
             return
